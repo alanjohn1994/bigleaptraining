@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Leap Training — Get your evenings back.</title>
+<meta name="description" content="In-person AI workshops for professional teams. Your staff will save hours every week from session one. No tech skills needed.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+:root{
+  --sf:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+  --white:#ffffff;--off-white:#f5f5f7;--mid-gray:#86868b;--dark-gray:#1d1d1f;
+  --blue:#0071e3;--blue-hover:#0077ed;--blue-light:#e8f0fe;
+  --green:#30d158;--separator:rgba(0,0,0,0.07);
+  --radius:18px;--ease:cubic-bezier(0.4,0,0.2,1);--t:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sf);background:var(--white);color:var(--dark-gray);line-height:1.47059;font-size:17px;letter-spacing:-0.022em}
+.container{max-width:1080px;margin:0 auto;padding:0 48px}
+@media(max-width:768px){.container{padding:0 22px}}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.75s var(--ease),transform 0.75s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+
+/* GRADIENT */
+.grad{background:linear-gradient(95deg,#0071e3 0%,#34aadc 45%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-light{background:linear-gradient(95deg,#409cff 0%,#6ac4dc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* OFFER BANNER */
+.offer-banner{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--dark-gray);padding:10px 48px;display:flex;align-items:center;justify-content:center;gap:12px;transition:transform 0.4s var(--ease),opacity 0.4s var(--ease)}
+.offer-banner.hidden{transform:translateY(-100%);opacity:0;pointer-events:none}
+@media(max-width:768px){.offer-banner{padding:10px 40px 10px 16px}}
+.offer-badge{background:var(--blue);color:white;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:980px;white-space:nowrap;flex-shrink:0}
+.offer-text{font-size:13px;color:rgba(255,255,255,.85);letter-spacing:-.01em;text-align:center}
+.offer-text strong{color:white;font-weight:600}
+.offer-link{font-size:13px;color:#409cff;text-decoration:none;white-space:nowrap;font-weight:500;flex-shrink:0;transition:opacity var(--t)}
+.offer-link:hover{opacity:.75}
+.offer-link::after{content:' ›'}
+.offer-close{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:6px;color:rgba(255,255,255,.4);transition:color var(--t);line-height:1}
+.offer-close:hover{color:white}
+
+/* NAV */
+nav{position:fixed;top:40px;left:0;right:0;z-index:200;height:52px;background:#ffffff;border-bottom:1px solid var(--separator);display:flex;align-items:center;transition:top 0.4s var(--ease);overflow:hidden}
+@supports(backdrop-filter:blur(1px)){nav{background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}}
+nav.no-banner{top:0}
+.nav-inner{width:100%;max-width:1080px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+@media(max-width:768px){.nav-inner{padding:0 22px}}
+.nav-logo{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;text-decoration:none}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;list-style:none;align-items:center}
+.nav-links a{display:block;padding:6px 14px;font-size:13px;color:var(--mid-gray);text-decoration:none;letter-spacing:-.01em;transition:color var(--t)}
+.nav-links a:hover,.nav-links a.active{color:var(--dark-gray)}
+.nav-cta-link{background:var(--blue)!important;color:white!important;border-radius:980px!important;padding:7px 16px!important;font-size:13px!important;font-weight:500!important;margin-left:8px;transition:background var(--t)!important}
+.nav-cta-link:hover{background:var(--blue-hover)!important}
+.nav-mobile-cta{display:none;background:var(--blue);color:white;border:none;border-radius:980px;padding:7px 16px;font-family:var(--sf);font-size:13px;font-weight:500;cursor:pointer}
+@media(max-width:900px){.nav-links{display:none}.nav-mobile-cta{display:block}}
+
+/* MOBILE STICKY */
+.mobile-sticky{display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--separator);padding:12px 22px;gap:10px}
+@media(max-width:900px){.mobile-sticky{display:flex}}
+.mobile-sticky a{flex:1;text-align:center;padding:13px;border-radius:980px;font-size:15px;font-weight:500;text-decoration:none;font-family:var(--sf);letter-spacing:-.015em;transition:all var(--t)}
+.ms-primary{background:var(--blue);color:white}.ms-primary:hover{background:var(--blue-hover)}
+.ms-secondary{background:var(--off-white);color:var(--dark-gray)}
+
+/* ── HERO ── */
+.hero{padding:172px 48px 120px;text-align:center;background:var(--white);transition:padding-top 0.4s var(--ease);position:relative;z-index:1;overflow:hidden}
+.hero.no-banner{padding-top:132px}
+@media(max-width:768px){.hero{padding:136px 22px 80px}}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:1}
+.hero-content{position:relative;z-index:2}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--blue);margin-bottom:28px;animation:fadeUp 0.7s ease both}
+.eyebrow-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(44px,7vw,80px);font-weight:700;letter-spacing:-.05em;line-height:1.02;color:var(--dark-gray);margin-bottom:28px;max-width:780px;margin-left:auto;margin-right:auto;animation:fadeUp 0.7s .1s ease both}
+.hero-sub{font-size:clamp(18px,2.2vw,22px);color:var(--mid-gray);font-weight:400;max-width:500px;margin:0 auto 48px;line-height:1.5;letter-spacing:-.022em;animation:fadeUp 0.7s .2s ease both}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;animation:fadeUp 0.7s .3s ease both}
+.btn-primary{background:var(--blue);color:white;padding:15px 30px;border-radius:980px;font-size:17px;font-weight:500;text-decoration:none;font-family:var(--sf);letter-spacing:-.022em;transition:background var(--t),transform var(--t);display:inline-block}
+.btn-primary:hover{background:var(--blue-hover);transform:scale(1.02)}
+.btn-secondary{color:var(--blue);font-size:17px;font-weight:400;text-decoration:none;font-family:var(--sf);letter-spacing:-.022em;transition:opacity var(--t)}
+.btn-secondary:hover{opacity:.7}
+.btn-secondary::after{content:' ›'}
+/* micro-trust strip */
+.hero-trust{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:28px;flex-wrap:wrap;animation:fadeUp 0.7s .4s ease both}
+.hero-trust-item{font-size:13px;color:var(--mid-gray);display:flex;align-items:center;gap:6px;letter-spacing:-.01em}
+.hero-trust-item svg{width:13px;height:13px;color:var(--green);flex-shrink:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── OUTCOME STATEMENT ── */
+/* Full-width dark band — one big emotional truth */
+.outcome-band{background:var(--dark-gray);padding:80px 48px;text-align:center;position:relative;z-index:1}
+@media(max-width:768px){.outcome-band{padding:60px 22px}}
+.outcome-band-inner{max-width:720px;margin:0 auto}
+.outcome-band h2{font-size:clamp(28px,4vw,52px);font-weight:700;letter-spacing:-.045em;line-height:1.1;color:white;margin-bottom:20px}
+.outcome-band p{font-size:19px;color:rgba(255,255,255,.5);line-height:1.6;letter-spacing:-.022em;max-width:520px;margin:0 auto 40px}
+/* Three stat pills inline */
+.outcome-stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.ostat{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px 28px;min-width:140px}
+.ostat-num{font-size:clamp(28px,3vw,40px);font-weight:700;letter-spacing:-.045em;line-height:1;margin-bottom:6px}
+.ostat-label{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:-.01em;text-align:center;line-height:1.4}
+
+/* ── TYPEWRITER ── */
+.tw-cursor{display:inline-block;width:3px;border-radius:2px;background:var(--blue);margin-left:2px;animation:cursorBlink 0.7s step-end infinite;vertical-align:middle;height:0.82em;position:relative;top:-0.04em}
+@keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── VIDEO ── */
+.video-section{background:var(--off-white);padding:80px 48px;position:relative;z-index:1;isolation:isolate}
+@media(max-width:768px){.video-section{padding:60px 22px}}
+.video-inner{max-width:860px;margin:0 auto;text-align:center}
+.video-overline{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:block}
+.video-title{font-size:clamp(22px,3vw,36px);font-weight:700;letter-spacing:-.04em;line-height:1.1;color:var(--dark-gray);margin-bottom:10px}
+.video-sub{font-size:17px;color:var(--mid-gray);margin-bottom:36px;letter-spacing:-.022em;line-height:1.5}
+.video-frame-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.14)}
+.video-frame-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-placeholder{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(135deg,#1d1d1f,#2d2d30)}
+.video-placeholder-icon{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center}
+.video-placeholder-icon svg{width:24px;height:24px;margin-left:3px}
+.video-placeholder-text{font-size:14px;color:rgba(255,255,255,.4)}
+
+/* ── PROOF CARDS ── */
+.proof-bar{background:var(--off-white);padding:48px;position:relative;z-index:1}
+@media(max-width:768px){.proof-bar{padding:36px 22px}}
+.proof-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:1024px){.proof-inner{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.proof-inner{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:380px){.proof-inner{grid-template-columns:1fr}}
+.proof-item{
+  background:var(--white);
+  border-radius:14px;
+  padding:20px 18px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  font-size:13px;
+  font-weight:500;
+  color:var(--dark-gray);
+  letter-spacing:-.01em;
+  line-height:1.4;
+  border:1px solid var(--separator);
+  transition:box-shadow 0.25s var(--ease),transform 0.25s var(--ease);
+  white-space:normal;
+}
+.proof-item:hover{box-shadow:0 8px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.proof-item-icon{
+  width:36px;height:36px;
+  border-radius:10px;
+  background:var(--blue-light);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.proof-item-icon svg{width:17px;height:17px;stroke:var(--blue)}
+
+/* ── SECTIONS ── */
+.section{padding:100px 48px;position:relative;z-index:1}
+@media(max-width:768px){.section{padding:72px 22px}}
+.section-center{text-align:center}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:block}
+.section-h{font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-.04em;line-height:1.08;color:var(--dark-gray);margin-bottom:16px}
+.section-sub{font-size:19px;color:var(--mid-gray);font-weight:400;letter-spacing:-.022em;line-height:1.5;max-width:520px;margin:0 auto 64px}
+
+/* ── HOW IT WORKS ── */
+.how{background:var(--off-white)}
+.step-icon-wrap{width:44px;height:44px;border-radius:12px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step-icon-wrap svg{width:22px;height:22px}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+@media(max-width:900px){.steps-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.steps-grid{grid-template-columns:1fr}}
+.step-tile{background:var(--white);padding:36px 28px;transition:background var(--t)}
+.step-tile:hover{background:#fafafa}
+.step-tile:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+.step-tile:last-child{border-radius:0 var(--radius) var(--radius) 0}
+@media(max-width:900px){
+  .step-tile:first-child{border-radius:var(--radius) 0 0 0}
+  .step-tile:nth-child(2){border-radius:0 var(--radius) 0 0}
+  .step-tile:nth-child(3){border-radius:0 0 0 var(--radius)}
+  .step-tile:last-child{border-radius:0 0 var(--radius) 0}
+}
+@media(max-width:500px){
+  .step-tile{border-radius:0!important}
+  .step-tile:first-child{border-radius:var(--radius) var(--radius) 0 0!important}
+  .step-tile:last-child{border-radius:0 0 var(--radius) var(--radius)!important}
+}
+.step-num-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+.step-title{font-size:17px;font-weight:600;color:var(--dark-gray);letter-spacing:-.022em;margin-bottom:8px}
+.step-text{font-size:14px;color:var(--mid-gray);line-height:1.6;letter-spacing:-.01em}
+
+/* ── WHO ── */
+.who{background:var(--white)}
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.who-grid{grid-template-columns:1fr}}
+.who-card{background:var(--off-white);border-radius:var(--radius);padding:36px 32px;transition:transform var(--t),box-shadow var(--t)}
+.who-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+.who-icon-wrap{width:52px;height:52px;border-radius:14px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.who-icon-wrap svg{width:26px;height:26px}
+.who-title{font-size:19px;font-weight:600;color:var(--dark-gray);letter-spacing:-.03em;margin-bottom:10px}
+.who-text{font-size:15px;color:var(--mid-gray);line-height:1.6;margin-bottom:20px}
+.who-tags{display:flex;flex-wrap:wrap;gap:6px}
+.who-tag{font-size:12px;color:var(--dark-gray);background:var(--white);padding:5px 12px;border-radius:980px}
+
+/* ── WORKSHOPS ── */
+.workshops{background:var(--off-white)}
+.ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:768px){.ws-grid{grid-template-columns:1fr}}
+.ws-card{background:var(--white);border-radius:var(--radius);padding:36px 32px;display:flex;flex-direction:column;transition:transform var(--t),box-shadow var(--t)}
+.ws-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+.ws-tag{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.ws-card-title{font-size:21px;font-weight:600;color:var(--dark-gray);letter-spacing:-.03em;margin-bottom:10px;line-height:1.2}
+.ws-card-sub{font-size:15px;color:var(--mid-gray);line-height:1.6;margin-bottom:24px;flex:1}
+.ws-outcomes{list-style:none;margin-bottom:24px}
+.ws-outcomes li{font-size:14px;color:var(--dark-gray);padding:8px 0;border-bottom:1px solid var(--separator);display:flex;align-items:center;gap:10px;letter-spacing:-.01em}
+.ws-outcomes li:last-child{border-bottom:none}
+.ws-outcomes li::before{content:'';display:inline-block;width:5px;height:5px;background:var(--blue);border-radius:50%;flex-shrink:0}
+.ws-meta{display:flex;gap:8px;flex-wrap:wrap}
+.ws-badge{font-size:12px;color:var(--mid-gray);background:var(--off-white);padding:4px 10px;border-radius:980px}
+
+/* ── PRICING ── */
+.pricing{background:var(--white)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}}
+.price-card{background:var(--off-white);border-radius:var(--radius);padding:36px 32px;display:flex;flex-direction:column;transition:transform var(--t),box-shadow var(--t)}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+.price-card.featured{background:var(--dark-gray)}
+.price-name{font-size:13px;font-weight:600;color:var(--mid-gray);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.price-card.featured .price-name{color:rgba(255,255,255,.45)}
+.popular-chip{font-size:11px;background:var(--blue);color:white;padding:2px 8px;border-radius:980px;font-weight:500}
+.price-amount{font-size:48px;font-weight:700;color:var(--dark-gray);letter-spacing:-.045em;line-height:1;margin:16px 0 4px}
+.price-card.featured .price-amount{color:white}
+.price-desc{font-size:14px;color:var(--mid-gray);margin-bottom:28px;line-height:1.5}
+.price-card.featured .price-desc{color:rgba(255,255,255,.4)}
+.price-list{list-style:none;flex:1;margin-bottom:32px}
+.price-list li{font-size:14px;color:var(--dark-gray);padding:9px 0;border-bottom:1px solid var(--separator);display:flex;align-items:center;gap:10px;letter-spacing:-.01em}
+.price-card.featured .price-list li{color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.1)}
+.price-list li:last-child{border-bottom:none}
+.price-list li::before{content:'';display:inline-block;width:16px;height:16px;border-radius:50%;flex-shrink:0;background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6.5 11.2L3.2 7.9l.9-.9 2.4 2.4 5-5 .9.9z'/%3E%3C/svg%3E") center/contain no-repeat}
+.btn-price{display:block;text-align:center;padding:13px 24px;border-radius:980px;font-size:15px;font-weight:500;text-decoration:none;font-family:var(--sf);letter-spacing:-.015em;transition:all var(--t);border:1.5px solid transparent;cursor:pointer}
+.btn-price-outline{background:transparent;border-color:rgba(0,0,0,.15);color:var(--blue)}
+.btn-price-outline:hover{border-color:var(--blue);background:var(--blue-light)}
+.btn-price-blue{background:var(--blue);color:white}
+.btn-price-blue:hover{background:var(--blue-hover)}
+
+/* ── FAQ ── */
+.faq{background:var(--off-white);padding:100px 48px;position:relative;z-index:1}
+@media(max-width:768px){.faq{padding:72px 22px}}
+.faq-inner{max-width:640px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--separator);overflow:hidden}
+.faq-item:first-of-type{border-top:1px solid var(--separator)}
+.faq-q{width:100%;background:none;border:none;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;font-family:var(--sf);font-size:17px;font-weight:500;color:var(--dark-gray);letter-spacing:-.022em;text-align:left;transition:color var(--t)}
+.faq-q:hover{color:var(--blue)}
+.faq-icon{width:24px;height:24px;border-radius:50%;background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background var(--t),transform var(--t)}
+.faq-item.open .faq-icon{background:var(--blue);transform:rotate(45deg)}
+.faq-icon svg{width:12px;height:12px}
+.faq-item.open .faq-icon svg{stroke:white}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s var(--ease)}
+.faq-item.open .faq-a{max-height:300px}
+.faq-a p{font-size:15px;color:var(--mid-gray);line-height:1.75;padding-bottom:22px;letter-spacing:-.01em}
+
+/* ── TASTER ── */
+.taster{background:var(--dark-gray);padding:100px 48px;position:relative;z-index:1}
+@media(max-width:768px){.taster{padding:72px 22px}}
+.taster-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:768px){.taster-inner{grid-template-columns:1fr;gap:48px}}
+.taster-overline{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;display:block}
+.taster-h{font-size:clamp(28px,3.5vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1.1;color:white;margin-bottom:20px}
+.taster-p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.65;letter-spacing:-.022em;margin-bottom:28px}
+.taster-promise{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px}
+.taster-promise svg{width:18px;height:18px;flex-shrink:0;margin-top:2px}
+.taster-promise p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;letter-spacing:-.01em}
+.taster-promise p strong{color:white;font-weight:500}
+.taster-right{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px}
+.taster-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.taster-label{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:-.01em}
+.taster-input-field{font-family:var(--sf);font-size:15px;color:white;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;outline:none;letter-spacing:-.015em;transition:border-color var(--t),background var(--t);width:100%}
+.taster-input-field::placeholder{color:rgba(255,255,255,.25)}
+.taster-input-field:focus{border-color:var(--blue);background:rgba(255,255,255,.1)}
+.taster-submit{display:block;width:100%;margin-top:8px;background:var(--blue);color:white;border:none;border-radius:980px;padding:14px;font-family:var(--sf);font-size:15px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t)}
+.taster-submit:hover{background:var(--blue-hover);transform:scale(1.01)}
+.taster-note{font-size:12px;color:rgba(255,255,255,.25);text-align:center;margin-top:12px;letter-spacing:-.01em}
+
+/* ── CONTACT ── */
+.contact{background:var(--white);padding:100px 48px;position:relative;z-index:1}
+@media(max-width:768px){.contact{padding:72px 22px}}
+.contact-inner{max-width:640px;margin:0 auto}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.contact-grid{grid-template-columns:1fr}}
+.contact-field{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+.contact-field.full{grid-column:1/-1}
+.contact-label{font-size:13px;font-weight:500;color:var(--dark-gray);letter-spacing:-.01em}
+.contact-input,.contact-select,.contact-textarea{font-family:var(--sf);font-size:15px;color:var(--dark-gray);background:var(--off-white);border:1.5px solid transparent;border-radius:12px;padding:12px 16px;letter-spacing:-.015em;outline:none;transition:border-color var(--t),background var(--t);width:100%}
+.contact-input::placeholder,.contact-textarea::placeholder{color:var(--mid-gray)}
+.contact-input:focus,.contact-select:focus,.contact-textarea:focus{border-color:var(--blue);background:var(--white)}
+.contact-select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2386868b' stroke-width='1.5' stroke-linecap='round' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;background-color:var(--off-white)}
+.contact-textarea{resize:vertical;min-height:120px;line-height:1.5}
+.privacy-check{display:flex;align-items:flex-start;gap:10px;margin-top:16px;margin-bottom:16px}
+.privacy-check input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(0,0,0,.18);background:var(--off-white);cursor:pointer;flex-shrink:0;margin-top:1px;transition:background var(--t),border-color var(--t);position:relative}
+.privacy-check input[type="checkbox"]:checked{background:var(--blue);border-color:var(--blue)}
+.privacy-check input[type="checkbox"]:checked::after{content:'';position:absolute;top:2px;left:5px;width:5px;height:9px;border:2px solid white;border-top:none;border-left:none;transform:rotate(45deg)}
+.privacy-check label{font-size:13px;color:var(--mid-gray);line-height:1.5;letter-spacing:-.01em;cursor:pointer}
+.privacy-check label a{color:var(--blue);text-decoration:none}
+.contact-submit{display:block;width:100%;background:var(--blue);color:white;border:none;border-radius:980px;padding:15px 24px;font-family:var(--sf);font-size:17px;font-weight:500;cursor:pointer;letter-spacing:-.022em;transition:background var(--t),transform var(--t),opacity var(--t)}
+.contact-submit:hover{background:var(--blue-hover);transform:scale(1.01)}
+.contact-submit:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.contact-success{display:none;text-align:center;padding:56px 0}
+.contact-success.show{display:block;animation:fadeUp 0.5s ease both}
+.success-icon-wrap{width:64px;height:64px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.success-icon-wrap svg{width:32px;height:32px}
+.success-title{font-size:24px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;margin-bottom:8px}
+.success-sub{font-size:15px;color:var(--mid-gray)}
+
+/* ── FOOTER ── Jobs-approved: minimal, purposeful ── */
+footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
+@media(max-width:768px){footer{padding:40px 22px}}
+.footer-inner{max-width:1080px;margin:0 auto}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
+.footer-logo{font-size:17px;font-weight:700;color:white;letter-spacing:-.03em}
+.footer-logo span{color:#409cff}
+.footer-tagline{font-size:13px;color:rgba(255,255,255,.3);margin-top:6px;letter-spacing:-.01em;max-width:220px;line-height:1.5}
+.footer-nav{display:flex;gap:28px;flex-wrap:wrap}
+.footer-nav a{font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;letter-spacing:-.01em;transition:color var(--t)}
+.footer-nav a:hover{color:rgba(255,255,255,.85)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.22);letter-spacing:-.01em}
+.footer-legal{display:flex;gap:20px}
+.footer-legal a{font-size:12px;color:rgba(255,255,255,.28);text-decoration:none;transition:color var(--t)}
+.footer-legal a:hover{color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<!-- OFFER BANNER -->
+<script>
+  var OFFER_PERCENT = "20";
+  var OFFER_LABEL   = "Welcome Offer";
+  var OFFER_DETAIL  = "Get <strong>" + OFFER_PERCENT + "% off</strong> your first workshop bundle \u2014 limited spaces.";
+  var OFFER_CTA     = "Claim offer";
+</script>
+<div class="offer-banner" id="offer-banner">
+  <span class="offer-badge" id="offer-badge"></span>
+  <span class="offer-text" id="offer-text"></span>
+  <a class="offer-link" id="offer-link" href="#contact"></a>
+  <button class="offer-close" onclick="closeBanner()" aria-label="Dismiss">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+  </button>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">Big Leap <span>Training</span></a>
+    <ul class="nav-links">
+      <li><a href="#how" data-section="how">How it works</a></li>
+      <li><a href="#who" data-section="who">Who it's for</a></li>
+      <li><a href="#workshops" data-section="workshops">Workshops</a></li>
+      <li><a href="#pricing" data-section="pricing">Pricing</a></li>
+      <li><a href="#faq" data-section="faq">FAQ</a></li>
+      <li><a href="#contact" data-section="contact">Contact</a></li>
+      <li><a href="#taster" class="nav-cta-link">Free taster</a></li>
+    </ul>
+    <button class="nav-mobile-cta" onclick="document.getElementById('taster').scrollIntoView({behavior:'smooth'})">Free taster</button>
+  </div>
+</nav>
+
+<!-- MOBILE STICKY -->
+<div class="mobile-sticky">
+  <a href="#taster" class="ms-primary">Book free taster</a>
+  <a href="#pricing" class="ms-secondary">See pricing</a>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HERO — one truth, said simply
+══════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+  <div class="hero-eyebrow"><span class="eyebrow-dot"></span>AI workshops for business teams</div>
+  <h1>Get your<br><span class="grad" id="tw-target"></span><span class="tw-cursor" id="tw-cursor"></span></h1>
+  <p class="hero-sub">We come to your office and show your team how to use AI — practically, safely, and in a single afternoon. No tech skills needed.</p>
+  <div class="hero-actions">
+    <a href="#taster" class="btn-primary">See it for free first</a>
+    <a href="#workshops" class="btn-secondary">What we teach</a>
+  </div>
+  <div class="hero-trust">
+    <span class="hero-trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      No technical background needed
+    </span>
+    <span class="hero-trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Skills they use from day one
+    </span>
+    <span class="hero-trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      One flat fee, nothing hidden
+    </span>
+  </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     OUTCOME BAND — the human truth in numbers
+══════════════════════════════════════════ -->
+<div class="outcome-band">
+  <div class="outcome-band-inner">
+    <h2 class="reveal">The hours your team loses every week<br><span class="grad-light">— we'll show you how to get them back.</span></h2>
+    <p class="reveal rd1">Writing, research, admin, reports. AI doesn't replace your team. It removes the parts of their job nobody likes.</p>
+    <div class="outcome-stats">
+      <div class="ostat reveal rd1">
+        <span class="ostat-num grad">4–6</span>
+        <span class="ostat-label">Hours saved per person<br>per week</span>
+      </div>
+      <div class="ostat reveal rd2">
+        <span class="ostat-num grad-light">3×</span>
+        <span class="ostat-label">Faster document drafting<br>after session two</span>
+      </div>
+      <div class="ostat reveal rd3">
+        <span class="ostat-num grad">12hrs</span>
+        <span class="ostat-label">Total training time across<br>the full programme</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<section class="video-section reveal" id="video">
+  <div class="video-inner">
+    <span class="video-overline">See it in action</span>
+    <h2 class="video-title">Watch how <span class="grad">Big Leap Training</span> works</h2>
+    <p class="video-sub">A short look at what a session feels like — and what your team walks away with.</p>
+    <div class="video-frame-wrap">
+      <!-- Replace div below with: <iframe src="YOUR_EMBED_URL" allowfullscreen></iframe> -->
+      <div class="video-placeholder">
+        <div class="video-placeholder-icon"><svg viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        <span class="video-placeholder-text">Your video will appear here</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF CARDS -->
+<div class="proof-bar">
+  <div class="proof-inner">
+    <div class="proof-item">
+      <div class="proof-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+      In-person at your office
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M8 3v3M16 3v3"/></svg></div>
+      Flat fee — no per-head charges
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+      Up to 15 people per session
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      Content tailored to your sector
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      First session free, no obligation
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="how">
+  <div class="container section-center">
+    <span class="eyebrow reveal">How it works</span>
+    <h2 class="section-h reveal rd1">Simple from <span class="grad">start to finish.</span></h2>
+    <p class="section-sub reveal rd2">We handle all the preparation. You just show up.</p>
+  </div>
+  <div class="container">
+    <div class="steps-grid">
+      <div class="step-tile reveal rd1">
+        <div class="step-num-label">Step 01</div>
+        <div class="step-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+        <div class="step-title">Free taster</div>
+        <div class="step-text">One hour, at your office, no obligation. See exactly what we do before you spend a penny.</div>
+      </div>
+      <div class="step-tile reveal rd2">
+        <div class="step-num-label">Step 02</div>
+        <div class="step-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div class="step-title">We tailor everything</div>
+        <div class="step-text">A short survey before each session. We use your documents, your workflows, your terminology.</div>
+      </div>
+      <div class="step-tile reveal rd3">
+        <div class="step-num-label">Step 03</div>
+        <div class="step-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="step-title">We come to you</div>
+        <div class="step-text">Four sessions, in-person, spaced 2–3 weeks apart so skills have time to become habits.</div>
+      </div>
+      <div class="step-tile reveal rd4">
+        <div class="step-num-label">Step 04</div>
+        <div class="step-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="step-title">Your team flies</div>
+        <div class="step-text">Everyone leaves with a personal AI action plan and a prompt library built for your firm.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="section who" id="who">
+  <div class="container section-center">
+    <span class="eyebrow reveal">Who it's for</span>
+    <h2 class="section-h reveal rd1">Not every business <span class="grad">is the same.</span><br>We treat yours that way.</h2>
+    <p class="section-sub reveal rd2">We work with three sectors where the admin burden is highest and the gains are fastest.</p>
+  </div>
+  <div class="container">
+    <div class="who-grid">
+      <div class="who-card reveal rd1">
+        <div class="who-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="who-title">Professional Services</div>
+        <div class="who-text">Your fee earners are too expensive to spend half their day writing emails and summarising documents. We fix that.</div>
+        <div class="who-tags"><span class="who-tag">Law firms</span><span class="who-tag">Accountancies</span><span class="who-tag">HR consultancies</span><span class="who-tag">Financial advisers</span></div>
+      </div>
+      <div class="who-card reveal rd2">
+        <div class="who-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="who-title">Health & Wellness</div>
+        <div class="who-text">You started this business to help people. Not to write content, chase admin, and wrestle with scheduling. AI handles the rest.</div>
+        <div class="who-tags"><span class="who-tag">Fitness studios</span><span class="who-tag">Clinics</span><span class="who-tag">Personal trainers</span><span class="who-tag">Wellness coaches</span></div>
+      </div>
+      <div class="who-card reveal rd3">
+        <div class="who-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="who-title">Care Home Administration</div>
+        <div class="who-text">Every hour your team spends on paperwork is an hour not spent with residents. AI makes compliance, communications, and reporting significantly faster.</div>
+        <div class="who-tags"><span class="who-tag">Care home groups</span><span class="who-tag">Residential care</span><span class="who-tag">Nursing homes</span><span class="who-tag">Domiciliary care</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKSHOPS -->
+<section class="section workshops" id="workshops">
+  <div class="container section-center">
+    <span class="eyebrow reveal">The programme</span>
+    <h2 class="section-h reveal rd1">Four sessions.<br><span class="grad">Permanent change.</span></h2>
+    <p class="section-sub reveal rd2">Each session builds directly on the last. No theory. No slides. Just your team doing real work, faster.</p>
+  </div>
+  <div class="container">
+    <div class="ws-grid">
+      <div class="ws-card reveal rd1">
+        <div class="ws-tag">Session 01</div>
+        <div class="ws-card-title">AI Without the Hype</div>
+        <div class="ws-card-sub">What it actually is. What it can't do. And your first real task completed with it — in the room, today.</div>
+        <ul class="ws-outcomes"><li>Use ChatGPT or Claude independently</li><li>Write prompts that get useful results</li><li>Know when not to trust AI output</li></ul>
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Beginner</span><span class="ws-badge">Hands-on</span></div>
+      </div>
+      <div class="ws-card reveal rd2">
+        <div class="ws-tag">Session 02</div>
+        <div class="ws-card-title">Writing, Faster</div>
+        <div class="ws-card-sub">Every email, report, letter, and proposal your team writes. Done in a fraction of the time. And better.</div>
+        <ul class="ws-outcomes"><li>Draft documents 3–5× faster</li><li>Summarise anything in seconds</li><li>Make AI write in your voice, not its own</li></ul>
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Beginner–Mid</span><span class="ws-badge">Hands-on</span></div>
+      </div>
+      <div class="ws-card reveal rd3">
+        <div class="ws-tag">Session 03</div>
+        <div class="ws-card-title">Research & Analysis</div>
+        <div class="ws-card-sub">Query documents, extract key information, and work with data — without being a data analyst or spending an afternoon on it.</div>
+        <ul class="ws-outcomes"><li>Ask AI questions about any document</li><li>Analyse spreadsheets without formulas</li><li>Know when to double-check the answer</li></ul>
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Intermediate</span><span class="ws-badge">Hands-on</span></div>
+      </div>
+      <div class="ws-card reveal rd4">
+        <div class="ws-tag">Session 04</div>
+        <div class="ws-card-title">Your AI Workflow</div>
+        <div class="ws-card-sub">Lock in everything. Automate the tasks nobody wants. Leave with a written personal AI plan and a firm-wide prompt library.</div>
+        <ul class="ws-outcomes"><li>Map your weekly AI opportunities</li><li>Set up automations without coding</li><li>Build a shared prompt library together</li></ul>
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Intermediate</span><span class="ws-badge">Hands-on</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing" id="pricing">
+  <div class="container section-center">
+    <span class="eyebrow reveal">Pricing</span>
+    <h2 class="section-h reveal rd1">One price.<br><span class="grad">Everything included.</span></h2>
+    <p class="section-sub reveal rd2">No per-head charges. No surprise invoices. One number, agreed upfront.</p>
+  </div>
+  <div class="container">
+    <div class="pricing-grid">
+      <div class="price-card reveal rd1">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">£1,500</div>
+        <div class="price-desc">2 sessions · up to 10 people<br>Try it before you commit fully</div>
+        <ul class="price-list"><li>Sessions 1 & 2</li><li>Pre-session survey</li><li>Printed takeaway guide</li><li>2 weeks email support</li></ul>
+        <a href="#contact" class="btn-price btn-price-outline">Get started</a>
+      </div>
+      <div class="price-card featured reveal rd2">
+        <div class="price-name">Growth <span class="popular-chip">Most popular</span></div>
+        <div class="price-amount">£2,800</div>
+        <div class="price-desc">4 sessions · up to 15 people<br>The full programme</div>
+        <ul class="price-list"><li>All 4 sessions</li><li>Pre-session survey</li><li>Firm prompt library PDF</li><li>Team action plan template</li><li>30 days email support</li></ul>
+        <a href="#contact" class="btn-price btn-price-blue">Book this</a>
+      </div>
+      <div class="price-card reveal rd3">
+        <div class="price-name">Transformation</div>
+        <div class="price-amount">£4,800</div>
+        <div class="price-desc">6 sessions · up to 20 people<br>For lasting, firm-wide change</div>
+        <ul class="price-list"><li>All 4 sessions</li><li>2 follow-up clinics</li><li>Custom prompt library</li><li>Team action plan template</li><li>90 days email support</li></ul>
+        <a href="#contact" class="btn-price btn-price-outline">Enquire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="section-center" style="margin-bottom:56px">
+      <span class="eyebrow reveal">FAQ</span>
+      <h2 class="section-h reveal rd1">Honest answers<br><span class="grad">to real questions.</span></h2>
+    </div>
+    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)">Does my team need any technical background?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none" stroke="#1d1d1f" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span></button><div class="faq-a"><p>No. If your team can use email and a browser, they're ready. We start from zero in Session 1. The fastest learner in the room is usually the person who was most sceptical before they arrived.</p></div></div>
+    <div class="faq-item reveal rd1"><button class="faq-q" onclick="toggleFaq(this)">What do we need on the day?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none" stroke="#1d1d1f" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span></button><div class="faq-a"><p>A laptop or tablet per person and internet access. We send a one-page setup guide a week before each session — free ChatGPT or Claude account, takes five minutes. That's it.</p></div></div>
+    <div class="faq-item reveal rd2"><button class="faq-q" onclick="toggleFaq(this)">Is the content specific to our industry?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none" stroke="#1d1d1f" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span></button><div class="faq-a"><p>Every session. We ask your team what tasks consume the most time before we arrive, and we build the demos around your actual documents and workflows. A law firm session looks nothing like a care home session.</p></div></div>
+    <div class="faq-item reveal rd3"><button class="faq-q" onclick="toggleFaq(this)">What about client confidentiality and data security?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none" stroke="#1d1d1f" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span></button><div class="faq-a"><p>We cover this in every session. Your team will know exactly what to share with AI tools, what never to share, and how to work effectively within those boundaries. For regulated sectors like legal and healthcare, we tailor this guidance specifically.</p></div></div>
+    <div class="faq-item reveal rd4"><button class="faq-q" onclick="toggleFaq(this)">Can we spread the cost across our financial year?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none" stroke="#1d1d1f" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span></button><div class="faq-a"><p>Yes. We invoice in two or three instalments if that's easier. Just mention it when you get in touch.</p></div></div>
+    <div class="faq-item reveal"><button class="faq-q" onclick="toggleFaq(this)">How quickly will we see results?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none" stroke="#1d1d1f" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></span></button><div class="faq-a"><p>Most teams leave Session 1 having already completed a real work task faster than they would have done it normally. By Session 2 you'll have people voluntarily showing each other what they've discovered in between. The shift is usually visible within a week.</p></div></div>
+  </div>
+</section>
+
+<!-- TASTER -->
+<section class="taster" id="taster">
+  <div class="taster-inner">
+    <div class="taster-left reveal">
+      <span class="taster-overline">No commitment required</span>
+      <h2 class="taster-h">The first session<br><span class="grad-light">is our gift to you.</span></h2>
+      <p class="taster-p">One hour. Your office. We show your team what's possible with AI — and answer every question honestly. If you don't want to continue after that, there's no invoice and no follow-up. We mean it.</p>
+      <div class="taster-promise">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p><strong>Our promise:</strong> if the taster session doesn't genuinely impress you, we part as friends. No awkward follow-up. No invoice. Ever.</p>
+      </div>
+    </div>
+    <div class="taster-right reveal rd2">
+      <div class="taster-field"><label class="taster-label" for="t-name">Your name</label><input class="taster-input-field" id="t-name" type="text" placeholder="Jane Smith"/></div>
+      <div class="taster-field"><label class="taster-label" for="t-email">Work email</label><input class="taster-input-field" id="t-email" type="email" placeholder="jane@yourcompany.com"/></div>
+      <div class="taster-field"><label class="taster-label" for="t-company">Company</label><input class="taster-input-field" id="t-company" type="text" placeholder="Your company name"/></div>
+      <button class="taster-submit" onclick="submitTaster()">Book the free session</button>
+      <p class="taster-note">We'll reply within 24 hours to find a time that works.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="section-center" style="margin-bottom:48px">
+      <span class="eyebrow reveal">Get in touch</span>
+      <h2 class="section-h reveal rd1">Any questions?<br><span class="grad">We're here.</span></h2>
+      <p class="section-sub reveal rd2" style="margin-bottom:0">Tell us about your team. We'll reply within one business day.</p>
+    </div>
+    <div id="contact-form-wrap" class="reveal rd2">
+      <div class="contact-grid">
+        <div class="contact-field"><label class="contact-label" for="fname">First name</label><input class="contact-input" id="fname" type="text" placeholder="Jane"/></div>
+        <div class="contact-field"><label class="contact-label" for="lname">Last name</label><input class="contact-input" id="lname" type="text" placeholder="Smith"/></div>
+        <div class="contact-field"><label class="contact-label" for="cemail">Work email</label><input class="contact-input" id="cemail" type="email" placeholder="jane@yourcompany.com"/></div>
+        <div class="contact-field"><label class="contact-label" for="company">Company</label><input class="contact-input" id="company" type="text" placeholder="Your company name"/></div>
+        <div class="contact-field"><label class="contact-label" for="sector">Your sector</label>
+          <select class="contact-select" id="sector"><option value="" disabled selected>Select sector</option><option>Professional Services</option><option>Health &amp; Wellness</option><option>Care Home Administration</option><option>Other</option></select>
+        </div>
+        <div class="contact-field"><label class="contact-label" for="team">Team size</label>
+          <select class="contact-select" id="team"><option value="" disabled selected>Select size</option><option>1–5 people</option><option>6–10 people</option><option>11–15 people</option><option>16–20 people</option><option>20+ people</option></select>
+        </div>
+        <div class="contact-field full"><label class="contact-label" for="message">What's on your mind?</label><textarea class="contact-textarea" id="message" placeholder="Tell us about your team, what you're hoping to achieve, or anything you want to ask..."></textarea></div>
+      </div>
+      <div class="privacy-check">
+        <input type="checkbox" id="privacy-agree" onchange="toggleSubmit()"/>
+        <label for="privacy-agree">I agree to the <a href="#">Privacy Policy</a>. Big Leap Training will never share my details.</label>
+      </div>
+      <button class="contact-submit" id="contact-submit-btn" onclick="submitContact()" disabled>Send message</button>
+    </div>
+    <div class="contact-success" id="contact-success">
+      <div class="success-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="success-title">Message received.</div>
+      <div class="success-sub">We'll be in touch within one business day.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER — minimal, purposeful -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Big Leap <span>Training</span></div>
+        <div class="footer-tagline">In-person AI workshops for teams who have better things to do with their time.</div>
+      </div>
+      <nav class="footer-nav">
+        <a href="#how">How it works</a>
+        <a href="#workshops">Workshops</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#taster">Free taster</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Big Leap Training. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// TYPEWRITER — cycles through phrases with realistic typing rhythm
+(function(){
+  const phrases = [
+    "evenings back.",
+    "time back.",
+    "team's hours back.",
+    "weekends back."
+  ];
+  const target  = document.getElementById('tw-target');
+  const cursor  = document.getElementById('tw-cursor');
+  if (!target) return;
+
+  let phraseIdx = 0;
+  let charIdx   = 0;
+  let deleting  = false;
+  let pauseTick = 0;
+
+  // Randomise typing speed slightly for realism
+  function randDelay(base) { return base + Math.random() * base * 0.4; }
+
+  function tick() {
+    const current = phrases[phraseIdx];
+
+    if (deleting) {
+      charIdx--;
+      target.textContent = current.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting  = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        setTimeout(tick, 480);
+        return;
+      }
+      setTimeout(tick, randDelay(42));
+    } else {
+      charIdx++;
+      target.textContent = current.slice(0, charIdx);
+      if (charIdx === current.length) {
+        // Pause at end before deleting
+        setTimeout(() => { deleting = true; tick(); }, 2200);
+        return;
+      }
+      // Slight hesitation after punctuation
+      const delay = /[.,!?]/.test(current[charIdx - 1]) ? randDelay(200) : randDelay(68);
+      setTimeout(tick, delay);
+    }
+  }
+
+  // Start after hero animation settles
+  setTimeout(tick, 900);
+})();
+(function(){
+  document.getElementById('offer-badge').textContent=OFFER_LABEL;
+  document.getElementById('offer-text').innerHTML=OFFER_DETAIL;
+  document.getElementById('offer-link').textContent=OFFER_CTA;
+})();
+function closeBanner(){
+  document.getElementById('offer-banner').classList.add('hidden');
+  document.getElementById('main-nav').classList.add('no-banner');
+  var h=document.querySelector('.hero');if(h)h.classList.add('no-banner');
+}
+
+// SCROLL REVEAL
+const els=document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:0.08,rootMargin:'0px 0px -20px 0px'});
+  els.forEach(el=>obs.observe(el));
+}else{els.forEach(el=>el.classList.add('visible'))}
+setTimeout(()=>els.forEach(el=>el.classList.add('visible')),2000);
+
+// ACTIVE NAV
+const sects=document.querySelectorAll('section[id]');
+const navAs=document.querySelectorAll('.nav-links a[data-section]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sects.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id});
+  navAs.forEach(a=>a.classList.toggle('active',a.dataset.section===cur));
+},{passive:true});
+
+// FAQ
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const was=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!was)item.classList.add('open');
+}
+
+// PRIVACY TOGGLE
+function toggleSubmit(){
+  document.getElementById('contact-submit-btn').disabled=!document.getElementById('privacy-agree').checked;
+}
+
+// CONTACT SUBMIT
+function submitContact(){
+  const fname=document.getElementById('fname').value.trim();
+  const email=document.getElementById('cemail').value.trim();
+  if(!fname||!email){
+    const f=document.getElementById(!fname?'fname':'cemail');
+    f.style.borderColor='#ff3b30';f.focus();
+    setTimeout(()=>f.style.borderColor='',2000);return;
+  }
+  document.getElementById('contact-form-wrap').style.display='none';
+  document.getElementById('contact-success').classList.add('show');
+}
+
+// TASTER SUBMIT
+function submitTaster(){
+  const name=document.getElementById('t-name').value.trim();
+  const email=document.getElementById('t-email').value.trim();
+  const btn=document.querySelector('.taster-submit');
+  if(!name||!email.includes('@')){
+    const f=!name?document.getElementById('t-name'):document.getElementById('t-email');
+    f.style.borderColor='#ff453a';f.focus();
+    setTimeout(()=>f.style.borderColor='',2000);return;
+  }
+  btn.textContent="We'll be in touch!";
+  btn.style.background='#34c759';
+  ['t-name','t-email','t-company'].forEach(id=>document.getElementById(id).value='');
+  setTimeout(()=>{btn.textContent='Book the free session';btn.style.background=''},4000);
+}
+</script>
+<!-- HERO ANIMATION — subtle dots, cursor repel -->
+<script>
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const hero   = document.getElementById('hero');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, animId;
+  let mx = -9999, my = -9999;
+
+  const CFG = {
+    count:       55,    // total dots
+    radius:      1.6,   // dot size px
+    baseAlpha:   0.18,  // resting opacity
+    repelDist:   110,   // cursor influence radius
+    repelForce:  2.8,   // how hard dots flee
+    returnForce: 0.045, // spring back to home
+    damping:     0.82,  // velocity friction
+    drift:       0.012, // tiny idle drift amplitude
+  };
+
+  // Brand palette — very low saturation feel
+  const COLS = [
+    {r:0,  g:113, b:227},  // blue
+    {r:52, g:170, b:220},  // teal
+    {r:48, g:209, b:88 },  // green
+  ];
+
+  function resize(){
+    W = canvas.width  = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+  }
+
+  class Dot {
+    constructor(){
+      // Home position — where dot always wants to return
+      this.hx = Math.random() * W;
+      this.hy = Math.random() * H;
+      this.x  = this.hx;
+      this.y  = this.hy;
+      this.vx = 0;
+      this.vy = 0;
+      this.c  = COLS[Math.floor(Math.random() * COLS.length)];
+      // Tiny idle drift phase
+      this.ph  = Math.random() * Math.PI * 2;
+      this.phx = Math.random() * Math.PI * 2;
+    }
+
+    update(){
+      this.ph  += 0.007;
+      this.phx += 0.005;
+
+      // Spring back toward home with gentle idle drift
+      const tx = this.hx + Math.sin(this.phx) * 3;
+      const ty = this.hy + Math.cos(this.ph)  * 3;
+      this.vx += (tx - this.x) * CFG.returnForce;
+      this.vy += (ty - this.y) * CFG.returnForce;
+
+      // Cursor repulsion
+      const dx = this.x - mx;
+      const dy = this.y - my;
+      const d  = Math.sqrt(dx*dx + dy*dy);
+      if(d < CFG.repelDist && d > 0){
+        const strength = (1 - d / CFG.repelDist) * CFG.repelForce;
+        this.vx += (dx / d) * strength;
+        this.vy += (dy / d) * strength;
+      }
+
+      // Damping
+      this.vx *= CFG.damping;
+      this.vy *= CFG.damping;
+
+      this.x += this.vx;
+      this.y += this.vy;
+    }
+
+    draw(){
+      const {r,g,b} = this.c;
+      // Slightly dim when far from home (fleeing)
+      const dist = Math.sqrt((this.x-this.hx)**2 + (this.y-this.hy)**2);
+      const a = Math.max(0.06, CFG.baseAlpha - dist * 0.001);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, CFG.radius, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${a.toFixed(3)})`;
+      ctx.fill();
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', ()=>{
+    resize();
+    // Reanchor home positions proportionally
+    dots.forEach(d=>{
+      d.hx = Math.random() * W;
+      d.hy = Math.random() * H;
+    });
+  });
+
+  const dots = Array.from({length: CFG.count}, ()=> new Dot());
+
+  // Track cursor inside hero only
+  hero.addEventListener('mousemove', e=>{
+    const r = canvas.getBoundingClientRect();
+    mx = e.clientX - r.left;
+    my = e.clientY - r.top;
+  });
+  hero.addEventListener('mouseleave', ()=>{ mx=-9999; my=-9999; });
+
+  function frame(){
+    animId = requestAnimationFrame(frame);
+    ctx.clearRect(0, 0, W, H);
+    dots.forEach(d=>{ d.update(); d.draw(); });
+  }
+
+  frame();
+
+  new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){ if(!animId) frame(); }
+    else{ cancelAnimationFrame(animId); animId = null; }
+  }).observe(hero);
+})();
+</script>
+</body>
+</html>

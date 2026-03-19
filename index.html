@@ -57,7 +57,31 @@ nav.no-banner{top:0}
 .nav-mobile-cta{display:none;background:var(--blue);color:white;border:none;border-radius:980px;padding:7px 16px;font-family:var(--sf);font-size:13px;font-weight:500;cursor:pointer}
 @media(max-width:900px){.nav-links{display:none}.nav-mobile-cta{display:block}}
 
-/* MOBILE STICKY */
+/* ── HAMBURGER MENU ── */
+.nav-mobile-cta{display:none}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;border-radius:8px;transition:background var(--t)}
+.hamburger:hover{background:var(--off-white)}
+.hamburger span{display:block;width:22px;height:2px;background:var(--dark-gray);border-radius:2px;transition:transform 0.3s var(--ease),opacity 0.3s var(--ease)}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:900px){.nav-links{display:none}.hamburger{display:flex}}
+
+/* Mobile drawer */
+.mobile-drawer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:190;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.mobile-drawer.open{display:flex;animation:drawerIn 0.3s var(--ease) both}
+@keyframes drawerIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.mobile-drawer a{font-size:22px;font-weight:600;color:var(--dark-gray);text-decoration:none;letter-spacing:-.03em;padding:10px 24px;border-radius:12px;transition:background var(--t),color var(--t);width:260px;text-align:center}
+.mobile-drawer a:hover{background:var(--off-white)}
+.mobile-drawer .drawer-cta{background:var(--blue);color:white;margin-top:8px;font-size:17px}
+.mobile-drawer .drawer-cta:hover{background:var(--blue-hover)}
+.drawer-close{position:absolute;top:20px;right:20px;background:none;border:none;cursor:pointer;padding:8px;color:var(--dark-gray)}
+
+/* Fix hero canvas on mobile — no extra gap */
+@media(max-width:768px){
+  #hero-canvas{display:none}
+  .hero{padding:120px 22px 72px}
+}
 .mobile-sticky{display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--separator);padding:12px 22px;gap:10px}
 @media(max-width:900px){.mobile-sticky{display:flex}}
 .mobile-sticky a{flex:1;text-align:center;padding:13px;border-radius:980px;font-size:15px;font-weight:500;text-decoration:none;font-family:var(--sf);letter-spacing:-.015em;transition:all var(--t)}
@@ -357,9 +381,25 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
       <li><a href="#contact" data-section="contact">Contact</a></li>
       <li><a href="#taster" class="nav-cta-link">Free taster</a></li>
     </ul>
-    <button class="nav-mobile-cta" onclick="document.getElementById('taster').scrollIntoView({behavior:'smooth'})">Free taster</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobile-drawer">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="#how"       onclick="toggleDrawer()">How it works</a>
+  <a href="#who"       onclick="toggleDrawer()">Who it's for</a>
+  <a href="#workshops" onclick="toggleDrawer()">Workshops</a>
+  <a href="#pricing"   onclick="toggleDrawer()">Pricing</a>
+  <a href="#faq"       onclick="toggleDrawer()">FAQ</a>
+  <a href="#contact"   onclick="toggleDrawer()">Contact</a>
+  <a href="#taster"    onclick="toggleDrawer()" class="drawer-cta">Book free taster</a>
+</div>
 
 <!-- MOBILE STICKY -->
 <div class="mobile-sticky">
@@ -770,7 +810,16 @@ function closeBanner(){
   var h=document.querySelector('.hero');if(h)h.classList.add('no-banner');
 }
 
-// SCROLL REVEAL
+// HAMBURGER DRAWER
+function toggleDrawer(){
+  const drawer = document.getElementById('mobile-drawer');
+  const burger = document.getElementById('hamburger');
+  const open   = drawer.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+
 const els=document.querySelectorAll('.reveal');
 if('IntersectionObserver' in window){
   const obs=new IntersectionObserver(entries=>{
@@ -802,33 +851,100 @@ function toggleSubmit(){
   document.getElementById('contact-submit-btn').disabled=!document.getElementById('privacy-agree').checked;
 }
 
-// CONTACT SUBMIT
-function submitContact(){
-  const fname=document.getElementById('fname').value.trim();
-  const email=document.getElementById('cemail').value.trim();
-  if(!fname||!email){
-    const f=document.getElementById(!fname?'fname':'cemail');
-    f.style.borderColor='#ff3b30';f.focus();
-    setTimeout(()=>f.style.borderColor='',2000);return;
+// FORMSPREE ENDPOINT
+const FORM_ENDPOINT = 'https://formspree.io/f/mwvryjpo';
+
+// CONTACT SUBMIT — posts to Formspree → alanjohndavid4@gmail.com
+async function submitContact(){
+  const fname  = document.getElementById('fname').value.trim();
+  const lname  = document.getElementById('lname').value.trim();
+  const email  = document.getElementById('cemail').value.trim();
+  const company= document.getElementById('company').value.trim();
+  const sector = document.getElementById('sector').value;
+  const team   = document.getElementById('team').value;
+  const message= document.getElementById('message').value.trim();
+  const agreed = document.getElementById('privacy-agree').checked;
+
+  if(!fname || !email){
+    const f = document.getElementById(!fname ? 'fname' : 'cemail');
+    f.style.borderColor='#ff3b30'; f.focus();
+    setTimeout(()=>f.style.borderColor='', 2000); return;
   }
-  document.getElementById('contact-form-wrap').style.display='none';
-  document.getElementById('contact-success').classList.add('show');
+
+  const btn = document.getElementById('contact-submit-btn');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject:  'New enquiry from Big Leap Training',
+        name:      `${fname} ${lname}`.trim(),
+        email,
+        company,
+        sector,
+        team_size: team,
+        message,
+        _replyto:  email,
+      })
+    });
+    if(res.ok){
+      document.getElementById('contact-form-wrap').style.display='none';
+      document.getElementById('contact-success').classList.add('show');
+    } else {
+      throw new Error('Server error');
+    }
+  } catch(e){
+    btn.textContent = 'Something went wrong — try again';
+    btn.style.background = '#ff3b30';
+    btn.disabled = false;
+    setTimeout(()=>{ btn.textContent='Send message'; btn.style.background=''; btn.disabled=false; }, 3000);
+  }
 }
 
-// TASTER SUBMIT
-function submitTaster(){
-  const name=document.getElementById('t-name').value.trim();
-  const email=document.getElementById('t-email').value.trim();
-  const btn=document.querySelector('.taster-submit');
-  if(!name||!email.includes('@')){
-    const f=!name?document.getElementById('t-name'):document.getElementById('t-email');
-    f.style.borderColor='#ff453a';f.focus();
-    setTimeout(()=>f.style.borderColor='',2000);return;
+// TASTER SUBMIT — posts to Formspree → alanjohndavid4@gmail.com
+async function submitTaster(){
+  const name    = document.getElementById('t-name').value.trim();
+  const email   = document.getElementById('t-email').value.trim();
+  const company = document.getElementById('t-company').value.trim();
+  const btn     = document.querySelector('.taster-submit');
+
+  if(!name || !email.includes('@')){
+    const f = !name ? document.getElementById('t-name') : document.getElementById('t-email');
+    f.style.borderColor='#ff453a'; f.focus();
+    setTimeout(()=>f.style.borderColor='', 2000); return;
   }
-  btn.textContent="We'll be in touch!";
-  btn.style.background='#34c759';
-  ['t-name','t-email','t-company'].forEach(id=>document.getElementById(id).value='');
-  setTimeout(()=>{btn.textContent='Book the free session';btn.style.background=''},4000);
+
+  btn.textContent = 'Sending…'; btn.disabled = true;
+
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'Free taster booking — Big Leap Training',
+        name,
+        email,
+        company,
+        _replyto: email,
+        type:     'Taster booking',
+      })
+    });
+    if(res.ok){
+      btn.textContent = "Booked! We'll be in touch within 24 hrs";
+      btn.style.background = '#34c759';
+      ['t-name','t-email','t-company'].forEach(id=>document.getElementById(id).value='');
+      setTimeout(()=>{ btn.textContent='Book the free session'; btn.style.background=''; btn.disabled=false; }, 5000);
+    } else {
+      throw new Error('Server error');
+    }
+  } catch(e){
+    btn.textContent = 'Something went wrong — try again';
+    btn.style.background = '#ff3b30';
+    btn.disabled = false;
+    setTimeout(()=>{ btn.textContent='Book the free session'; btn.style.background=''; }, 3000);
+  }
 }
 </script>
 <!-- HERO ANIMATION — subtle dots, cursor repel -->

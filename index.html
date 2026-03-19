@@ -48,8 +48,10 @@ nav{position:fixed;top:40px;left:0;right:0;z-index:200;height:52px;background:#f
 nav.no-banner{top:0}
 .nav-inner{width:100%;max-width:1080px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
 @media(max-width:768px){.nav-inner{padding:0 22px}}
-.nav-logo{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;text-decoration:none}
-.nav-logo span{color:var(--blue)}
+.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:28px;height:28px;flex-shrink:0}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;line-height:1;word-spacing:-.5px}
+.nav-logo-text span{background:linear-gradient(95deg,#0071e3 0%,#34aadc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .nav-links{display:flex;list-style:none;align-items:center}
 .nav-links a{display:block;padding:6px 14px;font-size:13px;color:var(--mid-gray);text-decoration:none;letter-spacing:-.01em;transition:color var(--t)}
 .nav-links a:hover,.nav-links a.active{color:var(--dark-gray)}
@@ -346,8 +348,10 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
 @media(max-width:768px){footer{padding:40px 22px}}
 .footer-inner{max-width:1080px;margin:0 auto}
 .footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
-.footer-logo{font-size:17px;font-weight:700;color:white;letter-spacing:-.03em}
-.footer-logo span{color:#409cff}
+.footer-logo{display:inline-flex;align-items:center;gap:10px}
+.footer-logo-mark{width:28px;height:28px;flex-shrink:0}
+.footer-logo-text{font-size:17px;font-weight:700;color:white;letter-spacing:-.03em;line-height:1;word-spacing:-.5px}
+.footer-logo-text span{background:linear-gradient(95deg,#409cff 0%,#6ac4dc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .footer-tagline{font-size:13px;color:rgba(255,255,255,.3);margin-top:6px;letter-spacing:-.01em;max-width:220px;line-height:1.5}
 .footer-nav{display:flex;gap:28px;flex-wrap:wrap}
 .footer-nav a{font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;letter-spacing:-.01em;transition:color var(--t)}
@@ -380,7 +384,20 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
 <!-- NAV -->
 <nav id="main-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="#">Big Leap <span>Training</span></a>
+    <a class="nav-logo" href="#">
+      <svg class="nav-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- L corner — dark on light nav -->
+        <line x1="14" y1="10" x2="14" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="76" x2="74" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <!-- diagonal leap -->
+        <line x1="14" y1="38" x2="64" y2="10" stroke="#0071e3" stroke-width="6" stroke-linecap="round"/>
+        <!-- arrowhead -->
+        <polyline points="52,8 66,8 66,22" fill="none" stroke="#0071e3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- junction dot -->
+        <circle cx="14" cy="38" r="6" fill="#30d158"/>
+      </svg>
+      <span class="nav-logo-text">Big Leap <span>Training</span></span>
+    </a>
     <ul class="nav-links">
       <li><a href="#how" data-section="how">How it works</a></li>
       <li><a href="#who" data-section="who">Who it's for</a></li>
@@ -737,7 +754,20 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
   <div class="footer-inner">
     <div class="footer-top">
       <div>
-        <div class="footer-logo">Big Leap <span>Training</span></div>
+        <div class="footer-logo">
+          <svg class="footer-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- L corner — white on dark footer -->
+            <line x1="14" y1="10" x2="14" y2="76" stroke="white" stroke-width="10" stroke-linecap="round"/>
+            <line x1="14" y1="76" x2="74" y2="76" stroke="white" stroke-width="10" stroke-linecap="round"/>
+            <!-- diagonal leap -->
+            <line x1="14" y1="38" x2="64" y2="10" stroke="#34aadc" stroke-width="6" stroke-linecap="round"/>
+            <!-- arrowhead -->
+            <polyline points="52,8 66,8 66,22" fill="none" stroke="#34aadc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- junction dot -->
+            <circle cx="14" cy="38" r="6" fill="#30d158"/>
+          </svg>
+          <span class="footer-logo-text">Big Leap <span>Training</span></span>
+        </div>
         <div class="footer-tagline">In-person AI workshops for teams who have better things to do with their time.</div>
       </div>
       <nav class="footer-nav">

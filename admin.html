@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Availability Manager — Big Leap Training</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+:root{
+  --sf:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+  --white:#ffffff;--off-white:#f5f5f7;--mid-gray:#86868b;--dark-gray:#1d1d1f;
+  --blue:#0071e3;--blue-hover:#0077ed;--blue-light:#e8f0fe;
+  --green:#30d158;--green-light:#e6f9ed;--red:#ff453a;--red-light:#fff1f0;
+  --separator:rgba(0,0,0,0.07);--error:#ff453a;
+  --radius:18px;--ease:cubic-bezier(0.4,0,0.2,1);--t:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sf);background:var(--off-white);color:var(--dark-gray);line-height:1.47059;font-size:17px;letter-spacing:-0.022em;min-height:100vh}
+
+/* ── LOGIN ── */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--dark-gray)}
+.login-card{background:var(--white);border-radius:24px;padding:48px 40px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.28)}
+@media(max-width:480px){.login-card{padding:36px 28px}}
+.login-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:28px}
+.login-logo-mark{width:28px;height:28px;flex-shrink:0}
+.login-logo-text{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;line-height:1}
+.login-logo-text span{background:linear-gradient(95deg,#0071e3 0%,#34aadc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-h{font-size:26px;font-weight:700;letter-spacing:-.04em;color:var(--dark-gray);margin-bottom:6px}
+.login-sub{font-size:14px;color:var(--mid-gray);margin-bottom:28px;letter-spacing:-.01em}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.login-field label{font-size:13px;font-weight:500;color:var(--dark-gray);letter-spacing:-.01em}
+.login-field input{font-family:var(--sf);font-size:15px;color:var(--dark-gray);background:var(--off-white);border:1.5px solid transparent;border-radius:10px;padding:11px 14px;outline:none;letter-spacing:-.015em;transition:border-color var(--t),background var(--t);width:100%}
+.login-field input:focus{border-color:var(--blue);background:var(--white)}
+.login-field input.error{border-color:var(--error)}
+.login-error{font-size:13px;color:var(--error);letter-spacing:-.01em;margin-bottom:12px}
+.primary-btn{display:block;width:100%;margin-top:4px;background:var(--blue);color:white;border:none;border-radius:980px;padding:14px;font-family:var(--sf);font-size:15px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t)}
+.primary-btn:hover{background:var(--blue-hover);transform:scale(1.01)}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--separator);display:flex;align-items:center;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+.nav-inner{width:100%;max-width:1200px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+@media(max-width:768px){.nav-inner{padding:0 22px}}
+.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:28px;height:28px;flex-shrink:0}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;line-height:1}
+.nav-logo-text span{background:linear-gradient(95deg,#0071e3 0%,#34aadc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.2);border-radius:980px;padding:4px 10px;font-size:11px;font-weight:600;color:#1a8733;letter-spacing:.03em;text-transform:uppercase}
+.nav-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.nav-preview{font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--t)}
+.nav-preview:hover{opacity:.7}
+.nav-signout{background:none;border:1.5px solid var(--separator);border-radius:980px;padding:5px 14px;font-family:var(--sf);font-size:13px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:border-color var(--t),color var(--t)}
+.nav-signout:hover{border-color:var(--dark-gray);color:var(--dark-gray)}
+
+/* ── ADMIN CONTENT ── */
+.admin-wrap{max-width:1200px;margin:0 auto;padding:40px 48px 120px}
+@media(max-width:768px){.admin-wrap{padding:28px 22px 120px}}
+.page-header{margin-bottom:36px}
+.page-header h1{font-size:clamp(26px,3vw,36px);font-weight:700;letter-spacing:-.05em;color:var(--dark-gray)}
+.page-header p{font-size:14px;color:var(--mid-gray);margin-top:6px;letter-spacing:-.01em}
+
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.admin-grid{grid-template-columns:1fr}}
+
+/* ── SECTION CARD ── */
+.section-card{background:var(--white);border-radius:20px;padding:28px;box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.section-card h2{font-size:17px;font-weight:700;letter-spacing:-.03em;color:var(--dark-gray);margin-bottom:6px}
+.section-card .section-desc{font-size:13px;color:var(--mid-gray);letter-spacing:-.01em;margin-bottom:20px;line-height:1.5}
+
+/* ── LEGEND ── */
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:20px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mid-gray);letter-spacing:-.01em}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-available{background:var(--green)}
+.dot-blocked{background:var(--red)}
+.dot-unavail{background:#d1d1d6}
+
+/* ── ADMIN CALENDAR ── */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav-label{font-size:15px;font-weight:600;color:var(--dark-gray);letter-spacing:-.02em}
+.cal-nav-btn{background:none;border:none;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--mid-gray);transition:background var(--t),color var(--t)}
+.cal-nav-btn:hover{background:var(--off-white);color:var(--dark-gray)}
+.cal-nav-btn:disabled{opacity:.25;cursor:not-allowed}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px}
+.cal-weekday{font-size:11px;font-weight:600;color:var(--mid-gray);text-align:center;padding:4px 0;letter-spacing:.04em;text-transform:uppercase}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:400;border-radius:50%;cursor:pointer;transition:opacity var(--t),background var(--t),color var(--t);letter-spacing:-.01em;border:none;font-family:var(--sf);position:relative}
+.cal-day.empty{background:none;cursor:default}
+.cal-day.unavailable{background:none;color:#d1d1d6;cursor:default}
+.cal-day.available{background:var(--green-light);color:#1a8733;font-weight:500}
+.cal-day.available:hover{background:#c5f0d4;color:#117222}
+.cal-day.available.today{outline:2px solid var(--green);outline-offset:1px}
+.cal-day.blocked{background:var(--red-light);color:var(--red);font-weight:500}
+.cal-day.blocked:hover{background:#ffd6d4;color:#cc2f26}
+
+/* ── BULK ACTIONS ── */
+.bulk-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.ghost-btn{background:none;border:1.5px solid var(--separator);border-radius:980px;padding:7px 16px;font-family:var(--sf);font-size:13px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:border-color var(--t),color var(--t),background var(--t);letter-spacing:-.01em}
+.ghost-btn:hover{border-color:var(--dark-gray);color:var(--dark-gray)}
+.ghost-btn.danger:hover{border-color:var(--red);color:var(--red)}
+
+/* ── TIME SLOTS LIST ── */
+.slots-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.slot-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;cursor:pointer;transition:background var(--t);border:1.5px solid transparent}
+.slot-row:hover{background:var(--off-white)}
+.slot-row.enabled{background:var(--blue-light);border-color:rgba(0,113,227,.15)}
+.slot-row input[type="checkbox"]{width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+.slot-time{font-size:14px;font-weight:500;letter-spacing:-.01em;color:var(--dark-gray);flex:1}
+.slot-row.enabled .slot-time{color:var(--blue)}
+.slot-status{font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--mid-gray)}
+.slot-row.enabled .slot-status{color:var(--blue)}
+
+.select-actions{display:flex;gap:8px}
+
+/* ── SAVE BAR ── */
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);border-top:1px solid var(--separator);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;padding:16px 48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+@media(max-width:768px){.save-bar{padding:14px 22px;gap:8px}}
+.save-btn{background:var(--blue);color:white;border:none;border-radius:980px;padding:11px 24px;font-family:var(--sf);font-size:14px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t)}
+.save-btn:hover{background:var(--blue-hover);transform:scale(1.01)}
+.secondary-btn{background:none;border:1.5px solid var(--separator);border-radius:980px;padding:10px 20px;font-family:var(--sf);font-size:14px;font-weight:500;color:var(--dark-gray);cursor:pointer;letter-spacing:-.015em;transition:border-color var(--t),background var(--t)}
+.secondary-btn:hover{background:var(--off-white);border-color:rgba(0,0,0,.15)}
+.save-status{font-size:13px;font-weight:500;letter-spacing:-.01em;transition:opacity var(--t);opacity:0;margin-left:4px}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-card{background:var(--white);border-radius:20px;padding:32px;width:100%;max-width:520px;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+.modal-card h3{font-size:20px;font-weight:700;letter-spacing:-.04em;color:var(--dark-gray);margin-bottom:8px}
+.modal-card p{font-size:14px;color:var(--mid-gray);letter-spacing:-.01em;margin-bottom:18px;line-height:1.55}
+.modal-card textarea{font-family:"SF Mono","Fira Mono","Courier New",monospace;font-size:12px;color:var(--dark-gray);background:var(--off-white);border:1.5px solid transparent;border-radius:10px;padding:12px 14px;width:100%;height:200px;resize:vertical;outline:none;transition:border-color var(--t);letter-spacing:0;line-height:1.7}
+.modal-card textarea:focus{border-color:var(--blue);background:var(--white)}
+.modal-error{font-size:13px;color:var(--error);letter-spacing:-.01em;margin-top:8px}
+.modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <a class="login-logo" href="index.html">
+      <svg class="login-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="14" y1="10" x2="14" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="76" x2="74" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="64" y2="10" stroke="#0071e3" stroke-width="6" stroke-linecap="round"/>
+        <polyline points="52,8 66,8 66,22" fill="none" stroke="#0071e3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="38" r="6" fill="#30d158"/>
+      </svg>
+      <span class="login-logo-text">Big Leap <span>Training</span></span>
+    </a>
+    <h1 class="login-h">Admin access</h1>
+    <p class="login-sub">Sign in to manage your availability.</p>
+    <div class="login-field">
+      <label for="pin-input">Password</label>
+      <input type="password" id="pin-input" placeholder="Enter your password" autocomplete="current-password"/>
+    </div>
+    <p class="login-error" id="login-error" style="display:none">Incorrect password — please try again.</p>
+    <button class="primary-btn" onclick="checkPin()">Sign in</button>
+  </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="admin-panel" hidden>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <svg class="nav-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="14" y1="10" x2="14" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+          <line x1="14" y1="76" x2="74" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+          <line x1="14" y1="38" x2="64" y2="10" stroke="#0071e3" stroke-width="6" stroke-linecap="round"/>
+          <polyline points="52,8 66,8 66,22" fill="none" stroke="#0071e3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="14" cy="38" r="6" fill="#30d158"/>
+        </svg>
+        <span class="nav-logo-text">Big Leap <span>Training</span></span>
+      </a>
+      <div class="nav-right">
+        <span class="nav-badge"><span class="nav-badge-dot"></span>Admin</span>
+        <a class="nav-preview" href="taster.html" target="_blank">Preview booking page →</a>
+        <button class="nav-signout" onclick="logout()">Sign out</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-wrap">
+    <div class="page-header">
+      <h1>Availability Manager</h1>
+      <p>Control which dates and times are shown to clients on the booking page.</p>
+    </div>
+
+    <div class="admin-grid">
+
+      <!-- ── CALENDAR CARD ── -->
+      <div class="section-card">
+        <h2>Block &amp; unblock dates</h2>
+        <p class="section-desc">Click any upcoming weekday to toggle it. Blocked dates won't appear as bookable on the taster page. Weekends and past dates are always unavailable.</p>
+
+        <div class="legend">
+          <span class="legend-item"><span class="dot dot-available"></span>Available</span>
+          <span class="legend-item"><span class="dot dot-blocked"></span>Blocked</span>
+          <span class="legend-item"><span class="dot dot-unavail"></span>Weekend / past</span>
+        </div>
+
+        <div class="cal-nav">
+          <button class="cal-nav-btn" id="admin-cal-prev" aria-label="Previous month" onclick="adminCalNav(-1)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="cal-nav-label" id="admin-cal-label"></span>
+          <button class="cal-nav-btn" id="admin-cal-next" aria-label="Next month" onclick="adminCalNav(1)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        <div class="cal-weekdays">
+          <span class="cal-weekday">Mon</span>
+          <span class="cal-weekday">Tue</span>
+          <span class="cal-weekday">Wed</span>
+          <span class="cal-weekday">Thu</span>
+          <span class="cal-weekday">Fri</span>
+          <span class="cal-weekday">Sat</span>
+          <span class="cal-weekday">Sun</span>
+        </div>
+        <div class="cal-days" id="admin-cal-days"></div>
+
+        <div class="bulk-actions">
+          <button class="ghost-btn danger" onclick="blockThisMonth()">Block entire month</button>
+          <button class="ghost-btn" onclick="unblockThisMonth()">Clear month blocks</button>
+        </div>
+      </div>
+
+      <!-- ── TIME SLOTS CARD ── -->
+      <div class="section-card">
+        <h2>Available time slots</h2>
+        <p class="section-desc">Choose which time slots clients can pick from on all available days. Untick a slot to hide it from the booking page.</p>
+
+        <div class="slots-list" id="admin-slots-list"></div>
+
+        <div class="select-actions">
+          <button class="ghost-btn" onclick="selectAllSlots()">Select all</button>
+          <button class="ghost-btn" onclick="deselectAllSlots()">Deselect all</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SAVE BAR ── -->
+  <div class="save-bar">
+    <button class="save-btn" onclick="saveConfig()">Save changes</button>
+    <button class="secondary-btn" onclick="openExportModal()">Export config</button>
+    <button class="secondary-btn" onclick="openImportModal()">Import config</button>
+    <span class="save-status" id="save-status"></span>
+  </div>
+
+</div>
+
+<!-- ── EXPORT MODAL ── -->
+<div class="modal-overlay" id="export-modal" hidden onclick="closeOnOverlay(event,'export-modal')">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <h3>Export configuration</h3>
+    <p>Copy this JSON to back up your availability settings or transfer them to another device.</p>
+    <textarea id="export-text" readonly></textarea>
+    <div class="modal-actions">
+      <button class="ghost-btn" onclick="closeModal('export-modal')">Close</button>
+      <button class="save-btn" id="copy-btn" onclick="copyExport()">Copy to clipboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── IMPORT MODAL ── -->
+<div class="modal-overlay" id="import-modal" hidden onclick="closeOnOverlay(event,'import-modal')">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <h3>Import configuration</h3>
+    <p>Paste a previously exported JSON config below. This will replace your current settings — remember to save afterwards.</p>
+    <textarea id="import-text" placeholder='{"blockedDates":[],"availableSlots":["9:00 am","10:00 am"]}'></textarea>
+    <p class="modal-error" id="import-error" style="display:none">Invalid JSON — please check the format and try again.</p>
+    <div class="modal-actions">
+      <button class="ghost-btn" onclick="closeModal('import-modal')">Cancel</button>
+      <button class="save-btn" onclick="applyImport()">Apply import</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CHANGE THIS PASSWORD before deploying ──
+const ADMIN_PASSWORD = 'bigleap2024';
+
+const AVAIL_KEY  = 'blt_availability';
+const ALL_SLOTS  = ['9:00 am','10:00 am','11:00 am','1:00 pm','2:00 pm','3:00 pm','4:00 pm'];
+const MONTHS     = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+let calYear, calMonth;
+let config = { blockedDates: [], availableSlots: [...ALL_SLOTS] };
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+function checkPin() {
+  const val = document.getElementById('pin-input').value;
+  if (val === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').hidden = true;
+    document.getElementById('admin-panel').hidden  = false;
+    adminInit();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('pin-input').classList.add('error');
+    document.getElementById('pin-input').value = '';
+    document.getElementById('pin-input').focus();
+  }
+}
+
+function logout() {
+  document.getElementById('admin-panel').hidden  = true;
+  document.getElementById('login-screen').hidden = false;
+  document.getElementById('pin-input').value     = '';
+  document.getElementById('login-error').style.display = 'none';
+  document.getElementById('pin-input').classList.remove('error');
+}
+
+document.getElementById('pin-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPin();
+});
+
+// ── CONFIG ────────────────────────────────────────────────────────────
+function loadConfig() {
+  try {
+    const saved = localStorage.getItem(AVAIL_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed.blockedDates))   config.blockedDates   = parsed.blockedDates;
+      if (Array.isArray(parsed.availableSlots)) config.availableSlots = parsed.availableSlots;
+    }
+  } catch(e) { /* use defaults */ }
+}
+
+function saveConfig() {
+  try {
+    localStorage.setItem(AVAIL_KEY, JSON.stringify(config));
+    showSaveStatus('Changes saved ✓', false);
+  } catch(e) {
+    showSaveStatus('Error — could not save', true);
+  }
+}
+
+function showSaveStatus(msg, isError) {
+  const el = document.getElementById('save-status');
+  el.textContent  = msg;
+  el.style.color  = isError ? 'var(--error)' : 'var(--green)';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.style.opacity = '0'; }, 2500);
+}
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────
+function openExportModal() {
+  document.getElementById('export-text').value = JSON.stringify(config, null, 2);
+  document.getElementById('export-modal').hidden = false;
+}
+
+function copyExport() {
+  const text = document.getElementById('export-text').value;
+  const btn  = document.getElementById('copy-btn');
+  function onSuccess() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy to clipboard'; }, 1600);
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(function() {
+      fallbackCopy(onSuccess);
+    });
+  } else {
+    fallbackCopy(onSuccess);
+  }
+}
+
+function fallbackCopy(onSuccess) {
+  const ta = document.getElementById('export-text');
+  ta.select();
+  try { document.execCommand('copy'); onSuccess(); } catch(e) {}
+}
+
+function openImportModal() {
+  document.getElementById('import-text').value   = '';
+  document.getElementById('import-error').style.display = 'none';
+  document.getElementById('import-modal').hidden = false;
+}
+
+function applyImport() {
+  try {
+    const parsed = JSON.parse(document.getElementById('import-text').value.trim());
+    if (typeof parsed !== 'object' || parsed === null) throw new Error();
+    config.blockedDates   = Array.isArray(parsed.blockedDates)   ? parsed.blockedDates   : [];
+    config.availableSlots = Array.isArray(parsed.availableSlots) ? parsed.availableSlots : [...ALL_SLOTS];
+    closeModal('import-modal');
+    renderAdminCal();
+    renderSlots();
+    showSaveStatus('Config imported — click Save to apply', false);
+  } catch(e) {
+    document.getElementById('import-error').style.display = 'block';
+  }
+}
+
+function closeModal(id) {
+  document.getElementById(id).hidden = true;
+}
+
+function closeOnOverlay(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ── ADMIN INIT ────────────────────────────────────────────────────────
+function adminInit() {
+  loadConfig();
+  const now = new Date();
+  calYear  = now.getFullYear();
+  calMonth = now.getMonth();
+  renderAdminCal();
+  renderSlots();
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────────────
+function adminCalNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderAdminCal();
+}
+
+function dateToStr(date) {
+  return date.getFullYear() + '-' +
+    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+    String(date.getDate()).padStart(2, '0');
+}
+
+function renderAdminCal() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const now = new Date();
+  document.getElementById('admin-cal-prev').disabled =
+    (calYear === now.getFullYear() && calMonth === now.getMonth());
+  document.getElementById('admin-cal-label').textContent = MONTHS[calMonth] + ' ' + calYear;
+
+  const firstDay = new Date(calYear, calMonth, 1);
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const container   = document.getElementById('admin-cal-days');
+  container.innerHTML = '';
+
+  for (let i = 0; i < startOffset; i++) {
+    const blank = document.createElement('div');
+    blank.className = 'cal-day empty';
+    container.appendChild(blank);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date    = new Date(calYear, calMonth, d);
+    const dateStr = dateToStr(date);
+    const btn     = document.createElement('button');
+    btn.className  = 'cal-day';
+    btn.textContent = d;
+
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    const isPast    = date < today;
+    const isToday   = date.getTime() === today.getTime();
+    const isBlocked = config.blockedDates.includes(dateStr);
+
+    if (isWeekend || isPast) {
+      btn.classList.add('unavailable');
+      btn.disabled = true;
+      btn.setAttribute('aria-label', d + ' — unavailable');
+    } else if (isBlocked) {
+      btn.classList.add('blocked');
+      btn.title = 'Click to unblock';
+      btn.setAttribute('aria-label', d + ' — blocked, click to unblock');
+      btn.addEventListener('click', function() { toggleDate(dateStr); });
+    } else {
+      btn.classList.add('available');
+      if (isToday) btn.classList.add('today');
+      btn.title = 'Click to block';
+      btn.setAttribute('aria-label', d + ' — available, click to block');
+      btn.addEventListener('click', function() { toggleDate(dateStr); });
+    }
+
+    container.appendChild(btn);
+  }
+}
+
+function toggleDate(dateStr) {
+  const idx = config.blockedDates.indexOf(dateStr);
+  if (idx === -1) {
+    config.blockedDates.push(dateStr);
+  } else {
+    config.blockedDates.splice(idx, 1);
+  }
+  renderAdminCal();
+}
+
+function blockThisMonth() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(calYear, calMonth, d);
+    if (date < today) continue;
+    if (date.getDay() === 0 || date.getDay() === 6) continue;
+    const dateStr = dateToStr(date);
+    if (!config.blockedDates.includes(dateStr)) config.blockedDates.push(dateStr);
+  }
+  renderAdminCal();
+}
+
+function unblockThisMonth() {
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = dateToStr(new Date(calYear, calMonth, d));
+    const idx = config.blockedDates.indexOf(dateStr);
+    if (idx !== -1) config.blockedDates.splice(idx, 1);
+  }
+  renderAdminCal();
+}
+
+// ── TIME SLOTS ────────────────────────────────────────────────────────
+function renderSlots() {
+  const container = document.getElementById('admin-slots-list');
+  container.innerHTML = '';
+  ALL_SLOTS.forEach(function(slot) {
+    const enabled = config.availableSlots.includes(slot);
+    const row = document.createElement('label');
+    row.className = 'slot-row' + (enabled ? ' enabled' : '');
+
+    const cb = document.createElement('input');
+    cb.type    = 'checkbox';
+    cb.checked = enabled;
+    cb.addEventListener('change', function() { toggleSlot(slot, cb.checked, row); });
+
+    const timeSpan = document.createElement('span');
+    timeSpan.className   = 'slot-time';
+    timeSpan.textContent = slot;
+
+    const statusSpan = document.createElement('span');
+    statusSpan.className   = 'slot-status';
+    statusSpan.textContent = enabled ? 'On' : 'Off';
+
+    row.appendChild(cb);
+    row.appendChild(timeSpan);
+    row.appendChild(statusSpan);
+    container.appendChild(row);
+  });
+}
+
+function toggleSlot(slot, enabled, rowEl) {
+  if (enabled) {
+    if (!config.availableSlots.includes(slot)) {
+      config.availableSlots.push(slot);
+      config.availableSlots.sort(function(a, b) {
+        return ALL_SLOTS.indexOf(a) - ALL_SLOTS.indexOf(b);
+      });
+    }
+  } else {
+    config.availableSlots = config.availableSlots.filter(function(s) { return s !== slot; });
+  }
+  // Update row appearance without full re-render
+  rowEl.className = 'slot-row' + (enabled ? ' enabled' : '');
+  rowEl.querySelector('.slot-status').textContent = enabled ? 'On' : 'Off';
+}
+
+function selectAllSlots() {
+  config.availableSlots = [...ALL_SLOTS];
+  renderSlots();
+}
+
+function deselectAllSlots() {
+  config.availableSlots = [];
+  renderSlots();
+}
+</script>
+</body>
+</html>

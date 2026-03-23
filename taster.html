@@ -294,8 +294,21 @@ setTimeout(() => revEls.forEach(el => el.classList.add('visible')), 2000);
 // ── CALENDAR ──
 const TIME_SLOTS = ['9:00 am', '10:00 am', '11:00 am', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const AVAIL_KEY = 'blt_availability';
 
 let calYear, calMonth, selectedDate = null, selectedSlot = null;
+let availConfig = { blockedDates: [], availableSlots: null };
+
+function loadAvailabilityConfig() {
+  try {
+    const saved = localStorage.getItem(AVAIL_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed.blockedDates))   availConfig.blockedDates   = parsed.blockedDates;
+      if (Array.isArray(parsed.availableSlots)) availConfig.availableSlots = parsed.availableSlots;
+    }
+  } catch(e) { /* use defaults */ }
+}
 
 function calInit() {
   const now = new Date();
@@ -347,8 +360,10 @@ function renderCal() {
     const isWeekend = date.getDay() === 0 || date.getDay() === 6;
     const isPast    = date < today;
     const isToday   = date.getTime() === today.getTime();
+    const dateStr   = calYear + '-' + String(calMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+    const isBlocked = availConfig.blockedDates.includes(dateStr);
 
-    if (isWeekend || isPast) {
+    if (isWeekend || isPast || isBlocked) {
       btn.classList.add('disabled');
       btn.disabled = true;
     } else {
@@ -380,13 +395,21 @@ function selectDate(date, btn) {
   const slotGrid    = document.getElementById('slots-grid');
   slotLabel.textContent = 'Available times on ' + label.split(',')[0] + ', ' + MONTHS[date.getMonth()] + ' ' + date.getDate();
   slotGrid.innerHTML = '';
-  TIME_SLOTS.forEach(time => {
-    const sb = document.createElement('button');
-    sb.className = 'slot-btn';
-    sb.textContent = time;
-    sb.addEventListener('click', () => selectSlot(time, sb, label));
-    slotGrid.appendChild(sb);
-  });
+  const activeSlots = availConfig.availableSlots != null ? availConfig.availableSlots : TIME_SLOTS;
+  if (activeSlots.length === 0) {
+    const msg = document.createElement('span');
+    msg.className   = 'slots-empty';
+    msg.textContent = 'No times available on this date. Please pick another day.';
+    slotGrid.appendChild(msg);
+  } else {
+    activeSlots.forEach(time => {
+      const sb = document.createElement('button');
+      sb.className = 'slot-btn';
+      sb.textContent = time;
+      sb.addEventListener('click', () => selectSlot(time, sb, label));
+      slotGrid.appendChild(sb);
+    });
+  }
   slotSection.style.display = 'block';
   updateBanner();
 }
@@ -409,6 +432,7 @@ function updateBanner(text) {
   }
 }
 
+loadAvailabilityConfig();
 calInit();
 
 // ── FORM SUBMISSION ──

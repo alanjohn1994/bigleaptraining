@@ -309,7 +309,8 @@ nav.no-banner{top:0}
 .taster-input-field{font-family:var(--sf);font-size:15px;color:white;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;outline:none;letter-spacing:-.015em;transition:border-color var(--t),background var(--t);width:100%}
 .taster-input-field::placeholder{color:rgba(255,255,255,.25)}
 .taster-input-field:focus{border-color:var(--blue);background:rgba(255,255,255,.1)}
-.taster-submit{display:block;width:100%;margin-top:8px;background:var(--blue);color:white;border:none;border-radius:980px;padding:14px;font-family:var(--sf);font-size:15px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t)}
+.taster-submit{display:block;width:100%;margin-top:8px;background:var(--blue);color:white;border:none;border-radius:980px;padding:14px;font-family:var(--sf);font-size:15px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t);text-align:center;text-decoration:none}
+.taster-cal-desc{font-size:15px;color:rgba(255,255,255,.55);line-height:1.6;letter-spacing:-.015em;margin-bottom:24px}
 .taster-submit:hover{background:var(--blue-hover);transform:scale(1.01)}
 .taster-note{font-size:12px;color:rgba(255,255,255,.25);text-align:center;margin-top:12px;letter-spacing:-.01em}
 
@@ -701,11 +702,9 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
       </div>
     </div>
     <div class="taster-right reveal rd2">
-      <div class="taster-field"><label class="taster-label" for="t-name">Your name</label><input class="taster-input-field" id="t-name" type="text" placeholder="Jane Smith"/></div>
-      <div class="taster-field"><label class="taster-label" for="t-email">Work email</label><input class="taster-input-field" id="t-email" type="email" placeholder="jane@yourcompany.com"/></div>
-      <div class="taster-field"><label class="taster-label" for="t-company">Company</label><input class="taster-input-field" id="t-company" type="text" placeholder="Your company name"/></div>
-      <button class="taster-submit" onclick="submitTaster()">Book the free session</button>
-      <p class="taster-note">We'll reply within 24 hours to find a time that works.</p>
+      <p class="taster-cal-desc">Pick a date and time that suits your team. The whole booking takes under 2&nbsp;minutes — and we'll confirm within 24&nbsp;hours.</p>
+      <a href="taster.html" class="taster-submit" aria-label="Choose a date and time for your free session">Choose a date →</a>
+      <p class="taster-note">Free session, no commitment, at your office.</p>
     </div>
   </div>
 </section>
@@ -970,40 +969,6 @@ async function submitContact(){
     btn.textContent='Something went wrong — please try again';
     btn.style.background='#ff3b30'; btn.disabled=false;
     setTimeout(()=>{ btn.textContent='Send message'; btn.style.background=''; },3500);
-  }
-}
-
-// TASTER SUBMIT
-async function submitTaster(){
-  const name    = document.getElementById('t-name').value.trim();
-  const email   = document.getElementById('t-email').value.trim();
-  const company = document.getElementById('t-company').value.trim();
-  const btn     = document.querySelector('.taster-submit');
-
-  if(!name||!email.includes('@')){
-    const f=!name?document.getElementById('t-name'):document.getElementById('t-email');
-    f.style.borderColor='#ff453a'; f.focus();
-    setTimeout(()=>f.style.borderColor='',2000); return;
-  }
-  if(!checkRateLimit()) return;
-
-  btn.textContent='Sending…'; btn.disabled=true;
-  try{
-    const res=await fetch(FORM_ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({ _subject:'Free taster booking — Big Leap Training', name, email, company, _replyto:email, type:'Taster booking' })
-    });
-    if(res.ok){
-      btn.textContent="Booked! We'll be in touch within 24 hrs";
-      btn.style.background='#34c759';
-      ['t-name','t-email','t-company'].forEach(id=>document.getElementById(id).value='');
-      setTimeout(()=>{ btn.textContent='Book the free session'; btn.style.background=''; btn.disabled=false; },5000);
-    } else { throw new Error(); }
-  }catch(e){
-    btn.textContent='Something went wrong — try again';
-    btn.style.background='#ff3b30'; btn.disabled=false;
-    setTimeout(()=>{ btn.textContent='Book the free session'; btn.style.background=''; },3000);
   }
 }
 </script>

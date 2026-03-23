@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Availability Manager — Big Leap Training</title>
+<title>Admin Panel — Big Leap Training</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 :root{
@@ -38,17 +38,28 @@ body{font-family:var(--sf);background:var(--off-white);color:var(--dark-gray);li
 
 /* ── NAV ── */
 nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--separator);display:flex;align-items:center;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
-.nav-inner{width:100%;max-width:1200px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
-@media(max-width:768px){.nav-inner{padding:0 22px}}
-.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.nav-inner{width:100%;max-width:1200px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+@media(max-width:768px){.nav-inner{padding:0 16px;gap:8px}}
+.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
 .nav-logo-mark{width:28px;height:28px;flex-shrink:0}
 .nav-logo-text{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;line-height:1}
 .nav-logo-text span{background:linear-gradient(95deg,#0071e3 0%,#34aadc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-right{display:flex;align-items:center;gap:12px}
+@media(max-width:480px){.nav-logo-text{display:none}}
+
+/* ── NAV TABS ── */
+.nav-tabs{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
+.nav-tab{background:none;border:none;font-family:var(--sf);font-size:13px;font-weight:500;color:var(--mid-gray);cursor:pointer;padding:6px 14px;border-radius:980px;letter-spacing:-.01em;transition:background var(--t),color var(--t);white-space:nowrap}
+.nav-tab:hover{background:var(--off-white);color:var(--dark-gray)}
+.nav-tab.active{background:var(--off-white);color:var(--dark-gray);font-weight:600}
+@media(max-width:600px){.nav-tab{padding:5px 9px;font-size:12px}}
+
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+@media(max-width:600px){.nav-right{gap:8px}}
 .nav-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.2);border-radius:980px;padding:4px 10px;font-size:11px;font-weight:600;color:#1a8733;letter-spacing:.03em;text-transform:uppercase}
 .nav-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
-.nav-preview{font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--t)}
+.nav-preview{font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--t);white-space:nowrap}
 .nav-preview:hover{opacity:.7}
+@media(max-width:900px){.nav-preview{display:none}}
 .nav-signout{background:none;border:1.5px solid var(--separator);border-radius:980px;padding:5px 14px;font-family:var(--sf);font-size:13px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:border-color var(--t),color var(--t)}
 .nav-signout:hover{border-color:var(--dark-gray);color:var(--dark-gray)}
 
@@ -113,7 +124,8 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
 .select-actions{display:flex;gap:8px}
 
 /* ── SAVE BAR ── */
-.save-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);border-top:1px solid var(--separator);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;padding:16px 48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);border-top:1px solid var(--separator);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;padding:16px 48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;transition:transform 0.3s var(--ease),opacity 0.3s var(--ease)}
+.save-bar.hidden{transform:translateY(100%);opacity:0;pointer-events:none}
 @media(max-width:768px){.save-bar{padding:14px 22px;gap:8px}}
 .save-btn{background:var(--blue);color:white;border:none;border-radius:980px;padding:11px 24px;font-family:var(--sf);font-size:14px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t)}
 .save-btn:hover{background:var(--blue-hover);transform:scale(1.01)}
@@ -131,6 +143,34 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
 .modal-card textarea:focus{border-color:var(--blue);background:var(--white)}
 .modal-error{font-size:13px;color:var(--error);letter-spacing:-.01em;margin-top:8px}
 .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ── DASHBOARD ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:36px}
+.stat-card{background:var(--white);border-radius:20px;padding:28px;box-shadow:0 2px 20px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:12px}
+.stat-icon{width:44px;height:44px;border-radius:14px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon.green{background:var(--green-light)}
+.stat-value{font-size:48px;font-weight:700;letter-spacing:-.06em;color:var(--dark-gray);line-height:1}
+.stat-label{font-size:13px;color:var(--mid-gray);letter-spacing:-.01em;line-height:1.4}
+.quick-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+
+/* ── CONTENT EDITOR ── */
+.content-sections{display:flex;flex-direction:column;gap:24px}
+.content-card{background:var(--white);border-radius:20px;padding:28px;box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.content-card h2{font-size:17px;font-weight:700;letter-spacing:-.03em;color:var(--dark-gray);margin-bottom:6px}
+.content-card .section-desc{font-size:13px;color:var(--mid-gray);letter-spacing:-.01em;margin-bottom:20px;line-height:1.5}
+.content-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.content-fields{grid-template-columns:1fr}}
+.content-field{display:flex;flex-direction:column;gap:6px}
+.content-field.full{grid-column:1/-1}
+.content-field label{font-size:13px;font-weight:500;color:var(--dark-gray);letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:baseline}
+.char-counter{font-size:11px;font-weight:400;color:var(--mid-gray);letter-spacing:0}
+.char-counter.over{color:var(--error)}
+.content-input,.content-textarea{font-family:var(--sf);font-size:15px;color:var(--dark-gray);background:var(--off-white);border:1.5px solid transparent;border-radius:10px;padding:11px 14px;outline:none;letter-spacing:-.015em;transition:border-color var(--t),background var(--t);width:100%}
+.content-input:focus,.content-textarea:focus{border-color:var(--blue);background:var(--white)}
+.content-input.over,.content-textarea.over{border-color:var(--error)}
+.content-textarea{resize:vertical;min-height:80px;line-height:1.5}
+.content-save-row{margin-top:28px;padding-top:24px;border-top:1px solid var(--separator);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.content-save-status{font-size:13px;font-weight:500;letter-spacing:-.01em;transition:opacity var(--t);opacity:0}
 </style>
 </head>
 <body>
@@ -149,7 +189,7 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
       <span class="login-logo-text">Big Leap <span>Training</span></span>
     </a>
     <h1 class="login-h">Admin access</h1>
-    <p class="login-sub">Sign in to manage your availability.</p>
+    <p class="login-sub">Sign in to manage your website.</p>
     <div class="login-field">
       <label for="pin-input">Password</label>
       <input type="password" id="pin-input" placeholder="Enter your password" autocomplete="current-password"/>
@@ -175,79 +215,217 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
         </svg>
         <span class="nav-logo-text">Big Leap <span>Training</span></span>
       </a>
+      <div class="nav-tabs">
+        <button class="nav-tab active" id="tab-dashboard" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-tab" id="tab-availability" onclick="showSection('availability')">Availability</button>
+        <button class="nav-tab" id="tab-content" onclick="showSection('content')">Edit Content</button>
+      </div>
       <div class="nav-right">
         <span class="nav-badge"><span class="nav-badge-dot"></span>Admin</span>
-        <a class="nav-preview" href="taster.html" target="_blank">Preview booking page →</a>
+        <a class="nav-preview" href="taster.html" target="_blank">Preview booking →</a>
         <button class="nav-signout" onclick="logout()">Sign out</button>
       </div>
     </div>
   </nav>
 
-  <!-- MAIN CONTENT -->
-  <div class="admin-wrap">
-    <div class="page-header">
-      <h1>Availability Manager</h1>
-      <p>Control which dates and times are shown to clients on the booking page.</p>
-    </div>
+  <!-- ── DASHBOARD SECTION ── -->
+  <div id="section-dashboard" class="admin-section">
+    <div class="admin-wrap">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p>An overview of your website activity.</p>
+      </div>
 
-    <div class="admin-grid">
-
-      <!-- ── CALENDAR CARD ── -->
-      <div class="section-card">
-        <h2>Block &amp; unblock dates</h2>
-        <p class="section-desc">Click any upcoming weekday to toggle it. Blocked dates won't appear as bookable on the taster page. Weekends and past dates are always unavailable.</p>
-
-        <div class="legend">
-          <span class="legend-item"><span class="dot dot-available"></span>Available</span>
-          <span class="legend-item"><span class="dot dot-blocked"></span>Blocked</span>
-          <span class="legend-item"><span class="dot dot-unavail"></span>Weekend / past</span>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="stat-value" id="stat-contact">0</div>
+          <div class="stat-label">Contact form submissions<br><span style="font-size:11px;opacity:.65">Total all-time (this device)</span></div>
         </div>
-
-        <div class="cal-nav">
-          <button class="cal-nav-btn" id="admin-cal-prev" aria-label="Previous month" onclick="adminCalNav(-1)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-          <span class="cal-nav-label" id="admin-cal-label"></span>
-          <button class="cal-nav-btn" id="admin-cal-next" aria-label="Next month" onclick="adminCalNav(1)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-        </div>
-
-        <div class="cal-weekdays">
-          <span class="cal-weekday">Mon</span>
-          <span class="cal-weekday">Tue</span>
-          <span class="cal-weekday">Wed</span>
-          <span class="cal-weekday">Thu</span>
-          <span class="cal-weekday">Fri</span>
-          <span class="cal-weekday">Sat</span>
-          <span class="cal-weekday">Sun</span>
-        </div>
-        <div class="cal-days" id="admin-cal-days"></div>
-
-        <div class="bulk-actions">
-          <button class="ghost-btn danger" onclick="blockThisMonth()">Block entire month</button>
-          <button class="ghost-btn" onclick="unblockThisMonth()">Clear month blocks</button>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="stat-value" id="stat-taster">0</div>
+          <div class="stat-label">Free taster bookings<br><span style="font-size:11px;opacity:.65">Total all-time (this device)</span></div>
         </div>
       </div>
 
-      <!-- ── TIME SLOTS CARD ── -->
-      <div class="section-card">
-        <h2>Available time slots</h2>
-        <p class="section-desc">Choose which time slots clients can pick from on all available days. Untick a slot to hide it from the booking page.</p>
-
-        <div class="slots-list" id="admin-slots-list"></div>
-
-        <div class="select-actions">
-          <button class="ghost-btn" onclick="selectAllSlots()">Select all</button>
-          <button class="ghost-btn" onclick="deselectAllSlots()">Deselect all</button>
+      <div class="section-card" style="max-width:640px">
+        <h2>Quick actions</h2>
+        <p class="section-desc">Jump to a section to manage your website content or availability.</p>
+        <div class="quick-actions">
+          <button class="save-btn" onclick="showSection('availability')">Availability Manager →</button>
+          <button class="secondary-btn" onclick="showSection('content')">Edit Site Content →</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AVAILABILITY SECTION ── -->
+  <div id="section-availability" class="admin-section" hidden>
+    <div class="admin-wrap">
+      <div class="page-header">
+        <h1>Availability Manager</h1>
+        <p>Control which dates and times are shown to clients on the booking page.</p>
+      </div>
+
+      <div class="admin-grid">
+
+        <!-- ── CALENDAR CARD ── -->
+        <div class="section-card">
+          <h2>Block &amp; unblock dates</h2>
+          <p class="section-desc">Click any upcoming weekday to toggle it. Blocked dates won't appear as bookable on the taster page. Weekends and past dates are always unavailable.</p>
+
+          <div class="legend">
+            <span class="legend-item"><span class="dot dot-available"></span>Available</span>
+            <span class="legend-item"><span class="dot dot-blocked"></span>Blocked</span>
+            <span class="legend-item"><span class="dot dot-unavail"></span>Weekend / past</span>
+          </div>
+
+          <div class="cal-nav">
+            <button class="cal-nav-btn" id="admin-cal-prev" aria-label="Previous month" onclick="adminCalNav(-1)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="cal-nav-label" id="admin-cal-label"></span>
+            <button class="cal-nav-btn" id="admin-cal-next" aria-label="Next month" onclick="adminCalNav(1)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+
+          <div class="cal-weekdays">
+            <span class="cal-weekday">Mon</span>
+            <span class="cal-weekday">Tue</span>
+            <span class="cal-weekday">Wed</span>
+            <span class="cal-weekday">Thu</span>
+            <span class="cal-weekday">Fri</span>
+            <span class="cal-weekday">Sat</span>
+            <span class="cal-weekday">Sun</span>
+          </div>
+          <div class="cal-days" id="admin-cal-days"></div>
+
+          <div class="bulk-actions">
+            <button class="ghost-btn danger" onclick="blockThisMonth()">Block entire month</button>
+            <button class="ghost-btn" onclick="unblockThisMonth()">Clear month blocks</button>
+          </div>
+        </div>
+
+        <!-- ── TIME SLOTS CARD ── -->
+        <div class="section-card">
+          <h2>Available time slots</h2>
+          <p class="section-desc">Choose which time slots clients can pick from on all available days. Untick a slot to hide it from the booking page.</p>
+
+          <div class="slots-list" id="admin-slots-list"></div>
+
+          <div class="select-actions">
+            <button class="ghost-btn" onclick="selectAllSlots()">Select all</button>
+            <button class="ghost-btn" onclick="deselectAllSlots()">Deselect all</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EDIT CONTENT SECTION ── -->
+  <div id="section-content" class="admin-section" hidden>
+    <div class="admin-wrap">
+      <div class="page-header">
+        <h1>Edit Site Content</h1>
+        <p>Update the text shown to visitors. Character limits keep the layout looking its best.</p>
+      </div>
+
+      <div class="content-sections">
+
+        <!-- Offer Banner -->
+        <div class="content-card">
+          <h2>Offer Banner</h2>
+          <p class="section-desc">The announcement bar at the top of the homepage. Keep it short and punchy.</p>
+          <div class="content-fields">
+            <div class="content-field">
+              <label for="ce-offer-label">
+                Badge label
+                <span class="char-counter" id="cc-offer-label">0 / 20</span>
+              </label>
+              <input class="content-input" id="ce-offer-label" type="text" maxlength="20" placeholder="Welcome Offer" oninput="updateCounter(this,'cc-offer-label',20)"/>
+            </div>
+            <div class="content-field">
+              <label for="ce-offer-percent">
+                Discount %
+                <span class="char-counter" id="cc-offer-percent">0 / 3</span>
+              </label>
+              <input class="content-input" id="ce-offer-percent" type="text" maxlength="3" placeholder="20" oninput="updateCounter(this,'cc-offer-percent',3)"/>
+            </div>
+            <div class="content-field full">
+              <label for="ce-offer-cta">
+                CTA button text
+                <span class="char-counter" id="cc-offer-cta">0 / 25</span>
+              </label>
+              <input class="content-input" id="ce-offer-cta" type="text" maxlength="25" placeholder="Claim offer" oninput="updateCounter(this,'cc-offer-cta',25)"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="content-card">
+          <h2>Hero Section</h2>
+          <p class="section-desc">The main headline area at the top of the homepage.</p>
+          <div class="content-fields">
+            <div class="content-field full">
+              <label for="ce-hero-eyebrow">
+                Eyebrow text (above headline)
+                <span class="char-counter" id="cc-hero-eyebrow">0 / 50</span>
+              </label>
+              <input class="content-input" id="ce-hero-eyebrow" type="text" maxlength="50" placeholder="AI workshops for business teams" oninput="updateCounter(this,'cc-hero-eyebrow',50)"/>
+            </div>
+            <div class="content-field full">
+              <label for="ce-hero-sub">
+                Sub-headline
+                <span class="char-counter" id="cc-hero-sub">0 / 180</span>
+              </label>
+              <textarea class="content-textarea" id="ce-hero-sub" maxlength="180" placeholder="We come to your office and show your team how to use AI…" oninput="updateCounter(this,'cc-hero-sub',180)"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="content-card">
+          <h2>Contact Section</h2>
+          <p class="section-desc">The "Get in touch" section at the bottom of the homepage.</p>
+          <div class="content-fields">
+            <div class="content-field">
+              <label for="ce-contact-heading">
+                Heading
+                <span class="char-counter" id="cc-contact-heading">0 / 50</span>
+              </label>
+              <input class="content-input" id="ce-contact-heading" type="text" maxlength="50" placeholder="Any questions?" oninput="updateCounter(this,'cc-contact-heading',50)"/>
+            </div>
+            <div class="content-field">
+              <label for="ce-contact-sub">
+                Sub-text
+                <span class="char-counter" id="cc-contact-sub">0 / 180</span>
+              </label>
+              <textarea class="content-textarea" id="ce-contact-sub" maxlength="180" placeholder="Tell us about your team. We'll reply within one business day." oninput="updateCounter(this,'cc-contact-sub',180)"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Save row -->
+      <div class="content-save-row">
+        <button class="save-btn" onclick="saveSiteContent()">Save content changes</button>
+        <button class="secondary-btn" onclick="resetSiteContent()">Reset to defaults</button>
+        <span class="content-save-status" id="content-save-status"></span>
       </div>
 
     </div>
   </div>
 
-  <!-- ── SAVE BAR ── -->
-  <div class="save-bar">
+  <!-- ── SAVE BAR (availability only) ── -->
+  <div class="save-bar hidden" id="avail-save-bar">
     <button class="save-btn" onclick="saveConfig()">Save changes</button>
     <button class="secondary-btn" onclick="openExportModal()">Export config</button>
     <button class="secondary-btn" onclick="openImportModal()">Import config</button>
@@ -287,9 +465,22 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
 // ── CHANGE THIS PASSWORD before deploying ──
 const ADMIN_PASSWORD = 'bigleap2024';
 
-const AVAIL_KEY  = 'blt_availability';
-const ALL_SLOTS  = ['9:00 am','10:00 am','11:00 am','1:00 pm','2:00 pm','3:00 pm','4:00 pm'];
-const MONTHS     = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const AVAIL_KEY       = 'blt_availability';
+const CONTENT_KEY     = 'blt_site_content';
+const CONTACT_CNT_KEY = 'blt_contact_count';
+const TASTER_CNT_KEY  = 'blt_taster_count';
+const ALL_SLOTS       = ['9:00 am','10:00 am','11:00 am','1:00 pm','2:00 pm','3:00 pm','4:00 pm'];
+const MONTHS          = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const CONTENT_DEFAULTS = {
+  offerLabel:      'Welcome Offer',
+  offerPercent:    '20',
+  offerCta:        'Claim offer',
+  heroEyebrow:     'AI workshops for business teams',
+  heroSub:         'We come to your office and show your team how to use AI \u2014 practically, safely, and in a single afternoon. No tech skills needed.',
+  contactHeading:  'Any questions?',
+  contactSub:      'Tell us about your team. We\u2019ll reply within one business day.'
+};
 
 let calYear, calMonth;
 let config = { blockedDates: [], availableSlots: [...ALL_SLOTS] };
@@ -321,7 +512,49 @@ document.getElementById('pin-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') checkPin();
 });
 
-// ── CONFIG ────────────────────────────────────────────────────────────
+// ── SECTION NAVIGATION ────────────────────────────────────────────────
+var SECTIONS = ['dashboard', 'availability', 'content'];
+
+function showSection(name) {
+  SECTIONS.forEach(function(s) {
+    var section = document.getElementById('section-' + s);
+    var tab     = document.getElementById('tab-' + s);
+    if (section) section.hidden = (s !== name);
+    if (tab)     tab.classList.toggle('active', s === name);
+  });
+  // Show save bar only for availability section
+  var saveBar = document.getElementById('avail-save-bar');
+  if (name === 'availability') {
+    saveBar.classList.remove('hidden');
+  } else {
+    saveBar.classList.add('hidden');
+  }
+  // Init sections on first visit
+  if (name === 'availability' && !calYear) {
+    initAvailability();
+  }
+  if (name === 'content') {
+    loadContentEditor();
+  }
+  if (name === 'dashboard') {
+    loadDashboard();
+  }
+}
+
+// ── ADMIN INIT ────────────────────────────────────────────────────────
+function adminInit() {
+  showSection('dashboard');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+function loadDashboard() {
+  var contactCount = parseInt(localStorage.getItem(CONTACT_CNT_KEY) || '0', 10);
+  var tasterCount  = parseInt(localStorage.getItem(TASTER_CNT_KEY)  || '0', 10);
+  document.getElementById('stat-contact').textContent = contactCount;
+  document.getElementById('stat-taster').textContent  = tasterCount;
+}
+
+// ── CONFIG (AVAILABILITY) ─────────────────────────────────────────────
 function loadConfig() {
   try {
     const saved = localStorage.getItem(AVAIL_KEY);
@@ -336,9 +569,9 @@ function loadConfig() {
 function saveConfig() {
   try {
     localStorage.setItem(AVAIL_KEY, JSON.stringify(config));
-    showSaveStatus('Changes saved ✓', false);
+    showSaveStatus('Changes saved \u2713', false);
   } catch(e) {
-    showSaveStatus('Error — could not save', true);
+    showSaveStatus('Error \u2014 could not save', true);
   }
 }
 
@@ -394,7 +627,7 @@ function applyImport() {
     closeModal('import-modal');
     renderAdminCal();
     renderSlots();
-    showSaveStatus('Config imported — click Save to apply', false);
+    showSaveStatus('Config imported \u2014 click Save to apply', false);
   } catch(e) {
     document.getElementById('import-error').style.display = 'block';
   }
@@ -408,8 +641,8 @@ function closeOnOverlay(e, id) {
   if (e.target === document.getElementById(id)) closeModal(id);
 }
 
-// ── ADMIN INIT ────────────────────────────────────────────────────────
-function adminInit() {
+// ── AVAILABILITY INIT ─────────────────────────────────────────────────
+function initAvailability() {
   loadConfig();
   const now = new Date();
   calYear  = now.getFullYear();
@@ -470,17 +703,17 @@ function renderAdminCal() {
     if (isWeekend || isPast) {
       btn.classList.add('unavailable');
       btn.disabled = true;
-      btn.setAttribute('aria-label', d + ' — unavailable');
+      btn.setAttribute('aria-label', d + ' \u2014 unavailable');
     } else if (isBlocked) {
       btn.classList.add('blocked');
       btn.title = 'Click to unblock';
-      btn.setAttribute('aria-label', d + ' — blocked, click to unblock');
+      btn.setAttribute('aria-label', d + ' \u2014 blocked, click to unblock');
       btn.addEventListener('click', function() { toggleDate(dateStr); });
     } else {
       btn.classList.add('available');
       if (isToday) btn.classList.add('today');
       btn.title = 'Click to block';
-      btn.setAttribute('aria-label', d + ' — available, click to block');
+      btn.setAttribute('aria-label', d + ' \u2014 available, click to block');
       btn.addEventListener('click', function() { toggleDate(dateStr); });
     }
 
@@ -575,6 +808,92 @@ function selectAllSlots() {
 function deselectAllSlots() {
   config.availableSlots = [];
   renderSlots();
+}
+
+// ── SITE CONTENT EDITOR ───────────────────────────────────────────────
+function loadContentEditor() {
+  var saved = {};
+  try {
+    var raw = localStorage.getItem(CONTENT_KEY);
+    if (raw) saved = JSON.parse(raw);
+  } catch(e) {}
+
+  var fields = [
+    { id: 'ce-offer-label',      key: 'offerLabel',     limit: 20 },
+    { id: 'ce-offer-percent',    key: 'offerPercent',   limit: 3  },
+    { id: 'ce-offer-cta',        key: 'offerCta',       limit: 25 },
+    { id: 'ce-hero-eyebrow',     key: 'heroEyebrow',    limit: 50 },
+    { id: 'ce-hero-sub',         key: 'heroSub',        limit: 180},
+    { id: 'ce-contact-heading',  key: 'contactHeading', limit: 50 },
+    { id: 'ce-contact-sub',      key: 'contactSub',     limit: 180}
+  ];
+
+  fields.forEach(function(f) {
+    var el = document.getElementById(f.id);
+    if (!el) return;
+    var val = (saved[f.key] !== undefined) ? saved[f.key] : CONTENT_DEFAULTS[f.key];
+    el.value = val;
+    updateCounter(el, 'cc-' + f.id.replace('ce-',''), f.limit);
+  });
+}
+
+function updateCounter(input, counterId, limit) {
+  var len = input.value.length;
+  var counterEl = document.getElementById(counterId);
+  if (!counterEl) return;
+  counterEl.textContent = len + ' / ' + limit;
+  var over = len > limit;
+  counterEl.classList.toggle('over', over);
+  input.classList.toggle('over', over);
+}
+
+function saveSiteContent() {
+  var content = {};
+  var fields = [
+    { id: 'ce-offer-label',     key: 'offerLabel',     limit: 20 },
+    { id: 'ce-offer-percent',   key: 'offerPercent',   limit: 3  },
+    { id: 'ce-offer-cta',       key: 'offerCta',       limit: 25 },
+    { id: 'ce-hero-eyebrow',    key: 'heroEyebrow',    limit: 50 },
+    { id: 'ce-hero-sub',        key: 'heroSub',        limit: 180},
+    { id: 'ce-contact-heading', key: 'contactHeading', limit: 50 },
+    { id: 'ce-contact-sub',     key: 'contactSub',     limit: 180}
+  ];
+
+  var hasOverLimit = false;
+  fields.forEach(function(f) {
+    var el = document.getElementById(f.id);
+    if (!el) return;
+    if (el.value.trim().length > f.limit) hasOverLimit = true;
+    content[f.key] = el.value.trim();
+  });
+
+  if (hasOverLimit) {
+    showContentSaveStatus('One or more fields exceed the character limit.', true);
+    return;
+  }
+
+  try {
+    localStorage.setItem(CONTENT_KEY, JSON.stringify(content));
+    showContentSaveStatus('Content saved \u2713', false);
+  } catch(e) {
+    showContentSaveStatus('Error \u2014 could not save', true);
+  }
+}
+
+function resetSiteContent() {
+  if (!confirm('Reset all content to the original defaults? This cannot be undone.')) return;
+  try { localStorage.removeItem(CONTENT_KEY); } catch(e) {}
+  loadContentEditor();
+  showContentSaveStatus('Reset to defaults \u2713', false);
+}
+
+function showContentSaveStatus(msg, isError) {
+  var el = document.getElementById('content-save-status');
+  el.textContent  = msg;
+  el.style.color  = isError ? 'var(--error)' : 'var(--green)';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.style.opacity = '0'; }, 2500);
 }
 </script>
 </body>

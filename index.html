@@ -439,9 +439,9 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
 <section class="hero" id="hero">
   <canvas id="hero-canvas"></canvas>
   <div class="hero-content">
-  <div class="hero-eyebrow"><span class="eyebrow-dot"></span>AI workshops for business teams</div>
+  <div class="hero-eyebrow"><span class="eyebrow-dot"></span><span id="site-hero-eyebrow">AI workshops for business teams</span></div>
   <h1>Get your<br><span class="grad" id="tw-target"></span><span class="tw-cursor" id="tw-cursor"></span></h1>
-  <p class="hero-sub">We come to your office and show your team how to use AI — practically, safely, and in a single afternoon. No tech skills needed.</p>
+  <p class="hero-sub" id="site-hero-sub">We come to your office and show your team how to use AI — practically, safely, and in a single afternoon. No tech skills needed.</p>
   <div class="hero-actions">
     <a href="taster.html" class="btn-primary">See it for free first</a>
     <a href="#workshops" class="btn-secondary">What we teach</a>
@@ -715,8 +715,8 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
   <div class="contact-inner">
     <div class="section-center" style="margin-bottom:48px">
       <span class="eyebrow reveal">Get in touch</span>
-      <h2 class="section-h reveal rd1">Any questions?<br><span class="grad">We're here.</span></h2>
-      <p class="section-sub reveal rd2" style="margin-bottom:0">Tell us about your team. We'll reply within one business day.</p>
+      <h2 class="section-h reveal rd1"><span id="site-contact-heading">Any questions?</span><br><span class="grad">We're here.</span></h2>
+      <p class="section-sub reveal rd2" id="site-contact-sub" style="margin-bottom:0">Tell us about your team. We'll reply within one business day.</p>
     </div>
     <div id="contact-form-wrap" class="reveal rd2">
       <div class="contact-grid">
@@ -847,6 +847,24 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
   document.getElementById('offer-text').innerHTML=OFFER_DETAIL;
   document.getElementById('offer-link').textContent=OFFER_CTA;
 })();
+(function loadCustomSiteContent(){
+  var CONTENT_KEY='blt_site_content';
+  var raw; try{ raw=localStorage.getItem(CONTENT_KEY); }catch(e){}
+  if(!raw) return;
+  var c; try{ c=JSON.parse(raw); }catch(e){ return; }
+  if(!c) return;
+  if(c.offerLabel)   document.getElementById('offer-badge').textContent=c.offerLabel;
+  if(c.offerCta)     document.getElementById('offer-link').textContent=c.offerCta;
+  if(c.offerPercent){
+    // Strip non-digit characters to prevent XSS via manipulated localStorage values
+    var pct=String(c.offerPercent).replace(/[^0-9]/g,'');
+    document.getElementById('offer-text').innerHTML='Get <strong>'+pct+'% off</strong> your first workshop bundle \u2014 limited spaces.';
+  }
+  if(c.heroEyebrow){ var he=document.getElementById('site-hero-eyebrow'); if(he) he.textContent=c.heroEyebrow; }
+  if(c.heroSub){     var hs=document.getElementById('site-hero-sub');     if(hs) hs.textContent=c.heroSub; }
+  if(c.contactHeading){ var ch=document.getElementById('site-contact-heading'); if(ch) ch.textContent=c.contactHeading; }
+  if(c.contactSub){     var cs=document.getElementById('site-contact-sub');     if(cs) cs.textContent=c.contactSub; }
+})();
 function closeBanner(){
   document.getElementById('offer-banner').classList.add('hidden');
   document.getElementById('main-nav').classList.add('no-banner');
@@ -964,6 +982,7 @@ async function submitContact(){
       body:JSON.stringify({ _subject:'New enquiry — Big Leap Training', name:`${fname} ${lname}`.trim(), email, company, sector, team_size:team, message, _replyto:email, 'h-captcha-response':captchaToken })
     });
     if(res.ok){
+      try{ localStorage.setItem('blt_contact_count', String(parseInt(localStorage.getItem('blt_contact_count')||'0',10)+1)); }catch(e){}
       document.getElementById('contact-form-wrap').style.display='none';
       document.getElementById('contact-success').classList.add('show');
     } else { throw new Error(); }
@@ -996,6 +1015,7 @@ async function submitTaster(){
       body:JSON.stringify({ _subject:'Free taster booking — Big Leap Training', name, email, company, _replyto:email, type:'Taster booking' })
     });
     if(res.ok){
+      try{ localStorage.setItem('blt_taster_count', String(parseInt(localStorage.getItem('blt_taster_count')||'0',10)+1)); }catch(e){}
       btn.textContent="Booked! We'll be in touch within 24 hrs";
       btn.style.background='#34c759';
       ['t-name','t-email','t-company'].forEach(id=>document.getElementById(id).value='');

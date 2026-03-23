@@ -381,4 +381,16 @@ function switchTab(tab){
 // Highlight active sidebar section on scroll
 const sections = document.querySelectorAll('.doc-section[id]');
 const snavLinks = document.querySelectorAll('.sidebar-nav a[id^="snav-"]');
-window.addEven
+window.addEventListener('scroll', ()=>{
+  let current = '';
+  sections.forEach(sec=>{
+    if(window.scrollY >= sec.offsetTop - 100) current = sec.id;
+  });
+  snavLinks.forEach(a=>{
+    if(a.id==='snav-privacy'||a.id==='snav-terms') return;
+    a.classList.toggle('active', a.getAttribute('href')==='#'+current);
+  });
+});
+</script>
+</body>
+</html>

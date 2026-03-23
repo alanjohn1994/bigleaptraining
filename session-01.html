@@ -141,6 +141,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(
 .btn-cta-outline{background:transparent;color:rgba(255,255,255,.75);border:1.5px solid rgba(255,255,255,.2);padding:15px 28px;border-radius:980px;font-size:17px;font-weight:400;text-decoration:none;transition:border-color var(--t),color var(--t)}
 .btn-cta-outline:hover{border-color:rgba(255,255,255,.5);color:white}
 
+/* TASTER FORM */
+.taster{background:var(--dark-gray);padding:100px 48px;position:relative;z-index:1}
+@media(max-width:768px){.taster{padding:72px 22px}}
+.taster-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:768px){.taster-inner{grid-template-columns:1fr;gap:48px}}
+.taster-overline{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;display:block}
+.taster-h{font-size:clamp(28px,3.5vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1.1;color:white;margin-bottom:20px}
+.taster-p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.65;letter-spacing:-.022em;margin-bottom:28px}
+.taster-promise{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px}
+.taster-promise svg{width:18px;height:18px;flex-shrink:0;margin-top:2px}
+.taster-promise p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;letter-spacing:-.01em}
+.taster-promise p strong{color:white;font-weight:500}
+.taster-right{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px}
+.taster-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.taster-label{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:-.01em}
+.taster-input-field{font-family:var(--sf);font-size:15px;color:white;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;outline:none;letter-spacing:-.015em;transition:border-color var(--t),background var(--t);width:100%}
+.taster-input-field::placeholder{color:rgba(255,255,255,.25)}
+.taster-input-field:focus{border-color:var(--blue);background:rgba(255,255,255,.1)}
+.taster-submit{display:block;width:100%;margin-top:8px;background:var(--blue);color:white;border:none;border-radius:980px;padding:14px;font-family:var(--sf);font-size:15px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t),transform var(--t)}
+.taster-submit:hover{background:var(--blue-hover);transform:scale(1.01)}
+.taster-note{font-size:12px;color:rgba(255,255,255,.25);text-align:center;margin-top:12px;letter-spacing:-.01em}
+
 /* FOOTER */
 footer{background:var(--dark-gray);padding:40px 48px;border-top:1px solid rgba(255,255,255,.06)}
 @media(max-width:768px){footer{padding:32px 22px}}

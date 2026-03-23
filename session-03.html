@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research & Analysis — Big Leap Training</title>
+<meta name="description" content="Query documents, extract key information, and analyse spreadsheets without formulas. Session 3 of the Big Leap Training AI programme.">
+<style>
+/* SESSION DETAIL PAGE — shared styles matching Big Leap Training */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+:root{
+  --sf:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+  --white:#ffffff;--off-white:#f5f5f7;--mid-gray:#86868b;--dark-gray:#1d1d1f;
+  --blue:#0071e3;--blue-hover:#0077ed;--blue-light:#e8f0fe;
+  --green:#30d158;--separator:rgba(0,0,0,0.07);
+  --radius:18px;--ease:cubic-bezier(0.4,0,0.2,1);--t:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sf);background:var(--white);color:var(--dark-gray);line-height:1.47059;font-size:17px;letter-spacing:-0.022em}
+.container{max-width:1080px;margin:0 auto;padding:0 48px}
+@media(max-width:768px){.container{padding:0 22px}}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.75s var(--ease),transform 0.75s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+
+.grad{background:linear-gradient(95deg,#0071e3 0%,#34aadc 45%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-light{background:linear-gradient(95deg,#409cff 0%,#6ac4dc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--separator);display:flex;align-items:center;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+.nav-inner{width:100%;max-width:1080px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+@media(max-width:768px){.nav-inner{padding:0 22px}}
+.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:28px;height:28px;flex-shrink:0}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;line-height:1}
+.nav-logo-text span{background:linear-gradient(95deg,#0071e3 0%,#34aadc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--t)}
+.nav-back:hover{opacity:.7}
+.nav-back svg{width:14px;height:14px}
+.nav-cta{background:var(--blue);color:white;border-radius:980px;padding:7px 16px;font-size:13px;font-weight:500;text-decoration:none;transition:background var(--t)}
+.nav-cta:hover{background:var(--blue-hover)}
+
+/* HERO */
+.session-hero{padding:110px 48px 80px;background:var(--white);position:relative;overflow:hidden}
+@media(max-width:768px){.session-hero{padding:88px 22px 60px}}
+.session-hero-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center}
+@media(max-width:900px){.session-hero-inner{grid-template-columns:1fr;gap:40px}}
+.session-label{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.session-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.session-hero h1{font-size:clamp(36px,5.5vw,64px);font-weight:700;letter-spacing:-.05em;line-height:1.04;color:var(--dark-gray);margin-bottom:20px}
+.session-hero-sub{font-size:19px;color:var(--mid-gray);line-height:1.6;letter-spacing:-.022em;margin-bottom:36px;max-width:520px}
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}
+.hero-pill{font-size:13px;font-weight:500;color:var(--dark-gray);background:var(--off-white);padding:6px 14px;border-radius:980px;letter-spacing:-.01em}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn-primary{background:var(--blue);color:white;padding:13px 26px;border-radius:980px;font-size:15px;font-weight:500;text-decoration:none;font-family:var(--sf);letter-spacing:-.015em;transition:background var(--t),transform var(--t);display:inline-block}
+.btn-primary:hover{background:var(--blue-hover);transform:scale(1.02)}
+.btn-ghost{color:var(--blue);font-size:15px;font-weight:400;text-decoration:none;letter-spacing:-.015em;transition:opacity var(--t)}
+.btn-ghost:hover{opacity:.7}
+.btn-ghost::after{content:' ›'}
+
+/* HERO CARD — quick-glance summary */
+.hero-card{background:var(--off-white);border-radius:20px;padding:32px;border:1px solid var(--separator)}
+.hero-card-title{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mid-gray);margin-bottom:20px}
+.hero-card-row{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--separator)}
+.hero-card-row:last-child{border-bottom:none}
+.hero-card-icon{width:32px;height:32px;border-radius:8px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-card-icon svg{width:15px;height:15px;stroke:var(--blue)}
+.hero-card-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mid-gray);margin-bottom:2px}
+.hero-card-value{font-size:14px;font-weight:500;color:var(--dark-gray);letter-spacing:-.01em;line-height:1.4}
+
+/* SECTIONS */
+.section{padding:80px 48px;position:relative}
+@media(max-width:768px){.section{padding:60px 22px}}
+.section-alt{background:var(--off-white)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:block}
+.section-h{font-size:clamp(26px,3.5vw,40px);font-weight:700;letter-spacing:-.04em;line-height:1.1;color:var(--dark-gray);margin-bottom:12px}
+.section-sub{font-size:17px;color:var(--mid-gray);letter-spacing:-.022em;line-height:1.6;max-width:560px}
+
+/* AGENDA */
+.agenda-grid{display:flex;flex-direction:column;gap:0;margin-top:48px;position:relative}
+.agenda-grid::before{content:'';position:absolute;left:19px;top:32px;bottom:32px;width:2px;background:var(--separator);z-index:0}
+.agenda-item{display:grid;grid-template-columns:40px 1fr;gap:24px;position:relative;z-index:1;padding-bottom:36px}
+.agenda-item:last-child{padding-bottom:0}
+.agenda-marker{width:40px;height:40px;border-radius:50%;background:var(--blue-light);border:2px solid var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--blue);box-shadow:0 0 0 3px var(--white)}
+.agenda-time{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.agenda-title{font-size:19px;font-weight:600;color:var(--dark-gray);letter-spacing:-.03em;margin-bottom:8px}
+.agenda-desc{font-size:15px;color:var(--mid-gray);line-height:1.65;letter-spacing:-.01em}
+.agenda-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.agenda-tag{font-size:12px;font-weight:500;color:var(--dark-gray);background:var(--white);padding:4px 10px;border-radius:980px;border:1px solid var(--separator)}
+
+/* OUTCOMES */
+.outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+@media(max-width:900px){.outcomes-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.outcomes-grid{grid-template-columns:1fr}}
+.outcome-card{background:var(--white);border-radius:var(--radius);padding:28px 24px;border:1px solid var(--separator);transition:transform var(--t),box-shadow var(--t)}
+.outcome-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.07)}
+.outcome-icon{width:40px;height:40px;border-radius:10px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.outcome-icon svg{width:19px;height:19px;stroke:var(--blue)}
+.outcome-title{font-size:15px;font-weight:600;color:var(--dark-gray);letter-spacing:-.02em;margin-bottom:8px}
+.outcome-desc{font-size:13px;color:var(--mid-gray);line-height:1.6;letter-spacing:-.01em}
+
+/* EXERCISES */
+.exercises-list{display:flex;flex-direction:column;gap:16px;margin-top:48px}
+.exercise-item{background:var(--white);border-radius:var(--radius);padding:28px 32px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;border:1px solid var(--separator);transition:transform var(--t),box-shadow var(--t)}
+.exercise-item:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.06)}
+.exercise-num{font-size:28px;font-weight:700;color:var(--blue-light);letter-spacing:-.045em;line-height:1;font-variant-numeric:tabular-nums;min-width:40px}
+.exercise-title{font-size:17px;font-weight:600;color:var(--dark-gray);letter-spacing:-.03em;margin-bottom:6px}
+.exercise-desc{font-size:14px;color:var(--mid-gray);line-height:1.65;letter-spacing:-.01em}
+.exercise-badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);background:var(--blue-light);padding:3px 9px;border-radius:980px;margin-top:10px}
+
+/* TAKEAWAYS */
+.takeaways-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+@media(max-width:680px){.takeaways-grid{grid-template-columns:1fr}}
+.takeaway-item{display:flex;align-items:flex-start;gap:14px;background:var(--white);border-radius:14px;padding:22px 20px;border:1px solid var(--separator)}
+.takeaway-check{width:28px;height:28px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.takeaway-check svg{width:13px;height:13px}
+.takeaway-text{font-size:14px;color:var(--dark-gray);line-height:1.6;font-weight:500;letter-spacing:-.01em}
+.takeaway-detail{font-size:13px;color:var(--mid-gray);margin-top:3px;font-weight:400}
+
+/* NEXT SESSION STRIP */
+.next-strip{background:var(--off-white);border-top:1px solid var(--separator);padding:48px}
+@media(max-width:768px){.next-strip{padding:36px 22px}}
+.next-strip-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.next-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mid-gray);margin-bottom:4px}
+.next-title{font-size:19px;font-weight:600;color:var(--dark-gray);letter-spacing:-.03em}
+.next-link{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:white;padding:11px 22px;border-radius:980px;font-size:14px;font-weight:500;text-decoration:none;transition:background var(--t)}
+.next-link:hover{background:var(--blue-hover)}
+.next-link svg{width:14px;height:14px}
+
+/* CTA BAND */
+.cta-band{background:var(--dark-gray);padding:80px 48px;text-align:center}
+@media(max-width:768px){.cta-band{padding:60px 22px}}
+.cta-band-inner{max-width:560px;margin:0 auto}
+.cta-band h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.045em;line-height:1.1;color:white;margin-bottom:14px}
+.cta-band p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:36px}
+.cta-band-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-cta-primary{background:var(--blue);color:white;padding:15px 28px;border-radius:980px;font-size:17px;font-weight:500;text-decoration:none;transition:background var(--t),transform var(--t)}
+.btn-cta-primary:hover{background:var(--blue-hover);transform:scale(1.02)}
+.btn-cta-outline{background:transparent;color:rgba(255,255,255,.75);border:1.5px solid rgba(255,255,255,.2);padding:15px 28px;border-radius:980px;font-size:17px;font-weight:400;text-decoration:none;transition:border-color var(--t),color var(--t)}
+.btn-cta-outline:hover{border-color:rgba(255,255,255,.5);color:white}
+
+/* FOOTER */
+footer{background:var(--dark-gray);padding:40px 48px;border-top:1px solid rgba(255,255,255,.06)}
+@media(max-width:768px){footer{padding:32px 22px}}
+.footer-inner{max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-logo{display:inline-flex;align-items:center;gap:10px}
+.footer-logo-mark{width:22px;height:22px}
+.footer-logo-text{font-size:14px;font-weight:700;color:white;letter-spacing:-.03em}
+.footer-logo-text span{background:linear-gradient(95deg,#409cff 0%,#6ac4dc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.22)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.3);text-decoration:none;transition:color var(--t)}
+.footer-links a:hover{color:rgba(255,255,255,.7)}
+
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="big-leap-training.html">
+      <svg class="nav-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="14" y1="10" x2="14" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="76" x2="74" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="64" y2="10" stroke="#0071e3" stroke-width="6" stroke-linecap="round"/>
+        <polyline points="52,8 66,8 66,22" fill="none" stroke="#0071e3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="38" r="6" fill="#30d158"/>
+      </svg>
+      <span class="nav-logo-text">Big Leap <span>Training</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:20px">
+      <a class="nav-back" href="big-leap-training.html#workshops">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
+        Back to all sessions
+      </a>
+      <a class="nav-cta" href="big-leap-training.html#taster">Free taster</a>
+    </div>
+  </div>
+</nav>
+
+<section class="session-hero">
+  <div class="session-hero-inner">
+    <div>
+      <div class="session-label"><span class="session-dot"></span>Session 03 of 04</div>
+      <h1>Research<br><span class="grad">& Analysis</span></h1>
+      <p class="session-hero-sub">Query documents, extract key information, and make sense of data — without being a data analyst or spending an afternoon on it.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">3 hours</span>
+        <span class="hero-pill">Intermediate</span>
+        <span class="hero-pill">Hands-on</span>
+        <span class="hero-pill">Builds on Session 2</span>
+      </div>
+      <div class="hero-actions">
+        <a href="big-leap-training.html#taster" class="btn-primary">Book the free taster</a>
+        <a href="big-leap-training.html#pricing" class="btn-ghost">See pricing</a>
+      </div>
+    </div>
+    <div class="hero-card reveal rd2">
+    <div class="hero-card-title">Session at a glance</div>
+    <div class="hero-card-row">
+        <div class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><<path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><polyline points="12 6 12 12 16 14"/>/></svg></div>
+        <div><div class="hero-card-label">Duration</div><div class="hero-card-value">3 hours</div></div>
+      </div><div class="hero-card-row">
+        <div class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><<path d="M18 20V10M12 20V4M6 20v-6"/>/></svg></div>
+        <div><div class="hero-card-label">Level</div><div class="hero-card-value">Intermediate</div></div>
+      </div><div class="hero-card-row">
+        <div class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>/></svg></div>
+        <div><div class="hero-card-label">Format</div><div class="hero-card-value">In-person, hands-on</div></div>
+      </div><div class="hero-card-row">
+        <div class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>/></svg></div>
+        <div><div class="hero-card-label">Prerequisite</div><div class="hero-card-value">Sessions 01 & 02 completed</div></div>
+      </div><div class="hero-card-row">
+        <div class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>/></svg></div>
+        <div><div class="hero-card-label">Next session</div><div class="hero-card-value">Your AI Workflow</div></div>
+      </div>
+  </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow reveal">Session agenda</span>
+    <h2 class="section-h reveal rd1">What happens<br><span class="grad">in the room.</span></h2>
+    <p class="section-sub reveal rd2">Three hours that will change how your team interacts with information forever.</p>
+    <div class="agenda-grid"><div class="agenda-item reveal rd1">
+        <div class="agenda-marker">1</div>
+        <div>
+          <div class="agenda-time">0:00 – 0:15</div>
+          <div class="agenda-title">Check-in & wins from Session 2</div>
+          <div class="agenda-desc">What writing tasks did people use AI for? What surprised them? We share results, troubleshoot anything that didn't work, and set the focus for today's session.</div>
+          <div class="agenda-tags"><span class="agenda-tag">Accountability round</span><span class="agenda-tag">Sharing results</span><span class="agenda-tag">Peer learning</span></div>
+        </div>
+      </div><div class="agenda-item reveal rd2">
+        <div class="agenda-marker">2</div>
+        <div>
+          <div class="agenda-time">0:15 – 1:00</div>
+          <div class="agenda-title">Document interrogation — asking AI about your files</div>
+          <div class="agenda-desc">We show teams how to upload contracts, reports, meeting notes, and policies and ask plain-English questions about them. No more reading 40 pages to find one clause. We practise with sample documents first, then with content the team brings.</div>
+          <div class="agenda-tags"><span class="agenda-tag">Document upload</span><span class="agenda-tag">Q&A techniques</span><span class="agenda-tag">Real content</span></div>
+        </div>
+      </div><div class="agenda-item reveal rd3">
+        <div class="agenda-marker">3</div>
+        <div>
+          <div class="agenda-time">1:00 – 1:40</div>
+          <div class="agenda-title">Spreadsheet analysis without formulas</div>
+          <div class="agenda-desc">You don't need to know Excel. We show how to paste spreadsheet data into AI and ask questions in plain English: "Which clients generated the most revenue this quarter?" "Where are our margins thinnest?" Results in seconds.</div>
+          <div class="agenda-tags"><span class="agenda-tag">Data analysis</span><span class="agenda-tag">Natural language queries</span><span class="agenda-tag">Business insight</span></div>
+        </div>
+      </div><div class="agenda-item reveal rd4">
+        <div class="agenda-marker">4</div>
+        <div>
+          <div class="agenda-time">1:40 – 1:55</div>
+          <div class="agenda-title">Break</div>
+          <div class="agenda-desc">15 minutes.</div>
+          <div class="agenda-tags"><span class="agenda-tag">Break</span></div>
+        </div>
+      </div><div class="agenda-item reveal rd4">
+        <div class="agenda-marker">5</div>
+        <div>
+          <div class="agenda-time">1:55 – 2:30</div>
+          <div class="agenda-title">The verification habit — knowing when to check</div>
+          <div class="agenda-desc">Research is where AI errors can cause real damage. We teach a systematic approach to verifying AI-generated research: what to cross-reference, when to push back, and how to catch the confident-sounding mistakes that look legitimate at first glance.</div>
+          <div class="agenda-tags"><span class="agenda-tag">Critical analysis</span><span class="agenda-tag">Verification methods</span><span class="agenda-tag">Risk management</span></div>
+        </div>
+      </div><div class="agenda-item reveal rd4">
+        <div class="agenda-marker">6</div>
+        <div>
+          <div class="agenda-time">2:30 – 3:00</div>
+          <div class="agenda-title">The research challenge</div>
+          <div class="agenda-desc">Teams are given a complex research task relevant to their sector. Using AI, they produce a structured research brief in 30 minutes — something that would typically take half a day. Results are compared and discussed.</div>
+          <div class="agenda-tags"><span class="agenda-tag">Group challenge</span><span class="agenda-tag">Real research task</span><span class="agenda-tag">Speed comparison</span></div>
+        </div>
+      </div></div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <span class="eyebrow reveal">Learning outcomes</span>
+    <h2 class="section-h reveal rd1">Information,<br><span class="grad">on demand.</span></h2>
+    <p class="section-sub reveal rd2">After Session 3, your team will never spend an afternoon reading a document they could interrogate in four minutes.</p>
+    <div class="outcomes-grid"><div class="outcome-card reveal rd1">
+        <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div class="outcome-title">Document interrogation</div>
+        <div class="outcome-desc">Upload any document and extract specific information, summaries, and answers using plain English — no Ctrl+F required.</div>
+      </div><div class="outcome-card reveal rd2">
+        <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></div>
+        <div class="outcome-title">Data without formulas</div>
+        <div class="outcome-desc">Paste business data into AI and get instant analysis, comparisons, and trend identification using natural language.</div>
+      </div><div class="outcome-card reveal rd3">
+        <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div class="outcome-title">Verification discipline</div>
+        <div class="outcome-desc">Apply a consistent fact-checking approach to AI-generated research so it becomes a trusted tool, not a liability.</div>
+      </div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow reveal">In-session exercises</span>
+    <h2 class="section-h reveal rd1">Real documents.<br><span class="grad">Real data. Real answers.</span></h2>
+    <p class="section-sub reveal rd2">Every exercise uses content that's directly relevant to your team's work.</p>
+    <div class="exercises-list"><div class="exercise-item reveal rd1">
+        <div class="exercise-num">01</div>
+        <div>
+          <div class="exercise-title">The clause hunt</div>
+          <div class="exercise-desc">Given a 15-page sample contract, teams must find the answers to 10 specific questions using AI — without reading the document. Average time: 4 minutes. Without AI: 35+ minutes.</div>
+          <span class="exercise-badge">Document Q&A</span>
+        </div>
+      </div><div class="exercise-item reveal rd2">
+        <div class="exercise-num">02</div>
+        <div>
+          <div class="exercise-title">Data in plain English</div>
+          <div class="exercise-desc">Teams paste a quarterly revenue spreadsheet into AI and ask five business questions in natural language. No formulas. No pivot tables. Just answers — and follow-up questions until the picture is clear.</div>
+          <span class="exercise-badge">Data analysis</span>
+        </div>
+      </div><div class="exercise-item reveal rd3">
+        <div class="exercise-num">03</div>
+        <div>
+          <div class="exercise-title">Spot the fabrication</div>
+          <div class="exercise-desc">We present three AI-generated research summaries. Two are accurate. One contains a subtly fabricated statistic that sounds completely plausible. Teams must identify it using the verification checklist.</div>
+          <span class="exercise-badge">Critical thinking</span>
+        </div>
+      </div><div class="exercise-item reveal rd4">
+        <div class="exercise-num">04</div>
+        <div>
+          <div class="exercise-title">The 30-minute brief</div>
+          <div class="exercise-desc">Teams use AI to produce a structured research brief on a topic relevant to their sector — competitive landscape, regulatory change, market sizing. Something that would typically take half a day.</div>
+          <span class="exercise-badge">Applied research</span>
+        </div>
+      </div></div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <span class="eyebrow reveal">What you take home</span>
+    <h2 class="section-h reveal rd1">A research function<br><span class="grad">that fits in your pocket.</span></h2>
+    <p class="section-sub reveal rd2">Four assets that turn every team member into a faster, sharper researcher.</p>
+    <div class="takeaways-grid"><div class="takeaway-item">
+        <div class="takeaway-check"><svg viewBox="0 0 13 13" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="2 7 5 10 11 3"/></svg></div>
+        <div><div class="takeaway-text">Document Q&A prompt pack</div><div class="takeaway-detail">Eight prompt templates for interrogating different document types: contracts, reports, meeting notes, financial statements, policy documents.</div></div>
+      </div><div class="takeaway-item">
+        <div class="takeaway-check"><svg viewBox="0 0 13 13" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="2 7 5 10 11 3"/></svg></div>
+        <div><div class="takeaway-text">Data analysis starter prompts</div><div class="takeaway-detail">Six prompts for extracting business insight from spreadsheet data without needing to know any formulas or data analysis tools.</div></div>
+      </div><div class="takeaway-item">
+        <div class="takeaway-check"><svg viewBox="0 0 13 13" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="2 7 5 10 11 3"/></svg></div>
+        <div><div class="takeaway-text">The verification checklist</div><div class="takeaway-detail">A four-step process for checking AI-generated research before it goes anywhere near a client, a report, or a decision.</div></div>
+      </div><div class="takeaway-item">
+        <div class="takeaway-check"><svg viewBox="0 0 13 13" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="2 7 5 10 11 3"/></svg></div>
+        <div><div class="takeaway-text">Research brief template</div><div class="takeaway-detail">A structured template for commissioning AI to produce research briefs — saves 2–3 hours per brief compared to doing it manually.</div></div>
+      </div></div>
+  </div>
+</section>
+
+<div class="next-strip">
+  <div class="next-strip-inner">
+    <div>
+      <div class="next-label">Up next</div>
+      <div class="next-title">Session 04 — Your AI Workflow</div>
+    </div>
+    <a href="session-04.html" class="next-link">View session 04
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 7h10M7 2l5 5-5 5"/></svg>
+    </a>
+  </div>
+</div>
+<div class="cta-band">
+  <div class="cta-band-inner">
+    <h2>Ready to bring this<br><span class="grad-light">to your team?</span></h2>
+    <p>Start with the free taster session — one hour, your office, no obligation. Most teams book all four sessions after seeing it.</p>
+    <div class="cta-band-buttons">
+      <a href="big-leap-training.html#taster" class="btn-cta-primary">Book the free taster</a>
+      <a href="big-leap-training.html#pricing" class="btn-cta-outline">See pricing</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <svg class="footer-logo-mark" viewBox="0 0 88 88" fill="none">
+        <line x1="14" y1="10" x2="14" y2="76" stroke="white" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="76" x2="74" y2="76" stroke="white" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="64" y2="10" stroke="#34aadc" stroke-width="6" stroke-linecap="round"/>
+        <polyline points="52,8 66,8 66,22" fill="none" stroke="#34aadc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="38" r="6" fill="#30d158"/>
+      </svg>
+      <span class="footer-logo-text">Big Leap <span>Training</span></span>
+    </div>
+    <div class="footer-copy">© 2026 Big Leap Training. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="big-leap-training.html#workshops">All sessions</a>
+      <a href="big-leap-training.html#pricing">Pricing</a>
+      <a href="big-leap-training.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+<script>
+const els=document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:0.08,rootMargin:'0px 0px -20px 0px'});
+  els.forEach(el=>obs.observe(el));
+}else{els.forEach(el=>el.classList.add('visible'))}
+setTimeout(()=>els.forEach(el=>el.classList.add('visible')),2000);
+</script>
+</body>
+</html>

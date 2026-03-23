@@ -230,7 +230,7 @@ nav.no-banner{top:0}
 .workshops{background:var(--off-white)}
 .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 @media(max-width:768px){.ws-grid{grid-template-columns:1fr}}
-.ws-card{background:var(--white);border-radius:var(--radius);padding:36px 32px;display:flex;flex-direction:column;transition:transform var(--t),box-shadow var(--t)}
+.ws-card{background:var(--white);border-radius:var(--radius);padding:36px 32px;display:flex;flex-direction:column;transition:transform var(--t),box-shadow var(--t);cursor:pointer}
 .ws-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
 .ws-tag{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
 .ws-card-title{font-size:21px;font-weight:600;color:var(--dark-gray);letter-spacing:-.03em;margin-bottom:10px;line-height:1.2}
@@ -606,34 +606,34 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
   </div>
   <div class="container">
     <div class="ws-grid">
-      <div class="ws-card reveal rd1">
+      <a href="session-01.html" class="ws-card reveal rd1" style="text-decoration:none;color:inherit;">
         <div class="ws-tag">Session 01</div>
         <div class="ws-card-title">AI Without the Hype</div>
         <div class="ws-card-sub">What it actually is. What it can't do. And your first real task completed with it — in the room, today.</div>
         <ul class="ws-outcomes"><li>Use ChatGPT or Claude independently</li><li>Write prompts that get useful results</li><li>Know when not to trust AI output</li></ul>
-        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Beginner</span><span class="ws-badge">Hands-on</span></div>
-      </div>
-      <div class="ws-card reveal rd2">
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Beginner</span><span class="ws-badge">Hands-on</span></div><div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,.07);font-size:13px;color:#0071e3;font-weight:500">View full session details ›</div>
+      </a>
+      <a href="session-02.html" class="ws-card reveal rd2" style="text-decoration:none;color:inherit;">
         <div class="ws-tag">Session 02</div>
         <div class="ws-card-title">Writing, Faster</div>
         <div class="ws-card-sub">Every email, report, letter, and proposal your team writes. Done in a fraction of the time. And better.</div>
         <ul class="ws-outcomes"><li>Draft documents 3–5× faster</li><li>Summarise anything in seconds</li><li>Make AI write in your voice, not its own</li></ul>
-        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Beginner–Mid</span><span class="ws-badge">Hands-on</span></div>
-      </div>
-      <div class="ws-card reveal rd3">
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Beginner–Mid</span><span class="ws-badge">Hands-on</span></div><div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,.07);font-size:13px;color:#0071e3;font-weight:500">View full session details ›</div>
+      </a>
+      <a href="session-03.html" class="ws-card reveal rd3" style="text-decoration:none;color:inherit;">
         <div class="ws-tag">Session 03</div>
         <div class="ws-card-title">Research & Analysis</div>
         <div class="ws-card-sub">Query documents, extract key information, and work with data — without being a data analyst or spending an afternoon on it.</div>
         <ul class="ws-outcomes"><li>Ask AI questions about any document</li><li>Analyse spreadsheets without formulas</li><li>Know when to double-check the answer</li></ul>
-        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Intermediate</span><span class="ws-badge">Hands-on</span></div>
-      </div>
-      <div class="ws-card reveal rd4">
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Intermediate</span><span class="ws-badge">Hands-on</span></div><div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,.07);font-size:13px;color:#0071e3;font-weight:500">View full session details ›</div>
+      </a>
+      <a href="session-04.html" class="ws-card reveal rd4" style="text-decoration:none;color:inherit;">
         <div class="ws-tag">Session 04</div>
         <div class="ws-card-title">Your AI Workflow</div>
         <div class="ws-card-sub">Lock in everything. Automate the tasks nobody wants. Leave with a written personal AI plan and a firm-wide prompt library.</div>
         <ul class="ws-outcomes"><li>Map your weekly AI opportunities</li><li>Set up automations without coding</li><li>Build a shared prompt library together</li></ul>
-        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Intermediate</span><span class="ws-badge">Hands-on</span></div>
-      </div>
+        <div class="ws-meta"><span class="ws-badge">3 hours</span><span class="ws-badge">Intermediate</span><span class="ws-badge">Hands-on</span></div><div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,.07);font-size:13px;color:#0071e3;font-weight:500">View full session details ›</div>
+      </a>
     </div>
   </div>
 </section>
@@ -1092,42 +1092,3 @@ async function submitTaster(){
       ctx.arc(this.x, this.y, CFG.radius, 0, Math.PI*2);
       ctx.fillStyle = `rgba(${r},${g},${b},${a.toFixed(3)})`;
       ctx.fill();
-    }
-  }
-
-  resize();
-  window.addEventListener('resize', ()=>{
-    resize();
-    // Reanchor home positions proportionally
-    dots.forEach(d=>{
-      d.hx = Math.random() * W;
-      d.hy = Math.random() * H;
-    });
-  });
-
-  const dots = Array.from({length: CFG.count}, ()=> new Dot());
-
-  // Track cursor inside hero only
-  hero.addEventListener('mousemove', e=>{
-    const r = canvas.getBoundingClientRect();
-    mx = e.clientX - r.left;
-    my = e.clientY - r.top;
-  });
-  hero.addEventListener('mouseleave', ()=>{ mx=-9999; my=-9999; });
-
-  function frame(){
-    animId = requestAnimationFrame(frame);
-    ctx.clearRect(0, 0, W, H);
-    dots.forEach(d=>{ d.update(); d.draw(); });
-  }
-
-  frame();
-
-  new IntersectionObserver(entries=>{
-    if(entries[0].isIntersecting){ if(!animId) frame(); }
-    else{ cancelAnimationFrame(animId); animId = null; }
-  }).observe(hero);
-})();
-</script>
-</body>
-</html>

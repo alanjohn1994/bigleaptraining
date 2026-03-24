@@ -293,6 +293,7 @@ input:checked+.slider:before{transform:translateX(20px)}
 
         <div class="bulk-actions">
           <button class="ghost-btn danger" onclick="blockThisMonth()">Block entire month</button>
+          <button class="ghost-btn danger" onclick="blockAllFutureMonths()">Block all future months</button>
           <button class="ghost-btn" onclick="unblockThisMonth()">Clear month blocks</button>
         </div>
       </div>
@@ -372,6 +373,34 @@ input:checked+.slider:before{transform:translateX(20px)}
           <div class="content-field">
             <label for="ce-contact-sub">Sub-text<span class="char-counter" id="cc-contact-sub">0 / 180</span></label>
             <textarea class="content-textarea" id="ce-contact-sub" maxlength="180" placeholder="Tell us about your team. We'll reply within one business day." oninput="updateCounter(this,'cc-contact-sub',180)"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Banner -->
+      <div class="content-card">
+        <h2>Stats Banner</h2>
+        <p class="section-desc">The dark band below the hero that leads with the business impact statement.</p>
+        <div class="content-fields">
+          <div class="content-field full">
+            <label for="ce-outcome-heading">Main heading<span class="char-counter" id="cc-outcome-heading">0 / 80</span></label>
+            <input class="content-input" id="ce-outcome-heading" type="text" maxlength="80" placeholder="The hours your team loses every week" oninput="updateCounter(this,'cc-outcome-heading',80)"/>
+          </div>
+          <div class="content-field full">
+            <label for="ce-outcome-sub">Sub-paragraph<span class="char-counter" id="cc-outcome-sub">0 / 220</span></label>
+            <textarea class="content-textarea" id="ce-outcome-sub" maxlength="220" placeholder="Writing, research, admin, reports. AI doesn't replace your team…" oninput="updateCounter(this,'cc-outcome-sub',220)"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="content-card">
+        <h2>Footer</h2>
+        <p class="section-desc">The tagline displayed under the logo in the site footer.</p>
+        <div class="content-fields">
+          <div class="content-field full">
+            <label for="ce-footer-tagline">Tagline<span class="char-counter" id="cc-footer-tagline">0 / 80</span></label>
+            <input class="content-input" id="ce-footer-tagline" type="text" maxlength="80" placeholder="In-person AI workshops for teams who have better things to do with their time." oninput="updateCounter(this,'cc-footer-tagline',80)"/>
           </div>
         </div>
       </div>
@@ -513,7 +542,10 @@ var CONTENT_DEFAULTS = {
   heroEyebrow:     'AI workshops for business teams',
   heroSub:         'We come to your office and show your team how to use AI \u2014 practically, safely, and in a single afternoon. No tech skills needed.',
   contactHeading:  'Any questions?',
-  contactSub:      'Tell us about your team. We\u2019ll reply within one business day.'
+  contactSub:      'Tell us about your team. We\u2019ll reply within one business day.',
+  outcomeHeading:  'The hours your team loses every week',
+  outcomeSub:      'Writing, research, admin, reports. AI doesn\u2019t replace your team. It removes the parts of their job nobody likes.',
+  footerTagline:   'In-person AI workshops for teams who have better things to do with their time.'
 };
 
 var calYear, calMonth;
@@ -761,6 +793,24 @@ function unblockThisMonth() {
   renderAdminCal();
 }
 
+function blockAllFutureMonths() {
+  if (!confirm('Block all weekdays for the next 12 months? You can clear individual months afterwards.')) return;
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  var end = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+  var d = new Date(today);
+  while (d <= end) {
+    var day = d.getDay();
+    if (day !== 0 && day !== 6) {
+      var dateStr = dateToStr(d);
+      if (config.blockedDates.indexOf(dateStr) === -1) config.blockedDates.push(dateStr);
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  renderAdminCal();
+  showSaveStatus('All future weekdays blocked \u2014 click Save to apply', false);
+}
+
 // ── TIME SLOTS ────────────────────────────────────────────────────────
 function renderSlots() {
   var container = document.getElementById('admin-slots-list');
@@ -830,7 +880,10 @@ function loadContentEditor() {
     { id: 'ce-hero-eyebrow',    key: 'heroEyebrow',    limit: 50  },
     { id: 'ce-hero-sub',        key: 'heroSub',        limit: 180 },
     { id: 'ce-contact-heading', key: 'contactHeading', limit: 50  },
-    { id: 'ce-contact-sub',     key: 'contactSub',     limit: 180 }
+    { id: 'ce-contact-sub',     key: 'contactSub',     limit: 180 },
+    { id: 'ce-outcome-heading', key: 'outcomeHeading', limit: 80  },
+    { id: 'ce-outcome-sub',     key: 'outcomeSub',     limit: 220 },
+    { id: 'ce-footer-tagline',  key: 'footerTagline',  limit: 80  }
   ];
 
   fields.forEach(function(f) {
@@ -861,7 +914,10 @@ function saveSiteContent() {
     { id: 'ce-hero-eyebrow',    key: 'heroEyebrow',    limit: 50  },
     { id: 'ce-hero-sub',        key: 'heroSub',        limit: 180 },
     { id: 'ce-contact-heading', key: 'contactHeading', limit: 50  },
-    { id: 'ce-contact-sub',     key: 'contactSub',     limit: 180 }
+    { id: 'ce-contact-sub',     key: 'contactSub',     limit: 180 },
+    { id: 'ce-outcome-heading', key: 'outcomeHeading', limit: 80  },
+    { id: 'ce-outcome-sub',     key: 'outcomeSub',     limit: 220 },
+    { id: 'ce-footer-tagline',  key: 'footerTagline',  limit: 80  }
   ];
 
   var hasOverLimit = false;

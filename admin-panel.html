@@ -517,7 +517,7 @@ var CONTENT_DEFAULTS = {
 };
 
 var calYear, calMonth;
-var config = { blockedDates: [], availableSlots: [].concat(ALL_SLOTS) };
+var config = { blockedDates: [], availableSlots: ALL_SLOTS.slice() };
 
 // ── AUTH ──────────────────────────────────────────────────────────────
 function getAdminPassword() {
@@ -630,7 +630,7 @@ function applyImport() {
     var parsed = JSON.parse(document.getElementById('import-text').value.trim());
     if (typeof parsed !== 'object' || parsed === null) throw new Error();
     config.blockedDates   = Array.isArray(parsed.blockedDates)   ? parsed.blockedDates   : [];
-    config.availableSlots = Array.isArray(parsed.availableSlots) ? parsed.availableSlots : [].concat(ALL_SLOTS);
+    config.availableSlots = Array.isArray(parsed.availableSlots) ? parsed.availableSlots : ALL_SLOTS.slice();
     closeModal('import-modal');
     renderAdminCal();
     renderSlots();
@@ -695,37 +695,35 @@ function renderAdminCal() {
     container.appendChild(blank);
   }
 
-  for (var d = 1; d <= daysInMonth; d++) {
-    (function(day) {
-      var date    = new Date(calYear, calMonth, day);
-      var dateStr = dateToStr(date);
-      var btn     = document.createElement('button');
-      btn.className  = 'cal-day';
-      btn.textContent = day;
+  for (let d = 1; d <= daysInMonth; d++) {
+    var date    = new Date(calYear, calMonth, d);
+    var dateStr = dateToStr(date);
+    var btn     = document.createElement('button');
+    btn.className  = 'cal-day';
+    btn.textContent = d;
 
-      var isWeekend = date.getDay() === 0 || date.getDay() === 6;
-      var isPast    = date < today;
-      var isToday   = date.getTime() === today.getTime();
-      var isBlocked = config.blockedDates.indexOf(dateStr) !== -1;
+    var isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    var isPast    = date < today;
+    var isToday   = date.getTime() === today.getTime();
+    var isBlocked = config.blockedDates.indexOf(dateStr) !== -1;
 
-      if (isWeekend || isPast) {
-        btn.classList.add('unavailable');
-        btn.disabled = true;
-        btn.setAttribute('aria-label', day + ' \u2014 unavailable');
-      } else if (isBlocked) {
-        btn.classList.add('blocked');
-        btn.title = 'Click to unblock';
-        btn.setAttribute('aria-label', day + ' \u2014 blocked, click to unblock');
-        btn.addEventListener('click', function() { toggleDate(dateStr); });
-      } else {
-        btn.classList.add('available');
-        if (isToday) btn.classList.add('today');
-        btn.title = 'Click to block';
-        btn.setAttribute('aria-label', day + ' \u2014 available, click to block');
-        btn.addEventListener('click', function() { toggleDate(dateStr); });
-      }
-      container.appendChild(btn);
-    })(d);
+    if (isWeekend || isPast) {
+      btn.classList.add('unavailable');
+      btn.disabled = true;
+      btn.setAttribute('aria-label', d + ' \u2014 unavailable');
+    } else if (isBlocked) {
+      btn.classList.add('blocked');
+      btn.title = 'Click to unblock';
+      btn.setAttribute('aria-label', d + ' \u2014 blocked, click to unblock');
+      btn.addEventListener('click', function() { toggleDate(dateStr); });
+    } else {
+      btn.classList.add('available');
+      if (isToday) btn.classList.add('today');
+      btn.title = 'Click to block';
+      btn.setAttribute('aria-label', d + ' \u2014 available, click to block');
+      btn.addEventListener('click', function() { toggleDate(dateStr); });
+    }
+    container.appendChild(btn);
   }
 }
 
@@ -808,7 +806,7 @@ function toggleSlot(slot, enabled, rowEl) {
 }
 
 function selectAllSlots() {
-  config.availableSlots = [].concat(ALL_SLOTS);
+  config.availableSlots = ALL_SLOTS.slice();
   renderSlots();
 }
 

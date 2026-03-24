@@ -361,6 +361,54 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
 .footer-legal{display:flex;gap:20px}
 .footer-legal a{font-size:12px;color:rgba(255,255,255,.28);text-decoration:none;transition:color var(--t)}
 .footer-legal a:hover{color:rgba(255,255,255,.6)}
+
+/* ── DARK MODE ── */
+html.dark{color-scheme:dark}
+html.dark body{background:#000;color:#f5f5f7}
+html.dark nav{background:rgba(28,28,30,0.94)!important;border-bottom-color:rgba(255,255,255,0.08)!important}
+html.dark .nav-links a{color:rgba(255,255,255,.65)}
+html.dark .nav-links a:hover,html.dark .nav-links a.active{color:#fff}
+html.dark .offer-banner{background:#1c1c1e}
+html.dark .offer-text{color:rgba(255,255,255,.75)}
+html.dark section{background:#000}
+html.dark .who{background:#1c1c1e}
+html.dark .contact-section{background:#1c1c1e}
+html.dark .step-num{background:rgba(0,113,227,.2);color:#409cff}
+html.dark .how-desc,html.dark .who-sub,html.dark .section-sub{color:rgba(255,255,255,.55)}
+html.dark .who-list li{border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.75)}
+html.dark .workshop-card{background:#1c1c1e;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+html.dark .workshop-tag{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55)}
+html.dark .workshop-title{color:#f5f5f7}
+html.dark .workshop-desc{color:rgba(255,255,255,.55)}
+html.dark .pricing-card{background:#1c1c1e;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+html.dark .pricing-card.featured{background:var(--blue)}
+html.dark .pricing-badge{background:rgba(255,255,255,.15)}
+html.dark .pricing-tag,html.dark .pricing-team{color:rgba(255,255,255,.55)}
+html.dark .pricing-features li{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.07)}
+html.dark .faq-item{border-color:rgba(255,255,255,.08)}
+html.dark .faq-item:first-child{border-top-color:rgba(255,255,255,.08)}
+html.dark .faq-q{color:#f5f5f7}
+html.dark .faq-a{color:rgba(255,255,255,.55)}
+html.dark .contact-form input,html.dark .contact-form textarea,html.dark .contact-form select{background:#2c2c2e;border-color:rgba(255,255,255,.1);color:#f5f5f7}
+html.dark .contact-form input:focus,html.dark .contact-form textarea:focus,html.dark .contact-form select:focus{border-color:var(--blue);background:#3a3a3c}
+html.dark .contact-form select option{background:#2c2c2e}
+html.dark .field-label{color:rgba(255,255,255,.7)}
+html.dark .privacy-row label{color:rgba(255,255,255,.55)}
+html.dark .privacy-row a{color:#409cff}
+html.dark .section-eyebrow{color:#409cff}
+html.dark .section-h{color:#f5f5f7}
+html.dark .mobile-drawer{background:#1c1c1e}
+html.dark .mobile-nav-links a{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.07)}
+html.dark .mobile-nav-links a:hover{color:#fff;background:rgba(255,255,255,.06)}
+html.dark .mobile-cta{background:#000;border-color:rgba(255,255,255,.1)}
+html.dark ::placeholder{color:rgba(255,255,255,.25)}
+
+/* ── DARK MODE TOGGLE BUTTON ── */
+.dm-toggle{position:fixed;bottom:24px;right:24px;z-index:150;width:48px;height:48px;border-radius:50%;background:var(--dark-gray);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:background var(--t),transform var(--t)}
+.dm-toggle:hover{transform:scale(1.08)}
+.dm-toggle.visible{display:flex}
+html.dark .dm-toggle{background:#f5f5f7}
+html.dark .dm-toggle svg{stroke:#1d1d1f}
 </style>
 </head>
 <body>
@@ -791,6 +839,12 @@ footer{background:var(--dark-gray);padding:48px;position:relative;z-index:1}
   </div>
 </footer>
 
+<!-- DARK MODE TOGGLE (shown only when admin enables it) -->
+<button class="dm-toggle" id="dm-toggle" onclick="toggleDarkMode()" aria-label="Switch to dark mode">
+  <svg class="dm-moon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="dm-sun"  width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+
 <script>
 // TYPEWRITER — cycles through phrases with realistic typing rhythm
 (function(){
@@ -1027,6 +1081,47 @@ async function submitTaster(){
     setTimeout(()=>{ btn.textContent='Book the free session'; btn.style.background=''; },3000);
   }
 }
+</script>
+<!-- DARK MODE -->
+<script>
+(function(){
+  var DM_ENABLED_KEY='blt_dark_mode_enabled';
+  var DM_PREF_KEY='blt_dark_pref';
+
+  function setDark(on){
+    if(on){ document.documentElement.classList.add('dark'); }
+    else  { document.documentElement.classList.remove('dark'); }
+    var btn=document.getElementById('dm-toggle');
+    if(!btn) return;
+    var moon=btn.querySelector('.dm-moon');
+    var sun =btn.querySelector('.dm-sun');
+    if(moon) moon.style.display=on?'none':'';
+    if(sun)  sun.style.display =on?'':'none';
+    btn.setAttribute('aria-label',on?'Switch to light mode':'Switch to dark mode');
+  }
+
+  function initDM(){
+    var adminEnabled=localStorage.getItem(DM_ENABLED_KEY)==='true';
+    var btn=document.getElementById('dm-toggle');
+    if(adminEnabled && btn){
+      btn.classList.add('visible');
+      var pref=localStorage.getItem(DM_PREF_KEY);
+      setDark(pref==='dark');
+    }
+  }
+
+  window.toggleDarkMode=function(){
+    var isDark=document.documentElement.classList.toggle('dark');
+    try{ localStorage.setItem(DM_PREF_KEY,isDark?'dark':'light'); }catch(e){}
+    setDark(isDark);
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initDM);
+  } else {
+    initDM();
+  }
+})();
 </script>
 <!-- HERO ANIMATION — subtle dots, cursor repel -->
 <script>

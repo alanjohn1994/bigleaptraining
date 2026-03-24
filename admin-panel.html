@@ -728,9 +728,9 @@ function renderAdminCal() {
   }
 
   for (let d = 1; d <= daysInMonth; d++) {
-    var date    = new Date(calYear, calMonth, d);
-    var dateStr = dateToStr(date);
-    var btn     = document.createElement('button');
+    const date    = new Date(calYear, calMonth, d);
+    const dateStr = dateToStr(date);
+    const btn     = document.createElement('button');
     btn.className  = 'cal-day';
     btn.textContent = d;
 

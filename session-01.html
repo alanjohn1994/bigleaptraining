@@ -479,35 +479,35 @@ setTimeout(()=>els.forEach(el=>el.classList.add('visible')),2000);
 </button>
 <script>
 (function(){
-  var DM_ENABLED_KEY="blt_dark_mode_enabled";
-  var DM_PREF_KEY="blt_dark_pref";
+  var DM_ENABLED_KEY='blt_dark_mode_enabled';
+  var DM_PREF_KEY='blt_dark_pref';
   function setDark(on){
-    if(on){ document.documentElement.classList.add("dark"); }
-    else  { document.documentElement.classList.remove("dark"); }
-    var btn=document.getElementById("dm-toggle");
+    if(on){ document.documentElement.classList.add('dark'); }
+    else  { document.documentElement.classList.remove('dark'); }
+    var btn=document.getElementById('dm-toggle');
     if(!btn) return;
-    var moon=btn.querySelector(".dm-moon");
-    var sun =btn.querySelector(".dm-sun");
-    if(moon) moon.style.display=on?"none":"";
-    if(sun)  sun.style.display =on?"":"none";
-    btn.setAttribute("aria-label",on?"Switch to light mode":"Switch to dark mode");
+    var moon=btn.querySelector('.dm-moon');
+    var sun =btn.querySelector('.dm-sun');
+    if(moon) moon.style.display=on?'none':'';
+    if(sun)  sun.style.display =on?'':'none';
+    btn.setAttribute('aria-label',on?'Switch to light mode':'Switch to dark mode');
   }
   function initDM(){
-    var adminEnabled=localStorage.getItem(DM_ENABLED_KEY)==="true";
-    var btn=document.getElementById("dm-toggle");
+    var adminEnabled=localStorage.getItem(DM_ENABLED_KEY)==='true';
+    var btn=document.getElementById('dm-toggle');
     if(adminEnabled && btn){
-      btn.classList.add("visible");
+      btn.classList.add('visible');
       var pref=localStorage.getItem(DM_PREF_KEY);
-      setDark(pref==="dark");
+      setDark(pref==='dark');
     }
   }
   window.toggleDarkMode=function(){
-    var isDark=document.documentElement.classList.toggle("dark");
-    try{ localStorage.setItem(DM_PREF_KEY,isDark?"dark":"light"); }catch(e){}
+    var isDark=document.documentElement.classList.toggle('dark');
+    try{ localStorage.setItem(DM_PREF_KEY,isDark?'dark':'light'); }catch(e){}
     setDark(isDark);
   };
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",initDM);
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initDM);
   } else {
     initDM();
   }

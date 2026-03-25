@@ -817,7 +817,7 @@ function showSection(name) {
   if (name === 'dashboard')    { loadDashboard(); }
   if (name === 'settings')     { loadSettings(); }
   if (name === 'casestudies')  { renderCsList(); }
-  if (name === 'insights')     { renderInsList(); }
+  if (name === 'insights')     { syncInsightsFromFile(renderInsList); }
 }
 
 function adminInit() {
@@ -1550,6 +1550,32 @@ function loadInsights() {
 
 function saveInsights(items) {
   try { localStorage.setItem(INSIGHTS_KEY, JSON.stringify(items)); } catch(e) {}
+}
+
+/* Merge file items with local items — local edits take precedence */
+function mergeInsights(fileItems, localItems) {
+  var merged = fileItems.slice();
+  localItems.forEach(function(localItem) {
+    var found = false;
+    for (var i = 0; i < merged.length; i++) {
+      if (merged[i].id === localItem.id) { merged[i] = localItem; found = true; break; }
+    }
+    if (!found) merged.push(localItem);
+  });
+  return merged;
+}
+
+/* Fetch data/insights.json, merge with localStorage, persist, then run callback */
+function syncInsightsFromFile(callback) {
+  fetch('data/insights.json')
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('Failed to load insights.json (HTTP ' + r.status + ')')); })
+    .then(function(fileItems) {
+      if (Array.isArray(fileItems) && fileItems.length > 0) {
+        saveInsights(mergeInsights(fileItems, loadInsights()));
+      }
+    })
+    .catch(function(err) { console.error('syncInsightsFromFile:', err); })
+    .then(function() { if (callback) callback(); });
 }
 
 function renderInsList() {

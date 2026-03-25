@@ -179,6 +179,11 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
 .action-btn{background:none;border:1.5px solid var(--separator);border-radius:980px;padding:5px 12px;font-family:var(--sf);font-size:12px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:border-color var(--t),color var(--t),background var(--t);letter-spacing:-.01em}
 .action-btn:hover{border-color:var(--dark-gray);color:var(--dark-gray)}
 .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.action-btn.publish:hover{border-color:var(--green);color:#1a8733}
+.publish-notice.active{background:#e6f9ed;border-color:rgba(48,209,88,.3);color:#1a8733}
+.publish-notice.active svg{stroke:#1a8733}
+.gh-help-link{font-size:12px;color:var(--blue);text-decoration:none;font-weight:500}
+.gh-help-link:hover{text-decoration:underline}
 .post-empty{text-align:center;padding:48px 24px;color:var(--mid-gray);font-size:14px;letter-spacing:-.01em}
 .new-post-btn{background:var(--blue);color:white;border:none;border-radius:980px;padding:9px 20px;font-family:var(--sf);font-size:13px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t)}
 .new-post-btn:hover{background:var(--blue-hover)}
@@ -475,8 +480,9 @@ input:checked+.slider:before{transform:translateX(20px)}
     </div>
     <div class="post-list-header">
       <h2 id="cs-list-count">0 case studies</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="secondary-btn" onclick="exportCsToFile()">&#x2913; Export to site</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="content-save-status" id="cs-sync-status" style="opacity:0"></span>
+        <button class="secondary-btn" id="cs-export-btn" onclick="exportCsToFile()">&#x2913; Export to site</button>
         <button class="new-post-btn" onclick="openCsModal(null)">+ New case study</button>
       </div>
     </div>
@@ -497,8 +503,9 @@ input:checked+.slider:before{transform:translateX(20px)}
     </div>
     <div class="post-list-header">
       <h2 id="ins-list-count">0 insights</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="secondary-btn" onclick="exportInsToFile()">&#x2913; Export to site</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="content-save-status" id="ins-sync-status" style="opacity:0"></span>
+        <button class="secondary-btn" id="ins-export-btn" onclick="exportInsToFile()">&#x2913; Export to site</button>
         <button class="new-post-btn" onclick="openInsModal(null)">+ New insight</button>
       </div>
     </div>
@@ -570,6 +577,36 @@ input:checked+.slider:before{transform:translateX(20px)}
           </label>
         </div>
         <span class="dm-save-status" id="dm-save-status"></span>
+      </div>
+
+      <!-- GitHub Auto-Publish Integration -->
+      <div class="content-card">
+        <h2>Auto-Publish Integration</h2>
+        <p class="section-desc">Connect to GitHub so that saving a published insight or case study automatically updates your live site — no manual export needed. Create a fine-grained Personal Access Token with <strong>Contents: Read and write</strong> permission scoped to this repository. <a class="gh-help-link" href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener" aria-label="Create a GitHub Personal Access Token (opens in new tab)">Create token on GitHub ↗</a></p>
+        <div class="content-fields">
+          <div class="content-field full">
+            <label for="gh-token">GitHub Personal Access Token</label>
+            <div class="pw-wrapper">
+              <input type="password" id="gh-token" class="content-input" placeholder="github_pat_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+              <button type="button" class="pw-toggle" onclick="togglePw('gh-token',this)" aria-label="Show">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="content-field">
+            <label for="gh-repo">Repository (owner/repo)</label>
+            <input class="content-input" id="gh-repo" type="text" placeholder="alanjohn1994/bigleaptraining"/>
+          </div>
+          <div class="content-field">
+            <label for="gh-branch">Branch</label>
+            <input class="content-input" id="gh-branch" type="text" placeholder="main"/>
+          </div>
+        </div>
+        <div class="content-save-row">
+          <button class="save-btn" onclick="saveGhSettings()">Save integration</button>
+          <button class="secondary-btn" onclick="testGhConnection()">Test connection</button>
+          <span class="content-save-status" id="gh-save-status"></span>
+        </div>
       </div>
 
     </div>
@@ -725,6 +762,11 @@ var TASTER_CNT_KEY  = 'blt_taster_count';
 var DARK_MODE_KEY   = 'blt_dark_mode_enabled';
 var CASE_STUDIES_KEY = 'blt_case_studies';
 var INSIGHTS_KEY     = 'blt_insights';
+var GH_TOKEN_KEY     = 'blt_gh_token';
+var GH_REPO_KEY      = 'blt_gh_repo';
+var GH_BRANCH_KEY    = 'blt_gh_branch';
+var GH_REPO_DEFAULT  = 'alanjohn1994/bigleaptraining';
+var GH_BRANCH_DEFAULT = 'main';
 var ALL_SLOTS       = ['9:00 am','10:00 am','11:00 am','1:00 pm','2:00 pm','3:00 pm','4:00 pm'];
 var MONTHS          = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -1156,6 +1198,9 @@ function showContentSaveStatus(msg, isError) {
 function loadSettings() {
   var darkEnabled = localStorage.getItem(DARK_MODE_KEY) === 'true';
   document.getElementById('dark-mode-admin-toggle').checked = darkEnabled;
+  document.getElementById('gh-token').value  = localStorage.getItem(GH_TOKEN_KEY)  || '';
+  document.getElementById('gh-repo').value   = localStorage.getItem(GH_REPO_KEY)   || GH_REPO_DEFAULT;
+  document.getElementById('gh-branch').value = localStorage.getItem(GH_BRANCH_KEY) || GH_BRANCH_DEFAULT;
 }
 
 function saveDarkModeSetting() {
@@ -1167,6 +1212,117 @@ function saveDarkModeSetting() {
   st.style.opacity = '1';
   clearTimeout(st._t);
   st._t = setTimeout(function() { st.style.opacity = '0'; }, 2000);
+}
+
+// ── GITHUB INTEGRATION ────────────────────────────────────────────────
+function getGhSettings() {
+  return {
+    token:  localStorage.getItem(GH_TOKEN_KEY)  || '',
+    repo:   localStorage.getItem(GH_REPO_KEY)   || GH_REPO_DEFAULT,
+    branch: localStorage.getItem(GH_BRANCH_KEY) || GH_BRANCH_DEFAULT
+  };
+}
+
+function showGhStatus(msg, isError) {
+  var el = document.getElementById('gh-save-status');
+  el.textContent  = msg;
+  el.style.color  = isError ? 'var(--error)' : 'var(--green)';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.style.opacity = '0'; }, 3500);
+}
+
+function saveGhSettings() {
+  var token  = document.getElementById('gh-token').value.trim();
+  var repo   = document.getElementById('gh-repo').value.trim()   || GH_REPO_DEFAULT;
+  var branch = document.getElementById('gh-branch').value.trim() || GH_BRANCH_DEFAULT;
+  try {
+    if (token) localStorage.setItem(GH_TOKEN_KEY, token);
+    else       localStorage.removeItem(GH_TOKEN_KEY);
+    localStorage.setItem(GH_REPO_KEY,   repo);
+    localStorage.setItem(GH_BRANCH_KEY, branch);
+  } catch(e) {}
+  showGhStatus('Saved \u2713', false);
+  renderInsList();
+  renderCsList();
+}
+
+function testGhConnection() {
+  var s = getGhSettings();
+  if (!s.token) { showGhStatus('No token — enter a token first.', true); return; }
+  showGhStatus('Testing\u2026', false);
+  fetch('https://api.github.com/repos/' + s.repo + '/contents/data/insights.json?ref=' + s.branch, {
+    headers: {
+      'Authorization': 'Bearer ' + s.token,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  }).then(function(resp) {
+    if (resp.ok || resp.status === 404) {
+      showGhStatus('Connection successful \u2713', false);
+    } else if (resp.status === 401) {
+      showGhStatus('Error: invalid or expired token', true);
+    } else if (resp.status === 403) {
+      showGhStatus('Error: access denied \u2014 check token permissions and repository access', true);
+    } else {
+      showGhStatus('Error: HTTP ' + resp.status, true);
+    }
+  }).catch(function() {
+    showGhStatus('Connection failed — check token and repo', true);
+  });
+}
+
+function syncToGitHub(filepath, items, onSuccess, onError) {
+  var s = getGhSettings();
+  if (!s.token) return; // No token configured — skip silently
+  var apiUrl = 'https://api.github.com/repos/' + s.repo + '/contents/' + filepath;
+  var headers = {
+    'Authorization': 'Bearer ' + s.token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  fetch(apiUrl + '?ref=' + s.branch, { headers: headers })
+    .then(function(resp) { return resp.json(); })
+    .then(function(data) {
+      var sha  = data.sha || null;
+      var json = JSON.stringify(items, null, 2);
+      var bytes = new TextEncoder().encode(json);
+      var binary = '';
+      bytes.forEach(function(b) { binary += String.fromCharCode(b); });
+      var b64  = btoa(binary);
+      var body = { message: 'Update ' + filepath + ' via admin panel', content: b64, branch: s.branch };
+      if (sha) body.sha = sha;
+      return fetch(apiUrl, {
+        method: 'PUT',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+        body: JSON.stringify(body)
+      });
+    })
+    .then(function(resp) {
+      if (resp.ok) {
+        if (onSuccess) onSuccess();
+      } else {
+        var ct = resp.headers.get('content-type') || '';
+        if (ct.indexOf('json') !== -1) {
+          resp.json().then(function(e) {
+            if (onError) onError(e.message || ('HTTP ' + resp.status));
+          }).catch(function() { if (onError) onError('HTTP ' + resp.status); });
+        } else {
+          if (onError) onError('HTTP ' + resp.status);
+        }
+      }
+    })
+    .catch(function(e) { if (onError) onError(e.message || 'network error'); });
+}
+
+function showSyncStatus(elId, msg, isError) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  el.textContent  = msg;
+  el.style.color  = isError ? 'var(--error)' : 'var(--green)';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.style.opacity = '0'; }, 4000);
 }
 
 // ── CHANGE PASSWORD ───────────────────────────────────────────────────
@@ -1253,7 +1409,10 @@ function renderCsList() {
   var countEl   = document.getElementById('cs-list-count');
   var notice    = document.getElementById('cs-publish-notice');
   countEl.textContent = items.length + ' case ' + (items.length === 1 ? 'study' : 'studies');
-  if (notice) notice.hidden = (items.length === 0);
+  if (notice) {
+    notice.hidden = (items.length === 0);
+    if (items.length > 0) updatePublishNotice('cs-publish-notice', 'case studies');
+  }
   container.innerHTML = '';
 
   if (items.length === 0) {
@@ -1277,8 +1436,11 @@ function renderCsList() {
           (cs.published ? 'Published' : 'Draft') +
         '</span>' +
         '<div class="post-row-actions">' +
-          '<button class="action-btn" data-id="' + cs.id + '" onclick="editCsPost(\'' + cs.id + '\')">Edit</button>' +
-          '<button class="action-btn danger" data-id="' + cs.id + '" onclick="deleteCsPost(\'' + cs.id + '\')">Delete</button>' +
+          '<button class="action-btn' + (cs.published ? '' : ' publish') + '" onclick="toggleCsPublish(\'' + cs.id + '\')">' +
+            (cs.published ? 'Unpublish' : 'Publish') +
+          '</button>' +
+          '<button class="action-btn" onclick="editCsPost(\'' + cs.id + '\')">Edit</button>' +
+          '<button class="action-btn danger" onclick="deleteCsPost(\'' + cs.id + '\')">Delete</button>' +
         '</div>';
       container.appendChild(row);
     });
@@ -1319,10 +1481,12 @@ function saveCsPost() {
   if (!body)    { errEl.textContent = 'Full content is required.'; return; }
   errEl.textContent = '';
 
-  var items = loadCaseStudies();
+  var items  = loadCaseStudies();
   var editId = document.getElementById('cs-edit-id').value;
+  var savedId;
 
   if (editId) {
+    savedId = editId;
     items = items.map(function(cs) {
       if (cs.id !== editId) return cs;
       return {
@@ -1339,8 +1503,9 @@ function saveCsPost() {
       };
     });
   } else {
+    savedId = genId();
     items.push({
-      id:        genId(),
+      id:        savedId,
       title:     title,
       client:    document.getElementById('cs-f-client').value.trim(),
       industry:  document.getElementById('cs-f-industry').value.trim(),
@@ -1356,6 +1521,14 @@ function saveCsPost() {
   saveCaseStudies(items);
   closeCsModal();
   renderCsList();
+  var savedPub = items.find(function(cs) { return cs.id === savedId; });
+  if (savedPub && savedPub.published) {
+    showSyncStatus('cs-sync-status', 'Syncing\u2026', false);
+    syncToGitHub('data/casestudies.json', items,
+      function() { showSyncStatus('cs-sync-status', 'Published to site \u2713', false); },
+      function(err) { showSyncStatus('cs-sync-status', 'Sync failed \u2014 use Export to site', true); }
+    );
+  }
 }
 
 function deleteCsPost(id) {
@@ -1385,7 +1558,10 @@ function renderInsList() {
   var countEl   = document.getElementById('ins-list-count');
   var notice    = document.getElementById('ins-publish-notice');
   countEl.textContent = items.length + ' ' + (items.length === 1 ? 'insight' : 'insights');
-  if (notice) notice.hidden = (items.length === 0);
+  if (notice) {
+    notice.hidden = (items.length === 0);
+    if (items.length > 0) updatePublishNotice('ins-publish-notice', 'insights');
+  }
   container.innerHTML = '';
 
   if (items.length === 0) {
@@ -1409,8 +1585,11 @@ function renderInsList() {
           (ins.published ? 'Published' : 'Draft') +
         '</span>' +
         '<div class="post-row-actions">' +
-          '<button class="action-btn" data-id="' + ins.id + '" onclick="editInsPost(\'' + ins.id + '\')">Edit</button>' +
-          '<button class="action-btn danger" data-id="' + ins.id + '" onclick="deleteInsPost(\'' + ins.id + '\')">Delete</button>' +
+          '<button class="action-btn' + (ins.published ? '' : ' publish') + '" onclick="toggleInsPublish(\'' + ins.id + '\')">' +
+            (ins.published ? 'Unpublish' : 'Publish') +
+          '</button>' +
+          '<button class="action-btn" onclick="editInsPost(\'' + ins.id + '\')">Edit</button>' +
+          '<button class="action-btn danger" onclick="deleteInsPost(\'' + ins.id + '\')">Delete</button>' +
         '</div>';
       container.appendChild(row);
     });
@@ -1449,10 +1628,12 @@ function saveInsPost() {
   if (!body)    { errEl.textContent = 'Full content is required.'; return; }
   errEl.textContent = '';
 
-  var items = loadInsights();
+  var items  = loadInsights();
   var editId = document.getElementById('ins-edit-id').value;
+  var savedId;
 
   if (editId) {
+    savedId = editId;
     items = items.map(function(ins) {
       if (ins.id !== editId) return ins;
       return {
@@ -1467,8 +1648,9 @@ function saveInsPost() {
       };
     });
   } else {
+    savedId = genId();
     items.push({
-      id:        genId(),
+      id:        savedId,
       title:     title,
       author:    document.getElementById('ins-f-author').value.trim(),
       date:      document.getElementById('ins-f-date').value,
@@ -1482,6 +1664,14 @@ function saveInsPost() {
   saveInsights(items);
   closeInsModal();
   renderInsList();
+  var savedPub = items.find(function(ins) { return ins.id === savedId; });
+  if (savedPub && savedPub.published) {
+    showSyncStatus('ins-sync-status', 'Syncing\u2026', false);
+    syncToGitHub('data/insights.json', items,
+      function() { showSyncStatus('ins-sync-status', 'Published to site \u2713', false); },
+      function(err) { showSyncStatus('ins-sync-status', 'Sync failed \u2014 use Export to site', true); }
+    );
+  }
 }
 
 function deleteInsPost(id) {
@@ -1495,6 +1685,59 @@ function escapeAdminHTML(str) {
   var d = document.createElement('div');
   d.appendChild(document.createTextNode(str || ''));
   return d.innerHTML;
+}
+
+function updatePublishNotice(noticeId, contentType) {
+  var notice = document.getElementById(noticeId);
+  if (!notice) return;
+  var s = getGhSettings();
+  var svgEl  = notice.querySelector('svg');
+  var spanEl = notice.querySelector('span');
+  if (s.token) {
+    notice.className = 'publish-notice active';
+    if (svgEl)  svgEl.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+    if (spanEl) spanEl.innerHTML = '<strong>Auto-publishing is active.</strong> When you publish ' + (contentType || 'content') + ', changes are synced to your live site automatically.';
+  } else {
+    notice.className = 'publish-notice';
+    if (svgEl)  svgEl.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+    if (spanEl) spanEl.innerHTML = 'To make your published content visible to all visitors, click <strong>Export to site</strong> and save the downloaded file to the <code>data/</code> folder in your site repository. Or set up Auto-Publish in <strong>Settings</strong>.';
+  }
+}
+
+function toggleInsPublish(id) {
+  var items = loadInsights();
+  items = items.map(function(ins) {
+    if (ins.id !== id) return ins;
+    return Object.assign({}, ins, { published: !ins.published });
+  });
+  saveInsights(items);
+  renderInsList();
+  var item = items.find(function(i) { return i.id === id; });
+  if (item && item.published) {
+    showSyncStatus('ins-sync-status', 'Syncing\u2026', false);
+    syncToGitHub('data/insights.json', items,
+      function() { showSyncStatus('ins-sync-status', 'Published to site \u2713', false); },
+      function(err) { showSyncStatus('ins-sync-status', 'Sync failed \u2014 use Export to site', true); }
+    );
+  }
+}
+
+function toggleCsPublish(id) {
+  var items = loadCaseStudies();
+  items = items.map(function(cs) {
+    if (cs.id !== id) return cs;
+    return Object.assign({}, cs, { published: !cs.published });
+  });
+  saveCaseStudies(items);
+  renderCsList();
+  var item = items.find(function(c) { return c.id === id; });
+  if (item && item.published) {
+    showSyncStatus('cs-sync-status', 'Syncing\u2026', false);
+    syncToGitHub('data/casestudies.json', items,
+      function() { showSyncStatus('cs-sync-status', 'Published to site \u2713', false); },
+      function(err) { showSyncStatus('cs-sync-status', 'Sync failed \u2014 use Export to site', true); }
+    );
+  }
 }
 
 // ── EXPORT TO SITE ────────────────────────────────────────────────────

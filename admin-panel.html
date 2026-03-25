@@ -164,6 +164,9 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
 /* ── POST LIST ── */
 .post-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .post-list-header h2{font-size:17px;font-weight:700;letter-spacing:-.03em;color:var(--dark-gray)}
+.publish-notice{display:flex;align-items:flex-start;gap:10px;background:#fff8e6;border:1px solid #f0c040;border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#7a5c00;line-height:1.5;letter-spacing:-.01em}
+.publish-notice svg{flex-shrink:0;margin-top:1px;stroke:#c08000}
+.publish-notice code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px;font-size:12px}
 .post-list{display:flex;flex-direction:column;gap:10px}
 .post-row{background:var(--white);border-radius:14px;padding:16px 20px;box-shadow:0 1px 8px rgba(0,0,0,.05);display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
 .post-row-main{flex:1;min-width:0}
@@ -466,9 +469,16 @@ input:checked+.slider:before{transform:translateX(20px)}
       <h1>Case Studies</h1>
       <p>Create and manage case studies shown on <a href="casestudy.html" target="_blank" style="color:var(--blue);text-decoration:none">casestudy.html</a>.</p>
     </div>
+    <div class="publish-notice" id="cs-publish-notice" hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>To make your published content visible to all visitors, click <strong>Export to site</strong> and save the downloaded file to the <code>data/</code> folder in your site repository.</span>
+    </div>
     <div class="post-list-header">
       <h2 id="cs-list-count">0 case studies</h2>
-      <button class="new-post-btn" onclick="openCsModal(null)">+ New case study</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="secondary-btn" onclick="exportCsToFile()">&#x2913; Export to site</button>
+        <button class="new-post-btn" onclick="openCsModal(null)">+ New case study</button>
+      </div>
     </div>
     <div id="cs-list" class="post-list"></div>
   </div>
@@ -481,9 +491,16 @@ input:checked+.slider:before{transform:translateX(20px)}
       <h1>Insights</h1>
       <p>Create and manage blog posts shown on <a href="insights.html" target="_blank" style="color:var(--blue);text-decoration:none">insights.html</a>.</p>
     </div>
+    <div class="publish-notice" id="ins-publish-notice" hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>To make your published content visible to all visitors, click <strong>Export to site</strong> and save the downloaded file to the <code>data/</code> folder in your site repository.</span>
+    </div>
     <div class="post-list-header">
       <h2 id="ins-list-count">0 insights</h2>
-      <button class="new-post-btn" onclick="openInsModal(null)">+ New insight</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="secondary-btn" onclick="exportInsToFile()">&#x2913; Export to site</button>
+        <button class="new-post-btn" onclick="openInsModal(null)">+ New insight</button>
+      </div>
     </div>
     <div id="ins-list" class="post-list"></div>
   </div>
@@ -647,7 +664,7 @@ input:checked+.slider:before{transform:translateX(20px)}
       </div>
       <div class="post-form-field full">
         <label for="ins-f-body">Full content *</label>
-        <textarea class="post-form-textarea tall" id="ins-f-body" placeholder="Write the full post here. You can use line breaks to separate paragraphs."></textarea>
+        <textarea class="post-form-textarea tall" id="ins-f-body" placeholder="Write the full post here. Use ## for section headings, - for bullet points, and **text** for bold.&#10;&#10;Example:&#10;## Why this matters&#10;&#10;AI tools are genuinely powerful &#x2014; but only when you know how to ask the right questions.&#10;&#10;- Key point one&#10;- Key point two&#10;&#10;## What to do next&#10;&#10;Start with a single use case and build from there."></textarea>
       </div>
       <div class="post-form-field">
         <label for="ins-f-tags">Tags (comma-separated)</label>
@@ -1234,7 +1251,9 @@ function renderCsList() {
   var items = loadCaseStudies();
   var container = document.getElementById('cs-list');
   var countEl   = document.getElementById('cs-list-count');
+  var notice    = document.getElementById('cs-publish-notice');
   countEl.textContent = items.length + ' case ' + (items.length === 1 ? 'study' : 'studies');
+  if (notice) notice.hidden = (items.length === 0);
   container.innerHTML = '';
 
   if (items.length === 0) {
@@ -1364,7 +1383,9 @@ function renderInsList() {
   var items = loadInsights();
   var container = document.getElementById('ins-list');
   var countEl   = document.getElementById('ins-list-count');
+  var notice    = document.getElementById('ins-publish-notice');
   countEl.textContent = items.length + ' ' + (items.length === 1 ? 'insight' : 'insights');
+  if (notice) notice.hidden = (items.length === 0);
   container.innerHTML = '';
 
   if (items.length === 0) {
@@ -1476,7 +1497,32 @@ function escapeAdminHTML(str) {
   return d.innerHTML;
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────
+// ── EXPORT TO SITE ────────────────────────────────────────────────────
+function downloadJSON(filename, data) {
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportInsToFile() {
+  var items = loadInsights();
+  downloadJSON('insights.json', items);
+  alert('insights.json downloaded.\n\nSave it to the data/ folder in your site repository to make published insights visible to all visitors.');
+}
+
+function exportCsToFile() {
+  var items = loadCaseStudies();
+  downloadJSON('casestudies.json', items);
+  alert('casestudies.json downloaded.\n\nSave it to the data/ folder in your site repository to make published case studies visible to all visitors.');
+}
+
+
 adminInit();
 </script>
 </body>

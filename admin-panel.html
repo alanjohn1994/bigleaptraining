@@ -161,6 +161,44 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;height:52px;background:rgba
 .content-save-row{margin-top:28px;padding-top:24px;border-top:1px solid var(--separator);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .content-save-status{font-size:13px;font-weight:500;letter-spacing:-.01em;transition:opacity var(--t);opacity:0}
 
+/* ── POST LIST ── */
+.post-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.post-list-header h2{font-size:17px;font-weight:700;letter-spacing:-.03em;color:var(--dark-gray)}
+.post-list{display:flex;flex-direction:column;gap:10px}
+.post-row{background:var(--white);border-radius:14px;padding:16px 20px;box-shadow:0 1px 8px rgba(0,0,0,.05);display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.post-row-main{flex:1;min-width:0}
+.post-row-title{font-size:15px;font-weight:600;letter-spacing:-.02em;color:var(--dark-gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-row-meta{font-size:12px;color:var(--mid-gray);margin-top:3px;letter-spacing:-.01em}
+.post-row-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:3px 10px;border-radius:980px}
+.status-badge.published{background:var(--green-light);color:#1a8733}
+.status-badge.draft{background:var(--off-white);color:var(--mid-gray)}
+.action-btn{background:none;border:1.5px solid var(--separator);border-radius:980px;padding:5px 12px;font-family:var(--sf);font-size:12px;font-weight:500;color:var(--mid-gray);cursor:pointer;transition:border-color var(--t),color var(--t),background var(--t);letter-spacing:-.01em}
+.action-btn:hover{border-color:var(--dark-gray);color:var(--dark-gray)}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.post-empty{text-align:center;padding:48px 24px;color:var(--mid-gray);font-size:14px;letter-spacing:-.01em}
+.new-post-btn{background:var(--blue);color:white;border:none;border-radius:980px;padding:9px 20px;font-family:var(--sf);font-size:13px;font-weight:500;cursor:pointer;letter-spacing:-.015em;transition:background var(--t)}
+.new-post-btn:hover{background:var(--blue-hover)}
+
+/* ── POST EDIT MODAL ── */
+.post-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding:60px 24px 24px;overflow-y:auto}
+.post-modal-overlay[hidden]{display:none}
+.post-modal-card{background:var(--white);border-radius:20px;padding:36px;width:100%;max-width:680px;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+@media(max-width:600px){.post-modal-card{padding:24px}}
+.post-modal-card h3{font-size:20px;font-weight:700;letter-spacing:-.04em;color:var(--dark-gray);margin-bottom:4px}
+.post-modal-card .post-modal-sub{font-size:13px;color:var(--mid-gray);margin-bottom:24px;letter-spacing:-.01em}
+.post-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.post-form-grid{grid-template-columns:1fr}}
+.post-form-field{display:flex;flex-direction:column;gap:5px}
+.post-form-field.full{grid-column:1/-1}
+.post-form-field label{font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--mid-gray)}
+.post-form-input,.post-form-textarea,.post-form-select{font-family:var(--sf);font-size:14px;color:var(--dark-gray);background:var(--off-white);border:1.5px solid transparent;border-radius:10px;padding:10px 13px;outline:none;letter-spacing:-.015em;transition:border-color var(--t),background var(--t);width:100%}
+.post-form-input:focus,.post-form-textarea:focus,.post-form-select:focus{border-color:var(--blue);background:var(--white)}
+.post-form-textarea{resize:vertical;min-height:100px;line-height:1.55}
+.post-form-textarea.tall{min-height:160px}
+.post-modal-actions{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+.post-modal-error{font-size:13px;color:var(--error);letter-spacing:-.01em;flex:1}
+
 /* ── SETTINGS ── */
 .settings-grid{display:flex;flex-direction:column;gap:24px;max-width:640px}
 .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--separator)}
@@ -202,6 +240,8 @@ input:checked+.slider:before{transform:translateX(20px)}
       <button class="nav-tab active" id="tab-dashboard"     onclick="showSection('dashboard')">Dashboard</button>
       <button class="nav-tab"        id="tab-availability"  onclick="showSection('availability')">Availability</button>
       <button class="nav-tab"        id="tab-content"       onclick="showSection('content')">Edit Content</button>
+      <button class="nav-tab"        id="tab-casestudies"   onclick="showSection('casestudies')">Case Studies</button>
+      <button class="nav-tab"        id="tab-insights"      onclick="showSection('insights')">Insights</button>
       <button class="nav-tab"        id="tab-settings"      onclick="showSection('settings')">Settings</button>
     </div>
     <div class="nav-right">
@@ -243,6 +283,8 @@ input:checked+.slider:before{transform:translateX(20px)}
       <div class="quick-actions">
         <button class="save-btn" onclick="showSection('availability')">Availability Manager →</button>
         <button class="secondary-btn" onclick="showSection('content')">Edit Site Content →</button>
+        <button class="secondary-btn" onclick="showSection('casestudies')">Case Studies →</button>
+        <button class="secondary-btn" onclick="showSection('insights')">Insights →</button>
         <button class="secondary-btn" onclick="showSection('settings')">Settings →</button>
       </div>
     </div>
@@ -417,6 +459,36 @@ input:checked+.slider:before{transform:translateX(20px)}
   </div>
 </div>
 
+<!-- ── CASE STUDIES SECTION ── -->
+<div id="section-casestudies" class="admin-section" hidden>
+  <div class="admin-wrap">
+    <div class="page-header">
+      <h1>Case Studies</h1>
+      <p>Create and manage case studies shown on <a href="casestudy.html" target="_blank" style="color:var(--blue);text-decoration:none">casestudy.html</a>.</p>
+    </div>
+    <div class="post-list-header">
+      <h2 id="cs-list-count">0 case studies</h2>
+      <button class="new-post-btn" onclick="openCsModal(null)">+ New case study</button>
+    </div>
+    <div id="cs-list" class="post-list"></div>
+  </div>
+</div>
+
+<!-- ── INSIGHTS SECTION ── -->
+<div id="section-insights" class="admin-section" hidden>
+  <div class="admin-wrap">
+    <div class="page-header">
+      <h1>Insights</h1>
+      <p>Create and manage blog posts shown on <a href="insights.html" target="_blank" style="color:var(--blue);text-decoration:none">insights.html</a>.</p>
+    </div>
+    <div class="post-list-header">
+      <h2 id="ins-list-count">0 insights</h2>
+      <button class="new-post-btn" onclick="openInsModal(null)">+ New insight</button>
+    </div>
+    <div id="ins-list" class="post-list"></div>
+  </div>
+</div>
+
 <!-- ── SETTINGS SECTION ── -->
 <div id="section-settings" class="admin-section" hidden>
   <div class="admin-wrap">
@@ -495,6 +567,108 @@ input:checked+.slider:before{transform:translateX(20px)}
   <span class="save-status" id="save-status"></span>
 </div>
 
+<!-- ── CASE STUDY MODAL ── -->
+<div class="post-modal-overlay" id="cs-modal" hidden onclick="if(event.target===this)closeCsModal()">
+  <div class="post-modal-card" onclick="event.stopPropagation()">
+    <h3 id="cs-modal-title">New case study</h3>
+    <p class="post-modal-sub">Fill in the details below. Only published case studies appear on the site.</p>
+    <input type="hidden" id="cs-edit-id"/>
+    <div class="post-form-grid">
+      <div class="post-form-field full">
+        <label for="cs-f-title">Title *</label>
+        <input class="post-form-input" id="cs-f-title" type="text" placeholder="e.g. How Acme Law Saved 6 Hours a Week"/>
+      </div>
+      <div class="post-form-field">
+        <label for="cs-f-client">Client / company</label>
+        <input class="post-form-input" id="cs-f-client" type="text" placeholder="Acme Law LLP"/>
+      </div>
+      <div class="post-form-field">
+        <label for="cs-f-industry">Industry</label>
+        <input class="post-form-input" id="cs-f-industry" type="text" placeholder="Professional Services"/>
+      </div>
+      <div class="post-form-field full">
+        <label for="cs-f-summary">Summary (shown on card) *</label>
+        <textarea class="post-form-textarea" id="cs-f-summary" placeholder="A short description for the case study card (1–2 sentences)."></textarea>
+      </div>
+      <div class="post-form-field full">
+        <label for="cs-f-body">Full content *</label>
+        <textarea class="post-form-textarea tall" id="cs-f-body" placeholder="Write the full case study here. You can use line breaks to separate paragraphs."></textarea>
+      </div>
+      <div class="post-form-field full">
+        <label for="cs-f-outcome">Key outcome</label>
+        <input class="post-form-input" id="cs-f-outcome" type="text" placeholder="e.g. Team saves 6 hours per week on document drafting."/>
+      </div>
+      <div class="post-form-field">
+        <label for="cs-f-date">Date</label>
+        <input class="post-form-input" id="cs-f-date" type="date"/>
+      </div>
+      <div class="post-form-field">
+        <label for="cs-f-tags">Tags (comma-separated)</label>
+        <input class="post-form-input" id="cs-f-tags" type="text" placeholder="AI, Law, Productivity"/>
+      </div>
+      <div class="post-form-field">
+        <label for="cs-f-status">Status</label>
+        <select class="post-form-select" id="cs-f-status">
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+    </div>
+    <div class="post-modal-actions">
+      <span class="post-modal-error" id="cs-modal-error"></span>
+      <button class="ghost-btn" onclick="closeCsModal()">Cancel</button>
+      <button class="save-btn" onclick="saveCsPost()">Save case study</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── INSIGHT MODAL ── -->
+<div class="post-modal-overlay" id="ins-modal" hidden onclick="if(event.target===this)closeInsModal()">
+  <div class="post-modal-card" onclick="event.stopPropagation()">
+    <h3 id="ins-modal-title">New insight</h3>
+    <p class="post-modal-sub">Fill in the details below. Only published insights appear on the site.</p>
+    <input type="hidden" id="ins-edit-id"/>
+    <div class="post-form-grid">
+      <div class="post-form-field full">
+        <label for="ins-f-title">Title *</label>
+        <input class="post-form-input" id="ins-f-title" type="text" placeholder="e.g. Five AI Prompts Every Law Firm Should Know"/>
+      </div>
+      <div class="post-form-field">
+        <label for="ins-f-author">Author</label>
+        <input class="post-form-input" id="ins-f-author" type="text" placeholder="Big Leap Training"/>
+      </div>
+      <div class="post-form-field">
+        <label for="ins-f-date">Date</label>
+        <input class="post-form-input" id="ins-f-date" type="date"/>
+      </div>
+      <div class="post-form-field full">
+        <label for="ins-f-summary">Summary (shown on card) *</label>
+        <textarea class="post-form-textarea" id="ins-f-summary" placeholder="A short description for the insight card (1–2 sentences)."></textarea>
+      </div>
+      <div class="post-form-field full">
+        <label for="ins-f-body">Full content *</label>
+        <textarea class="post-form-textarea tall" id="ins-f-body" placeholder="Write the full post here. You can use line breaks to separate paragraphs."></textarea>
+      </div>
+      <div class="post-form-field">
+        <label for="ins-f-tags">Tags (comma-separated)</label>
+        <input class="post-form-input" id="ins-f-tags" type="text" placeholder="AI, Tips, Writing"/>
+      </div>
+      <div class="post-form-field">
+        <label for="ins-f-status">Status</label>
+        <select class="post-form-select" id="ins-f-status">
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+    </div>
+    <div class="post-modal-actions">
+      <span class="post-modal-error" id="ins-modal-error"></span>
+      <button class="ghost-btn" onclick="closeInsModal()">Cancel</button>
+      <button class="save-btn" onclick="saveInsPost()">Save insight</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── EXPORT MODAL ── -->
 <div class="modal-overlay" id="export-modal" hidden onclick="closeOnOverlay(event,'export-modal')">
   <div class="modal-card" onclick="event.stopPropagation()">
@@ -532,6 +706,8 @@ var CONTENT_KEY     = 'blt_site_content';
 var CONTACT_CNT_KEY = 'blt_contact_count';
 var TASTER_CNT_KEY  = 'blt_taster_count';
 var DARK_MODE_KEY   = 'blt_dark_mode_enabled';
+var CASE_STUDIES_KEY = 'blt_case_studies';
+var INSIGHTS_KEY     = 'blt_insights';
 var ALL_SLOTS       = ['9:00 am','10:00 am','11:00 am','1:00 pm','2:00 pm','3:00 pm','4:00 pm'];
 var MONTHS          = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -562,7 +738,7 @@ function logout() {
 }
 
 // ── SECTION NAVIGATION ────────────────────────────────────────────────
-var SECTIONS = ['dashboard', 'availability', 'content', 'settings'];
+var SECTIONS = ['dashboard', 'availability', 'content', 'casestudies', 'insights', 'settings'];
 
 function showSection(name) {
   SECTIONS.forEach(function(s) {
@@ -578,9 +754,11 @@ function showSection(name) {
     saveBar.classList.add('hidden');
   }
   if (name === 'availability' && !calYear) { initAvailability(); }
-  if (name === 'content')  { loadContentEditor(); }
-  if (name === 'dashboard') { loadDashboard(); }
-  if (name === 'settings')  { loadSettings(); }
+  if (name === 'content')      { loadContentEditor(); }
+  if (name === 'dashboard')    { loadDashboard(); }
+  if (name === 'settings')     { loadSettings(); }
+  if (name === 'casestudies')  { renderCsList(); }
+  if (name === 'insights')     { renderInsList(); }
 }
 
 function adminInit() {
@@ -1023,6 +1201,279 @@ function changePassword() {
   document.getElementById('pw-new').value     = '';
   document.getElementById('pw-confirm').value = '';
   showPwStatus('Password updated \u2713', false);
+}
+
+// ── CASE STUDIES ─────────────────────────────────────────────────────
+function loadCaseStudies() {
+  try {
+    var raw = localStorage.getItem(CASE_STUDIES_KEY);
+    if (!raw) return [];
+    var items = JSON.parse(raw);
+    return Array.isArray(items) ? items : [];
+  } catch(e) { return []; }
+}
+
+function saveCaseStudies(items) {
+  try { localStorage.setItem(CASE_STUDIES_KEY, JSON.stringify(items)); } catch(e) {}
+}
+
+var _idCounter = 0;
+function genId() {
+  return Date.now().toString(36) + (++_idCounter).toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function formatDateLabel(str) {
+  if (!str) return '—';
+  try {
+    var d = new Date(str + 'T00:00:00');
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch(e) { return str; }
+}
+
+function renderCsList() {
+  var items = loadCaseStudies();
+  var container = document.getElementById('cs-list');
+  var countEl   = document.getElementById('cs-list-count');
+  countEl.textContent = items.length + ' case ' + (items.length === 1 ? 'study' : 'studies');
+  container.innerHTML = '';
+
+  if (items.length === 0) {
+    container.innerHTML = '<p class="post-empty">No case studies yet. Click "+ New case study" to create one.</p>';
+    return;
+  }
+
+  items.slice().sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); })
+    .forEach(function(cs) {
+      var row = document.createElement('div');
+      row.className = 'post-row';
+      row.innerHTML =
+        '<div class="post-row-main">' +
+          '<div class="post-row-title">' + escapeAdminHTML(cs.title || 'Untitled') + '</div>' +
+          '<div class="post-row-meta">' +
+            (cs.client ? escapeAdminHTML(cs.client) + ' &middot; ' : '') +
+            formatDateLabel(cs.date) +
+          '</div>' +
+        '</div>' +
+        '<span class="status-badge ' + (cs.published ? 'published' : 'draft') + '">' +
+          (cs.published ? 'Published' : 'Draft') +
+        '</span>' +
+        '<div class="post-row-actions">' +
+          '<button class="action-btn" data-id="' + cs.id + '" onclick="editCsPost(\'' + cs.id + '\')">Edit</button>' +
+          '<button class="action-btn danger" data-id="' + cs.id + '" onclick="deleteCsPost(\'' + cs.id + '\')">Delete</button>' +
+        '</div>';
+      container.appendChild(row);
+    });
+}
+
+function openCsModal(id) {
+  var items = loadCaseStudies();
+  var cs = id ? items.find(function(c) { return c.id === id; }) : null;
+  document.getElementById('cs-modal-title').textContent = cs ? 'Edit case study' : 'New case study';
+  document.getElementById('cs-edit-id').value    = cs ? cs.id : '';
+  document.getElementById('cs-f-title').value    = cs ? (cs.title || '') : '';
+  document.getElementById('cs-f-client').value   = cs ? (cs.client || '') : '';
+  document.getElementById('cs-f-industry').value = cs ? (cs.industry || '') : '';
+  document.getElementById('cs-f-summary').value  = cs ? (cs.summary || '') : '';
+  document.getElementById('cs-f-body').value     = cs ? (cs.body || '') : '';
+  document.getElementById('cs-f-outcome').value  = cs ? (cs.outcome || '') : '';
+  document.getElementById('cs-f-date').value     = cs ? (cs.date || '') : new Date().toISOString().slice(0, 10);
+  document.getElementById('cs-f-tags').value     = cs ? (cs.tags || '') : '';
+  document.getElementById('cs-f-status').value   = cs && cs.published ? 'published' : 'draft';
+  document.getElementById('cs-modal-error').textContent = '';
+  document.getElementById('cs-modal').hidden = false;
+}
+
+function editCsPost(id) { openCsModal(id); }
+
+function closeCsModal() {
+  document.getElementById('cs-modal').hidden = true;
+}
+
+function saveCsPost() {
+  var title   = document.getElementById('cs-f-title').value.trim();
+  var summary = document.getElementById('cs-f-summary').value.trim();
+  var body    = document.getElementById('cs-f-body').value.trim();
+  var errEl   = document.getElementById('cs-modal-error');
+
+  if (!title)   { errEl.textContent = 'Title is required.'; return; }
+  if (!summary) { errEl.textContent = 'Summary is required.'; return; }
+  if (!body)    { errEl.textContent = 'Full content is required.'; return; }
+  errEl.textContent = '';
+
+  var items = loadCaseStudies();
+  var editId = document.getElementById('cs-edit-id').value;
+
+  if (editId) {
+    items = items.map(function(cs) {
+      if (cs.id !== editId) return cs;
+      return {
+        id:        cs.id,
+        title:     title,
+        client:    document.getElementById('cs-f-client').value.trim(),
+        industry:  document.getElementById('cs-f-industry').value.trim(),
+        summary:   summary,
+        body:      body,
+        outcome:   document.getElementById('cs-f-outcome').value.trim(),
+        date:      document.getElementById('cs-f-date').value,
+        tags:      document.getElementById('cs-f-tags').value.trim(),
+        published: document.getElementById('cs-f-status').value === 'published'
+      };
+    });
+  } else {
+    items.push({
+      id:        genId(),
+      title:     title,
+      client:    document.getElementById('cs-f-client').value.trim(),
+      industry:  document.getElementById('cs-f-industry').value.trim(),
+      summary:   summary,
+      body:      body,
+      outcome:   document.getElementById('cs-f-outcome').value.trim(),
+      date:      document.getElementById('cs-f-date').value,
+      tags:      document.getElementById('cs-f-tags').value.trim(),
+      published: document.getElementById('cs-f-status').value === 'published'
+    });
+  }
+
+  saveCaseStudies(items);
+  closeCsModal();
+  renderCsList();
+}
+
+function deleteCsPost(id) {
+  if (!confirm('Delete this case study? This cannot be undone.')) return;
+  var items = loadCaseStudies().filter(function(cs) { return cs.id !== id; });
+  saveCaseStudies(items);
+  renderCsList();
+}
+
+// ── INSIGHTS ──────────────────────────────────────────────────────────
+function loadInsights() {
+  try {
+    var raw = localStorage.getItem(INSIGHTS_KEY);
+    if (!raw) return [];
+    var items = JSON.parse(raw);
+    return Array.isArray(items) ? items : [];
+  } catch(e) { return []; }
+}
+
+function saveInsights(items) {
+  try { localStorage.setItem(INSIGHTS_KEY, JSON.stringify(items)); } catch(e) {}
+}
+
+function renderInsList() {
+  var items = loadInsights();
+  var container = document.getElementById('ins-list');
+  var countEl   = document.getElementById('ins-list-count');
+  countEl.textContent = items.length + ' ' + (items.length === 1 ? 'insight' : 'insights');
+  container.innerHTML = '';
+
+  if (items.length === 0) {
+    container.innerHTML = '<p class="post-empty">No insights yet. Click "+ New insight" to create one.</p>';
+    return;
+  }
+
+  items.slice().sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); })
+    .forEach(function(ins) {
+      var row = document.createElement('div');
+      row.className = 'post-row';
+      row.innerHTML =
+        '<div class="post-row-main">' +
+          '<div class="post-row-title">' + escapeAdminHTML(ins.title || 'Untitled') + '</div>' +
+          '<div class="post-row-meta">' +
+            (ins.author ? 'By ' + escapeAdminHTML(ins.author) + ' &middot; ' : '') +
+            formatDateLabel(ins.date) +
+          '</div>' +
+        '</div>' +
+        '<span class="status-badge ' + (ins.published ? 'published' : 'draft') + '">' +
+          (ins.published ? 'Published' : 'Draft') +
+        '</span>' +
+        '<div class="post-row-actions">' +
+          '<button class="action-btn" data-id="' + ins.id + '" onclick="editInsPost(\'' + ins.id + '\')">Edit</button>' +
+          '<button class="action-btn danger" data-id="' + ins.id + '" onclick="deleteInsPost(\'' + ins.id + '\')">Delete</button>' +
+        '</div>';
+      container.appendChild(row);
+    });
+}
+
+function openInsModal(id) {
+  var items = loadInsights();
+  var ins = id ? items.find(function(i) { return i.id === id; }) : null;
+  document.getElementById('ins-modal-title').textContent = ins ? 'Edit insight' : 'New insight';
+  document.getElementById('ins-edit-id').value    = ins ? ins.id : '';
+  document.getElementById('ins-f-title').value    = ins ? (ins.title || '') : '';
+  document.getElementById('ins-f-author').value   = ins ? (ins.author || '') : '';
+  document.getElementById('ins-f-date').value     = ins ? (ins.date || '') : new Date().toISOString().slice(0, 10);
+  document.getElementById('ins-f-summary').value  = ins ? (ins.summary || '') : '';
+  document.getElementById('ins-f-body').value     = ins ? (ins.body || '') : '';
+  document.getElementById('ins-f-tags').value     = ins ? (ins.tags || '') : '';
+  document.getElementById('ins-f-status').value   = ins && ins.published ? 'published' : 'draft';
+  document.getElementById('ins-modal-error').textContent = '';
+  document.getElementById('ins-modal').hidden = false;
+}
+
+function editInsPost(id) { openInsModal(id); }
+
+function closeInsModal() {
+  document.getElementById('ins-modal').hidden = true;
+}
+
+function saveInsPost() {
+  var title   = document.getElementById('ins-f-title').value.trim();
+  var summary = document.getElementById('ins-f-summary').value.trim();
+  var body    = document.getElementById('ins-f-body').value.trim();
+  var errEl   = document.getElementById('ins-modal-error');
+
+  if (!title)   { errEl.textContent = 'Title is required.'; return; }
+  if (!summary) { errEl.textContent = 'Summary is required.'; return; }
+  if (!body)    { errEl.textContent = 'Full content is required.'; return; }
+  errEl.textContent = '';
+
+  var items = loadInsights();
+  var editId = document.getElementById('ins-edit-id').value;
+
+  if (editId) {
+    items = items.map(function(ins) {
+      if (ins.id !== editId) return ins;
+      return {
+        id:        ins.id,
+        title:     title,
+        author:    document.getElementById('ins-f-author').value.trim(),
+        date:      document.getElementById('ins-f-date').value,
+        summary:   summary,
+        body:      body,
+        tags:      document.getElementById('ins-f-tags').value.trim(),
+        published: document.getElementById('ins-f-status').value === 'published'
+      };
+    });
+  } else {
+    items.push({
+      id:        genId(),
+      title:     title,
+      author:    document.getElementById('ins-f-author').value.trim(),
+      date:      document.getElementById('ins-f-date').value,
+      summary:   summary,
+      body:      body,
+      tags:      document.getElementById('ins-f-tags').value.trim(),
+      published: document.getElementById('ins-f-status').value === 'published'
+    });
+  }
+
+  saveInsights(items);
+  closeInsModal();
+  renderInsList();
+}
+
+function deleteInsPost(id) {
+  if (!confirm('Delete this insight? This cannot be undone.')) return;
+  var items = loadInsights().filter(function(ins) { return ins.id !== id; });
+  saveInsights(items);
+  renderInsList();
+}
+
+function escapeAdminHTML(str) {
+  var d = document.createElement('div');
+  d.appendChild(document.createTextNode(str || ''));
+  return d.innerHTML;
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────

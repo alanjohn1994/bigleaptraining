@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Studies — Big Leap Training</title>
+<meta name="description" content="Real results from real teams. Read how Big Leap Training has helped businesses save hours every week with practical AI workshops.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+:root{
+  --sf:-apple-system,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+  --white:#ffffff;--off-white:#f5f5f7;--mid-gray:#86868b;--dark-gray:#1d1d1f;
+  --blue:#0071e3;--blue-hover:#0077ed;--blue-light:#e8f0fe;
+  --green:#30d158;--separator:rgba(0,0,0,0.07);
+  --radius:18px;--ease:cubic-bezier(0.4,0,0.2,1);--t:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sf);background:var(--white);color:var(--dark-gray);line-height:1.47059;font-size:17px;letter-spacing:-0.022em}
+.container{max-width:1080px;margin:0 auto;padding:0 48px}
+@media(max-width:768px){.container{padding:0 22px}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.75s var(--ease),transform 0.75s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+.grad{background:linear-gradient(95deg,#0071e3 0%,#34aadc 45%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--separator);display:flex;align-items:center;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+.nav-inner{width:100%;max-width:1080px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+@media(max-width:768px){.nav-inner{padding:0 22px}}
+.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:28px;height:28px;flex-shrink:0}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--dark-gray);letter-spacing:-.03em;line-height:1}
+.nav-logo-text span{background:linear-gradient(95deg,#0071e3 0%,#34aadc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;transition:opacity var(--t)}
+.nav-back:hover{opacity:.7}
+.nav-back svg{width:14px;height:14px}
+.nav-cta{background:var(--blue);color:white;border-radius:980px;padding:7px 16px;font-size:13px;font-weight:500;text-decoration:none;transition:background var(--t)}
+.nav-cta:hover{background:var(--blue-hover)}
+
+/* HERO */
+.page-hero{padding:110px 48px 72px;background:var(--white);text-align:center}
+@media(max-width:768px){.page-hero{padding:88px 22px 56px}}
+.page-hero-eyebrow{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;display:block}
+.page-hero h1{font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-.05em;line-height:1.04;color:var(--dark-gray);margin-bottom:20px}
+.page-hero-sub{font-size:19px;color:var(--mid-gray);line-height:1.6;letter-spacing:-.022em;max-width:520px;margin:0 auto}
+
+/* SECTION */
+.section{padding:72px 48px 100px}
+@media(max-width:768px){.section{padding:48px 22px 80px}}
+
+/* GRID */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+@media(max-width:960px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.cards-grid{grid-template-columns:1fr}}
+
+/* CARD */
+.cs-card{background:var(--white);border:1px solid var(--separator);border-radius:20px;padding:28px;cursor:pointer;transition:box-shadow 0.25s var(--ease),transform 0.25s var(--ease);display:flex;flex-direction:column;gap:14px}
+.cs-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-3px)}
+.cs-card-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);background:var(--blue-light);padding:4px 10px;border-radius:980px;width:fit-content}
+.cs-card-title{font-size:19px;font-weight:700;letter-spacing:-.03em;color:var(--dark-gray);line-height:1.2}
+.cs-card-client{font-size:13px;color:var(--mid-gray);letter-spacing:-.01em}
+.cs-card-summary{font-size:15px;color:var(--mid-gray);line-height:1.6;letter-spacing:-.015em;flex:1}
+.cs-card-meta{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--separator)}
+.cs-card-date{font-size:12px;color:var(--mid-gray);letter-spacing:-.01em}
+.cs-card-link{font-size:13px;color:var(--blue);font-weight:500;letter-spacing:-.01em}
+.cs-card-link::after{content:' ›'}
+
+.cs-tags{display:flex;flex-wrap:wrap;gap:6px}
+.cs-tag{font-size:11px;font-weight:500;color:var(--dark-gray);background:var(--off-white);padding:4px 10px;border-radius:980px;letter-spacing:-.01em}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:80px 48px;color:var(--mid-gray)}
+@media(max-width:768px){.empty-state{padding:60px 22px}}
+.empty-icon{width:56px;height:56px;border-radius:16px;background:var(--off-white);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.empty-icon svg{width:26px;height:26px;stroke:var(--mid-gray)}
+.empty-state h2{font-size:22px;font-weight:700;letter-spacing:-.04em;color:var(--dark-gray);margin-bottom:8px}
+.empty-state p{font-size:15px;line-height:1.6;letter-spacing:-.015em;max-width:360px;margin:0 auto}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding:72px 24px 24px;overflow-y:auto}
+.modal-overlay[hidden]{display:none}
+.modal-card{background:var(--white);border-radius:20px;padding:40px;width:100%;max-width:720px;box-shadow:0 24px 64px rgba(0,0,0,.2);position:relative}
+@media(max-width:768px){.modal-card{padding:28px}}
+.modal-close{position:absolute;top:20px;right:20px;background:var(--off-white);border:none;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--mid-gray);transition:background var(--t),color var(--t)}
+.modal-close:hover{background:#e5e5ea;color:var(--dark-gray)}
+.modal-eyebrow{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:block}
+.modal-title{font-size:clamp(24px,3vw,36px);font-weight:700;letter-spacing:-.04em;color:var(--dark-gray);margin-bottom:6px;line-height:1.1}
+.modal-client{font-size:15px;color:var(--mid-gray);letter-spacing:-.015em;margin-bottom:24px}
+.modal-section-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mid-gray);margin-bottom:8px;margin-top:24px;display:block}
+.modal-body{font-size:16px;color:var(--dark-gray);line-height:1.75;letter-spacing:-.015em;white-space:pre-wrap}
+.modal-outcome{background:var(--off-white);border-radius:12px;padding:20px;margin-top:20px;font-size:15px;color:var(--dark-gray);line-height:1.6;letter-spacing:-.015em}
+.modal-outcome strong{display:block;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px}
+.modal-tag{font-size:12px;font-weight:500;color:var(--dark-gray);background:var(--off-white);padding:5px 12px;border-radius:980px;letter-spacing:-.01em}
+.modal-date{font-size:13px;color:var(--mid-gray);margin-top:20px;letter-spacing:-.01em}
+.modal-divider{height:1px;background:var(--separator);margin:24px 0}
+
+/* FOOTER */
+footer{background:var(--dark-gray);padding:60px 48px 40px}
+@media(max-width:768px){footer{padding:48px 22px 32px}}
+.footer-inner{max-width:1080px;margin:0 auto}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin-bottom:40px}
+@media(max-width:640px){.footer-top{flex-direction:column;gap:28px}}
+.footer-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:10px}
+.footer-logo-mark{width:28px;height:28px}
+.footer-logo-text{font-size:17px;font-weight:700;color:white;letter-spacing:-.03em}
+.footer-logo-text span{background:linear-gradient(95deg,#409cff 0%,#6ac4dc 50%,#30d158 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-tagline{font-size:14px;color:rgba(255,255,255,.4);letter-spacing:-.01em;line-height:1.6;max-width:280px}
+.footer-nav{display:flex;flex-direction:column;gap:10px}
+.footer-nav a{font-size:14px;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:-.01em;transition:color var(--t)}
+.footer-nav a:hover{color:white}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:28px;border-top:1px solid rgba(255,255,255,.1)}
+.footer-copy{font-size:13px;color:rgba(255,255,255,.3);letter-spacing:-.01em}
+.footer-legal{display:flex;gap:20px;flex-wrap:wrap}
+.footer-legal a{font-size:13px;color:rgba(255,255,255,.35);text-decoration:none;letter-spacing:-.01em;transition:color var(--t)}
+.footer-legal a:hover{color:rgba(255,255,255,.7)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <svg class="nav-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="14" y1="10" x2="14" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="76" x2="74" y2="76" stroke="#1d1d1f" stroke-width="10" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="64" y2="10" stroke="#0071e3" stroke-width="6" stroke-linecap="round"/>
+        <polyline points="52,8 66,8 66,22" fill="none" stroke="#0071e3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="38" r="6" fill="#30d158"/>
+      </svg>
+      <span class="nav-logo-text">Big Leap <span>Training</span></span>
+    </a>
+    <a class="nav-back" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to home
+    </a>
+    <a class="nav-cta" href="taster.html">Free taster</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <span class="page-hero-eyebrow">Results that speak</span>
+  <h1>Case <span class="grad">Studies</span></h1>
+  <p class="page-hero-sub">Real teams, real results. See how businesses just like yours are saving hours every week with practical AI skills.</p>
+</div>
+
+<!-- CASE STUDIES LIST -->
+<section class="section">
+  <div class="container">
+    <div id="cs-grid" class="cards-grid"></div>
+    <div id="cs-empty" class="empty-state" hidden>
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <h2>No case studies yet</h2>
+      <p>Check back soon — we'll be sharing client stories here shortly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="cs-modal" hidden>
+  <div class="modal-card" id="cs-modal-card">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+    </button>
+    <span class="modal-eyebrow" id="modal-eyebrow"></span>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <p class="modal-client" id="modal-client"></p>
+    <div class="modal-divider"></div>
+    <span class="modal-section-label">Overview</span>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-outcome" id="modal-outcome-wrap">
+      <strong>Key outcome</strong>
+      <span id="modal-outcome"></span>
+    </div>
+    <div class="modal-tags" id="modal-tags"></div>
+    <p class="modal-date" id="modal-date"></p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <svg class="footer-logo-mark" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="14" y1="10" x2="14" y2="76" stroke="white" stroke-width="10" stroke-linecap="round"/>
+            <line x1="14" y1="76" x2="74" y2="76" stroke="white" stroke-width="10" stroke-linecap="round"/>
+            <line x1="14" y1="38" x2="64" y2="10" stroke="#34aadc" stroke-width="6" stroke-linecap="round"/>
+            <polyline points="52,8 66,8 66,22" fill="none" stroke="#34aadc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="14" cy="38" r="6" fill="#30d158"/>
+          </svg>
+          <span class="footer-logo-text">Big Leap <span>Training</span></span>
+        </div>
+        <div class="footer-tagline">In-person AI workshops for teams who have better things to do with their time.</div>
+      </div>
+      <nav class="footer-nav">
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#workshops">Workshops</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="taster.html">Free taster</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Big Leap Training. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+        <a href="admin.html">Admin</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+var CASE_STUDIES_KEY = 'blt_case_studies';
+
+function loadCaseStudies() {
+  try {
+    var raw = localStorage.getItem(CASE_STUDIES_KEY);
+    if (!raw) return [];
+    var items = JSON.parse(raw);
+    return Array.isArray(items) ? items : [];
+  } catch(e) { return []; }
+}
+
+function formatDate(str) {
+  if (!str) return '';
+  try {
+    var d = new Date(str + 'T00:00:00');
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  } catch(e) { return str; }
+}
+
+function escapeHTML(str) {
+  var d = document.createElement('div');
+  d.appendChild(document.createTextNode(str || ''));
+  return d.innerHTML;
+}
+
+function renderGrid() {
+  var items = loadCaseStudies().filter(function(cs) { return cs.published; });
+  var grid  = document.getElementById('cs-grid');
+  var empty = document.getElementById('cs-empty');
+
+  grid.innerHTML = '';
+
+  if (items.length === 0) {
+    grid.style.display = 'none';
+    empty.hidden = false;
+    return;
+  }
+
+  grid.style.display = '';
+  empty.hidden = true;
+
+  items.sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); });
+
+  items.forEach(function(cs) {
+    var card = document.createElement('div');
+    card.className = 'cs-card reveal';
+
+    var tagsHtml = '';
+    if (cs.tags) {
+      tagsHtml = cs.tags.split(',').map(function(t) {
+        return '<span class="cs-tag">' + escapeHTML(t.trim()) + '</span>';
+      }).join('');
+    }
+
+    card.innerHTML =
+      '<span class="cs-card-tag">' +
+        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+        'Case Study' +
+      '</span>' +
+      '<div class="cs-card-title">' + escapeHTML(cs.title) + '</div>' +
+      (cs.client ? '<div class="cs-card-client">' + escapeHTML(cs.client) + (cs.industry ? ' &middot; ' + escapeHTML(cs.industry) : '') + '</div>' : '') +
+      '<div class="cs-card-summary">' + escapeHTML(cs.summary || '') + '</div>' +
+      (tagsHtml ? '<div class="cs-tags">' + tagsHtml + '</div>' : '') +
+      '<div class="cs-card-meta">' +
+        '<span class="cs-card-date">' + formatDate(cs.date) + '</span>' +
+        '<span class="cs-card-link">Read more</span>' +
+      '</div>';
+
+    card.addEventListener('click', function() { openModal(cs); });
+    grid.appendChild(card);
+  });
+
+  // Trigger reveal animations
+  setTimeout(function() {
+    document.querySelectorAll('.cs-card.reveal').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }, 60);
+}
+
+function openModal(cs) {
+  document.getElementById('modal-eyebrow').textContent = cs.industry || 'Case Study';
+  document.getElementById('modal-title').textContent   = cs.title || '';
+  document.getElementById('modal-client').textContent  = cs.client ? cs.client + (cs.industry ? ' · ' + cs.industry : '') : '';
+  document.getElementById('modal-body').textContent    = cs.body || '';
+
+  var outcomeWrap = document.getElementById('modal-outcome-wrap');
+  if (cs.outcome) {
+    document.getElementById('modal-outcome').textContent = cs.outcome;
+    outcomeWrap.style.display = '';
+  } else {
+    outcomeWrap.style.display = 'none';
+  }
+
+  var tagsEl = document.getElementById('modal-tags');
+  tagsEl.innerHTML = '';
+  if (cs.tags) {
+    cs.tags.split(',').forEach(function(t) {
+      var span = document.createElement('span');
+      span.className   = 'modal-tag';
+      span.textContent = t.trim();
+      tagsEl.appendChild(span);
+    });
+  }
+
+  document.getElementById('modal-date').textContent = cs.date ? 'Published ' + formatDate(cs.date) : '';
+  document.getElementById('cs-modal').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('cs-modal').hidden = true;
+  document.body.style.overflow = '';
+}
+
+// Close on overlay click
+document.getElementById('cs-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+renderGrid();
+</script>
+</body>
+</html>

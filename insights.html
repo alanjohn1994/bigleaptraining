@@ -327,11 +327,13 @@ function formatDate(str) {
   } catch(e) { return str; }
 }
 
-function estimateReadTime(text) {
-  if (!text) return '1 min read';
-  var words = text.trim().split(/\s+/).length;
-  var mins = Math.max(1, Math.round(words / 200));
-  return mins + ' min read';
+function estimateReadTime(ins) {
+  if (ins._readTime) return ins._readTime;
+  var text = ((ins.body || '') + ' ' + (ins.summary || '')).trim();
+  if (!text) { ins._readTime = '1 min read'; return ins._readTime; }
+  var mins = Math.max(1, Math.round(text.split(/\s+/).length / 200));
+  ins._readTime = mins + ' min read';
+  return ins._readTime;
 }
 
 function escapeHTML(str) {
@@ -366,6 +368,7 @@ function renderBody(raw) {
   return html;
 }
 
+/* NOTE: str must be HTML-escaped before calling this function. */
 function inlineMd(str) {
   return str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 }
@@ -399,7 +402,7 @@ function renderGrid(items) {
       }).join('');
     }
 
-    var readTime = estimateReadTime((ins.body || '') + ' ' + (ins.summary || ''));
+    var readTime = estimateReadTime(ins);
 
     card.innerHTML =
       '<div class="ins-card-accent"></div>' +
@@ -457,7 +460,7 @@ function openModal(ins) {
   readBadge.className = 'article-read-time';
   readBadge.innerHTML =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
-    escapeHTML(estimateReadTime((ins.body || '') + ' ' + (ins.summary || '')));
+    escapeHTML(estimateReadTime(ins));
   bylineEl.appendChild(readBadge);
 
   document.getElementById('modal-body').innerHTML = renderBody(ins.body || '');

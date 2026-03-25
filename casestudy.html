@@ -221,14 +221,27 @@ footer{background:var(--dark-gray);padding:60px 48px 40px}
 
 <script>
 var CASE_STUDIES_KEY = 'blt_case_studies';
+var DATA_FILE        = 'data/casestudies.json';
 
-function loadCaseStudies() {
+function loadLocalCaseStudies() {
   try {
     var raw = localStorage.getItem(CASE_STUDIES_KEY);
     if (!raw) return [];
     var items = JSON.parse(raw);
     return Array.isArray(items) ? items : [];
   } catch(e) { return []; }
+}
+
+function mergeCaseStudies(fileItems, localItems) {
+  var merged = fileItems.slice();
+  localItems.forEach(function(localItem) {
+    var found = false;
+    for (var i = 0; i < merged.length; i++) {
+      if (merged[i].id === localItem.id) { merged[i] = localItem; found = true; break; }
+    }
+    if (!found) merged.push(localItem);
+  });
+  return merged;
 }
 
 function formatDate(str) {
@@ -245,8 +258,8 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
-function renderGrid() {
-  var items = loadCaseStudies().filter(function(cs) { return cs.published; });
+function renderGrid(allItems) {
+  var items = allItems.filter(function(cs) { return cs.published; });
   var grid  = document.getElementById('cs-grid');
   var empty = document.getElementById('cs-empty');
 
@@ -345,7 +358,15 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
 });
 
-renderGrid();
+/* Load from data file, merge with any localStorage entries */
+fetch(DATA_FILE)
+  .then(function(resp) { if (!resp.ok) throw new Error('no file'); return resp.json(); })
+  .then(function(fileItems) {
+    renderGrid(mergeCaseStudies(Array.isArray(fileItems) ? fileItems : [], loadLocalCaseStudies()));
+  })
+  .catch(function() {
+    renderGrid(mergeCaseStudies([], loadLocalCaseStudies()));
+  });
 </script>
 </body>
 </html>
